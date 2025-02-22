@@ -52,7 +52,7 @@ https://micni-ya.booth.pm/items/4564723
 『責任キット』SekininKit Ver1.02（妊娠検査薬・体温計・婚姻届）  
 https://unois.booth.pm/items/1000557
 
-Quest/Quest2対応定期イベントポスター（2023年11月版） 
+Quest/Quest2対応定期イベントポスター（2023年11月版）   
 https://booth.pm/ja/items/1985422
 
 Virtual Calendar (VRChat用カレンダー)  
