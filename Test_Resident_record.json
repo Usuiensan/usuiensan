@@ -1,59 +1,59 @@
 {
-  "residents": [
+  "住民一覧": [
     {
-      "residentID": "RS-0001",
-      "name": "[1] Local Player",
-      "nameplate": "",
-      "position": "デバッグ用"
+      "住民ID": "RS-0001",
+      "表示名": "[1] Local Player",
+      "表札の表記": "",
+      "役職": "デバッグ用"
     },
     {
-      "residentID": "RS-9001",
-      "name": "デバッグ プレイヤー",
-      "nameplate": "チョコミント",
-      "position": "テスト用"
+      "住民ID": "RS-9001",
+      "表示名": "デバッグ プレイヤー",
+      "表札の表記": "チョコミント",
+      "役職": "テスト用"
     },
     {
-      "residentID": "RS-9002",
-      "name": "チョコミント 太郎",
-      "nameplate": "チョコミント",
-      "position": "テスト用"
+      "住民ID": "RS-9002",
+      "表示名": "チョコミント 太郎",
+      "表札の表記": "チョコミント",
+      "役職": "テスト用"
     },
     {
-      "residentID": "RS-9003",
-      "name": "ドーナツ 花子",
-      "nameplate": "ドーナツ",
-      "position": "テスト用"
+      "住民ID": "RS-9003",
+      "表示名": "ドーナツ 花子",
+      "表札の表記": "ドーナツ",
+      "役職": "テスト用"
     },
     {
-      "residentID": "RS-9004",
-      "name": "サンプル 一郎",
-      "nameplate": "サンプル",
-      "position": "テスト用"
+      "住民ID": "RS-9004",
+      "表示名": "サンプル 一郎",
+      "表札の表記": "サンプル",
+      "役職": "テスト用"
     }
   ],
-  "households": [
+  "世帯一覧": [
     {
-      "householdID": "HH-0001",
-      "residents": [
+      "世帯ID": "HH-0001",
+      "住民一覧": [
         "RS-0001",
         "RS-9001",
         "RS-9002",
         "RS-9003",
         "RS-9004"
       ],
-      "nameplateID": "DP-0001"
+      "表札ID": "DP-0001"
     }
   ],
-  "nameplates": [
+  "表札一覧": [
     {
-      "nameplateID": "DP-0001",
-      "address": "!さや駅",
-      "position": {
+      "表札ID": "DP-0001",
+      "住所": "!さや駅",
+      "PlatePosition": {
         "x": "",
         "y": "",
         "z": ""
       },
-      "rotation": {
+      "PlateLotation": {
         "x": "",
         "y": "",
         "z": ""
