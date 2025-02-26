@@ -10,7 +10,7 @@
       "日付表記":"yyyy年M月d日",
       "住所":"住所",
       "表示名":"表示名",
-      "以下余白":"以下余白",
+      "以下余白": "<align=\"center\">** + 以下余白 + \"**</align>",
       "備考":"この証明書はさやタウン内でのみ有効です。",
       "ダミーデータ":"薄荷郡ヘケ町大字ヘケ2215番地27",
       "見本である旨":"これは住民票記載事項証明書の見本です。"
@@ -24,7 +24,7 @@
       "日付表記":"MM/dd/yyyy",
       "住所":"Address",
       "表示名":"Display Name",
-      "以下余白":"blank below",
+      "以下余白": "<align=\"center\">** + blank below + \"**</align>",
       "備考":"This certificate is valid only in Saya Town.",
       "ダミーデータ":"2215-27 Oaza Heke, Hekemachi, Hakka-gun",
       "見本である旨":"This is a sample of a Certificate of Residence."
