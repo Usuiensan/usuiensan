@@ -83,7 +83,22 @@ button:hover {
 }
 
 #result code {
-    font-family: 'OCR-B', monospace; /* フォントをOCR-Bに変更 */
+    font-family: "SourceHanCodeJP-Regular",
+               "M+ 1m",
+               "Rounded M+ 1m regular",
+               "Rounded M+ 2m regular",
+               "Rounded Mgen+ 1m regular",
+               "Rounded Mgen+ 2m regular",
+               "Yutapon coding Regular",
+               "Myrica M",
+               "MyricaM M",
+               "Ricty Diminished Discord",
+               "Ricty Diminished",
+               "Migu 1M",
+               "Migu 2M",
+               "VL ゴシック",
+               "MeiryoKe_Gothic",
+               monospace; /* フォントをOCR-Bに変更 */
     font-size: 1em;
     color: #333;
 }
@@ -101,6 +116,11 @@ label {
 input[type="radio"] {
     margin-right: 5px;
     vertical-align: middle;
+}
+
+input[type="checkbox"] {
+    vertical-align: middle;
+    margin-right: 5px;
 }
 
 #url-description,
