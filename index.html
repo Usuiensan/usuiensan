@@ -22,11 +22,13 @@
         <br>
         <label for="mode">モード:</label>
         <select id="mode">
-            <option value="url">URL・ファイル名向け</option>
-            <option value="noConfuse">数字・見間違えない一部大文字</option>
-            <option value="numberOnly">数字のみ</option>
-            <option value="numberAndLower">数字・アルファベット小文字</option>
-            <option value="nomberAndApper">数字・アルファベット大文字</option>
+            <option value="url">URL向け</option>
+            <option value="noConfuse">見間違いなし</option>
+            <option value="numberOnly">数字</option>
+            <option value="numberAndLower">数字+小文字</option>
+            <option value="nomberAndApper">数字+大文字</option>
+            <option value="numberAndAlphabet">数字+文字</option>
+            <option value="numberAndAlphabetAndSymbols">数字+文字+記号</option>
         </select>
         <div id="character-info"></div>
         <button id="generate">生成</button>

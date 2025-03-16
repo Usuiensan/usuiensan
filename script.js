@@ -35,6 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'nomberAndApper':
                 characterSetDescription = "使用文字: 0-9 A-Z";
                 break;
+            case 'numberAndAlphabet':
+                characterSetDescription = "使用文字: 0-9 A-Z a-z(紛らわしい文字を除く)";
+                break;
+            case 'numberAndAlphabetAndSymbols':
+                characterSetDescription = "使用文字: 0-9 A-Z a-z(紛らわしい文字を除く) -!?@#$%&=";
+                break;
             default:
                 characterSetDescription = "";
         }
@@ -77,6 +83,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'nomberAndApper':
                 characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                break;
+            case 'numberAndAlphabet':
+                characters = '0123456789ACFHKLMPXYBDEJNQRSTUVWZabcdefghkmnpqrstuvwxyz';
+                break;
+            case 'numberAndAlphabetAndSymbols':
+                characters = '0123456789ACFHKLMPXYBDEJNQRSTUVWZabcdefghkmnpqrstuvwxyz-!?@#$%&=';
                 break;
             default:
                 alert('モードを選択してください。');
