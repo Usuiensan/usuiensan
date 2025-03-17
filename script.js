@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modeSelect = document.getElementById('mode');
     const characterInfo = document.getElementById('character-info');
     const countInput = document.getElementById('count');
+    const hyphenateCheckbox = document.getElementById('hyphenate');
 
     const generateRandomString = (length, characters) => {
         let randomString = '';
@@ -13,6 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
             randomString += characters.charAt(randomIndex);
         }
         return randomString;
+    };
+
+    const hyphenate = (str) => {
+        const regex = /.{5}/g;
+        return str.match(regex)?.join('-') + (str.length % 5 !== 0 ? '-' + str.substring(str.length - (str.length % 5)) : '');
     };
 
     const updateDescription = () => {
@@ -98,7 +104,11 @@ document.addEventListener('DOMContentLoaded', () => {
         resultDiv.innerHTML = ''; // 結果をクリア
 
         for (let i = 0; i < count; i++) {
-            const randomString = generateRandomString(length, characters);
+            let randomString = generateRandomString(length, characters);
+
+            if (hyphenateCheckbox.checked) {
+                randomString = hyphenate(randomString);
+            }
 
             const codeBlockContainer = document.createElement('div');
             codeBlockContainer.classList.add('code-block-container');
