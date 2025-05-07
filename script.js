@@ -57,6 +57,42 @@ document.addEventListener('DOMContentLoaded', () => {
     modeSelect.addEventListener('change', updateDescription);
     updateDescription(); // 初期表示
 
+    modeSelect.addEventListener('change', () => {
+        if (modeSelect.value === 'ulid') {
+            hyphenateCheckbox.disabled = true;
+            hyphenateCheckbox.checked = false;
+        } else {
+            hyphenateCheckbox.disabled = false;
+        }
+    });
+
+    const updateTimestampDisplay = () => {
+        const timestampDisplay = document.getElementById('timestamp-display');
+        const currentTimestamp = new Date().toLocaleString();
+        const ulidTimestamp = Math.floor(Date.now()).toString(32).toUpperCase().padStart(10, '0');
+        timestampDisplay.innerHTML = `現在時刻: ${currentTimestamp}<br>ULID形式: <span id='ulid-timestamp' style='font-family: "OCR B", monospace; cursor: pointer;'>${ulidTimestamp}</span>`;
+
+        const ulidTimestampElement = document.getElementById('ulid-timestamp');
+        ulidTimestampElement.addEventListener('click', () => {
+            navigator.clipboard.writeText(ulidTimestamp).then(() => {
+                alert('ULID形式の時刻をコピーしました！');
+            }).catch(err => {
+                console.error('コピーに失敗しました: ', err);
+            });
+        });
+    };
+
+    setInterval(updateTimestampDisplay, 1000);
+
+    // const generateULID = () => {
+    //     const timestamp = Math.floor(Date.now() / 1000).toString(36).toUpperCase().padStart(10, '0');
+    //     const randomPart = Array.from({ length: 16 }, () => {
+    //         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+    //         return chars[Math.floor(Math.random() * chars.length)];
+    //     }).join('');
+    //     return timestamp + randomPart;
+    // };
+
     generateButton.addEventListener('click', () => {
         const length = parseInt(lengthInput.value);
         const count = parseInt(countInput.value);
@@ -74,40 +110,51 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedMode = modeSelect.value;
         let characters = '';
 
-        switch (selectedMode) {
-            case 'url':
-                characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_';
-                break;
-            case 'noConfuse':
-                characters = '0123456789ACFHKLMPXY';
-                break;
-            case 'numberOnly':
-                characters = '0123456789';
-                break;
-            case 'numberAndLower':
-                characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-                break;
-            case 'nomberAndApper':
-                characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                break;
-            case 'numberAndAlphabet':
-                characters = '0123456789ACFHKLMPXYBDEJNQRSTUVWZabcdefghkmnpqrstuvwxyz';
-                break;
-            case 'numberAndAlphabetAndSymbols':
-                characters = '0123456789ACFHKLMPXYBDEJNQRSTUVWZabcdefghkmnpqrstuvwxyz-!?@#$%&=';
-                break;
-            default:
-                alert('モードを選択してください。');
-                return;
-        }
-
         resultDiv.innerHTML = ''; // 結果をクリア
 
         for (let i = 0; i < count; i++) {
-            let randomString = generateRandomString(length, characters);
+            let randomString;
 
-            if (hyphenateCheckbox.checked) {
-                randomString = hyphenate(randomString);
+            if (selectedMode === 'ulid') {
+                const timestamp = Math.floor(Date.now()).toString(32).toUpperCase().padStart(10, '0');
+                const randomPart = Array.from({ length: 16 }, () => {
+                    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+                    return chars[Math.floor(Math.random() * chars.length)];
+                }).join('');
+                randomString = `${timestamp}${randomPart}`;
+            } else {
+                switch (selectedMode) {
+                    case 'url':
+                        characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_';
+                        break;
+                    case 'noConfuse':
+                        characters = '0123456789ACFHKLMPXY';
+                        break;
+                    case 'numberOnly':
+                        characters = '0123456789';
+                        break;
+                    case 'numberAndLower':
+                        characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+                        break;
+                    case 'nomberAndApper':
+                        characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                        break;
+                    case 'numberAndAlphabet':
+                        characters = '0123456789ACFHKLMPXYBDEJNQRSTUVWZabcdefghkmnpqrstuvwxyz';
+                        break;
+                    case 'numberAndAlphabetAndSymbols':
+                        characters = '0123456789ACFHKLMPXYBDEJNQRSTUVWZabcdefghkmnpqrstuvwxyz-!?@#$%&=';
+                        break;
+                    default:
+                        alert('モードを選択してください。');
+                        return;
+                }
+
+                randomString = generateRandomString(length, characters);
+
+                if (hyphenateCheckbox.checked) {
+                    randomString = hyphenate(randomString);
+                }
             }
 
             const codeBlockContainer = document.createElement('div');
