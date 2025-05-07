@@ -70,12 +70,44 @@ document.addEventListener('DOMContentLoaded', () => {
         const timestampDisplay = document.getElementById('timestamp-display');
         const currentTimestamp = new Date().toLocaleString();
         const ulidTimestamp = Math.floor(Date.now()).toString(32).toUpperCase().padStart(10, '0');
-        timestampDisplay.innerHTML = `現在時刻: ${currentTimestamp}<br>ULID形式: <span id='ulid-timestamp' style='font-family: "OCR B", monospace; cursor: pointer;'>${ulidTimestamp}</span>`;
-
+        const localNow = new Date();
+        // const excelTimestamp = (localNow - new Date('1899-12-30')) / (1000 * 60 * 60 * 24);
+        // const excelDate = Math.floor(excelTimestamp);
+        // const excelTime = excelTimestamp - excelDate;
+        timestampDisplay.innerHTML = `現在時刻: ${currentTimestamp}<br>ULID上10桁: <span id='ulid-timestamp' style='font-family: "OCR B", monospace; cursor: pointer;'>${ulidTimestamp}</span></span>`;
+//<br>Excel形式: <span id='excel-date' style='font-family: "OCR B", monospace; cursor: pointer;'>${excelDate}</span><br>Excel時刻部: <span id='excel-time' style='font-family: "OCR B", monospace; cursor: pointer;'>${excelTime.toFixed(6)}</span><br>Excel形式全体: <span id='excel-full' style='font-family: "OCR B", monospace; cursor: pointer;'>${excelDate + excelTime.toFixed(6).substring(1)}
         const ulidTimestampElement = document.getElementById('ulid-timestamp');
         ulidTimestampElement.addEventListener('click', () => {
             navigator.clipboard.writeText(ulidTimestamp).then(() => {
                 alert('ULID形式の時刻をコピーしました！');
+            }).catch(err => {
+                console.error('コピーに失敗しました: ', err);
+            });
+        });
+
+        const excelDateElement = document.getElementById('excel-date');
+        const excelTimeElement = document.getElementById('excel-time');
+
+        excelDateElement.addEventListener('click', () => {
+            navigator.clipboard.writeText(excelDate).then(() => {
+                alert('Excel形式の日付をコピーしました！');
+            }).catch(err => {
+                console.error('コピーに失敗しました: ', err);
+            });
+        });
+
+        excelTimeElement.addEventListener('click', () => {
+            navigator.clipboard.writeText(excelTime.toFixed(6)).then(() => {
+                alert('Excel形式の時刻部をコピーしました！');
+            }).catch(err => {
+                console.error('コピーに失敗しました: ', err);
+            });
+        });
+
+        const excelFullElement = document.getElementById('excel-full');
+        excelFullElement.addEventListener('click', () => {
+            navigator.clipboard.writeText(excelDate + excelTime.toFixed(6).substring(1)).then(() => {
+                alert('Excel形式全体をコピーしました！');
             }).catch(err => {
                 console.error('コピーに失敗しました: ', err);
             });
