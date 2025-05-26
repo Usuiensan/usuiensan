@@ -1,2 +1,4 @@
 # _config.yml
-baseurl: "/usuiensan/ # 例: /my-blog
+baseurl: "/usuiensan/"
+title: "Usuiensan"
+description: "personal blogs and portfolios"
