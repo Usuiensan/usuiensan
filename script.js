@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const countInput = document.getElementById('count');
     const hyphenateCheckbox = document.getElementById('hyphenate');
 
+    // ランダム文字列を生成する関数
     const generateRandomString = (length, characters) => {
         let randomString = '';
         for (let i = 0; i < length; i++) {
@@ -16,11 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return randomString;
     };
 
+    // 文字列を5文字ごとにハイフンで区切る関数
     const hyphenate = (str) => {
         const regex = /.{5}/g;
         return str.match(regex)?.join('-') + (str.length % 5 !== 0 ? '-' + str.substring(str.length - (str.length % 5)) : '');
     };
 
+    // モードに応じた説明を更新する関数
     const updateDescription = () => {
         const selectedMode = modeSelect.value;
         let characterSetDescription = "";
@@ -38,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'numberAndLower':
                 characterSetDescription = "使用文字: 0-9 a-z";
                 break;
-            case 'nomberAndApper':
+            case 'numberAndUpper':
                 characterSetDescription = "使用文字: 0-9 A-Z";
                 break;
             case 'numberAndAlphabet':
@@ -54,9 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
         characterInfo.textContent = characterSetDescription;
     };
 
+    // モード変更時のイベントリスナー
     modeSelect.addEventListener('change', updateDescription);
     updateDescription(); // 初期表示
 
+    // ULIDモード時のハイフンチェックボックスの制御
     modeSelect.addEventListener('change', () => {
         if (modeSelect.value === 'ulid') {
             hyphenateCheckbox.disabled = true;
@@ -66,16 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // 現在時刻とULID形式の時刻を表示する関数
     const updateTimestampDisplay = () => {
         const timestampDisplay = document.getElementById('timestamp-display');
         const currentTimestamp = new Date().toLocaleString();
         const ulidTimestamp = Math.floor(Date.now()).toString(32).toUpperCase().padStart(10, '0');
-        const localNow = new Date();
-        // const excelTimestamp = (localNow - new Date('1899-12-30')) / (1000 * 60 * 60 * 24);
-        // const excelDate = Math.floor(excelTimestamp);
-        // const excelTime = excelTimestamp - excelDate;
-        timestampDisplay.innerHTML = `現在時刻: ${currentTimestamp}<br>ULID上10桁: <span id='ulid-timestamp' style='font-family: "OCR B", monospace; cursor: pointer;'>${ulidTimestamp}</span></span>`;
-//<br>Excel形式: <span id='excel-date' style='font-family: "OCR B", monospace; cursor: pointer;'>${excelDate}</span><br>Excel時刻部: <span id='excel-time' style='font-family: "OCR B", monospace; cursor: pointer;'>${excelTime.toFixed(6)}</span><br>Excel形式全体: <span id='excel-full' style='font-family: "OCR B", monospace; cursor: pointer;'>${excelDate + excelTime.toFixed(6).substring(1)}
+
+        timestampDisplay.innerHTML = `現在時刻: ${currentTimestamp}<br>ULID上10桁: <span id='ulid-timestamp' style='font-family: "OCR B", monospace; cursor: pointer;'>${ulidTimestamp}</span>`;
+
         const ulidTimestampElement = document.getElementById('ulid-timestamp');
         ulidTimestampElement.addEventListener('click', () => {
             navigator.clipboard.writeText(ulidTimestamp).then(() => {
@@ -84,47 +87,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('コピーに失敗しました: ', err);
             });
         });
-
-        const excelDateElement = document.getElementById('excel-date');
-        const excelTimeElement = document.getElementById('excel-time');
-
-        excelDateElement.addEventListener('click', () => {
-            navigator.clipboard.writeText(excelDate).then(() => {
-                alert('Excel形式の日付をコピーしました！');
-            }).catch(err => {
-                console.error('コピーに失敗しました: ', err);
-            });
-        });
-
-        excelTimeElement.addEventListener('click', () => {
-            navigator.clipboard.writeText(excelTime.toFixed(6)).then(() => {
-                alert('Excel形式の時刻部をコピーしました！');
-            }).catch(err => {
-                console.error('コピーに失敗しました: ', err);
-            });
-        });
-
-        const excelFullElement = document.getElementById('excel-full');
-        excelFullElement.addEventListener('click', () => {
-            navigator.clipboard.writeText(excelDate + excelTime.toFixed(6).substring(1)).then(() => {
-                alert('Excel形式全体をコピーしました！');
-            }).catch(err => {
-                console.error('コピーに失敗しました: ', err);
-            });
-        });
     };
 
     setInterval(updateTimestampDisplay, 1000);
 
-    // const generateULID = () => {
-    //     const timestamp = Math.floor(Date.now() / 1000).toString(36).toUpperCase().padStart(10, '0');
-    //     const randomPart = Array.from({ length: 16 }, () => {
-    //         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-    //         return chars[Math.floor(Math.random() * chars.length)];
-    //     }).join('');
-    //     return timestamp + randomPart;
-    // };
-
+    // 生成ボタンのクリックイベント
     generateButton.addEventListener('click', () => {
         const length = parseInt(lengthInput.value);
         const count = parseInt(countInput.value);
@@ -168,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     case 'numberAndLower':
                         characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
                         break;
-                    case 'nomberAndApper':
+                    case 'numberAndUpper':
                         characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
                         break;
                     case 'numberAndAlphabet':
@@ -211,6 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // クリップボードにテキストをコピーする関数
     const copyTextToClipboard = (text) => {
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text)
@@ -226,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // 古いブラウザ用のコピー関数
     const fallbackCopyTextToClipboard = (text) => {
         const textArea = document.createElement("textarea");
         textArea.value = text;
@@ -246,12 +215,10 @@ document.addEventListener('DOMContentLoaded', () => {
         textArea.select();
 
         try {
-            const successful = document.execCommand('copy');
-            const msg = successful ? 'successful' : 'unsuccessful';
-            console.log('Fallback: Copying text command was ' + msg);
+            document.execCommand('copy');
             alert('クリップボードにコピーしました！');
         } catch (err) {
-            console.error('Fallback: Oops, unable to copy', err);
+            console.error('コピーに失敗しました: ', err);
             alert('コピーに失敗しました。');
         }
 
