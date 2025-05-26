@@ -19,8 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 文字列を5文字ごとにハイフンで区切る関数
     const hyphenate = (str) => {
-        const regex = /.{5}/g;
-        return str.match(regex)?.join('-') + (str.length % 5 !== 0 ? '-' + str.substring(str.length - (str.length % 5)) : '');
+        if (!str || typeof str !== 'string') {
+            return '';
+        }
+        return str.match(/.{1,5}/g)?.join('-') || '';
     };
 
     // モードに応じた説明を更新する関数
@@ -57,12 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
         characterInfo.textContent = characterSetDescription;
     };
 
-    // モード変更時のイベントリスナー
-    modeSelect.addEventListener('change', updateDescription);
-    updateDescription(); // 初期表示
-
-    // ULIDモード時のハイフンチェックボックスの制御
+    // modeSelectのchangeイベントリスナーを統合
     modeSelect.addEventListener('change', () => {
+        updateDescription();
         if (modeSelect.value === 'ulid') {
             hyphenateCheckbox.disabled = true;
             hyphenateCheckbox.checked = false;
@@ -70,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
             hyphenateCheckbox.disabled = false;
         }
     });
+    updateDescription(); // 初期表示
 
     // 現在時刻とULID形式の時刻を表示する関数
     const updateTimestampDisplay = () => {
@@ -187,41 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .catch(err => {
                     console.error('コピーに失敗しました: ', err);
-                    fallbackCopyTextToClipboard(text);
                 });
-        } else {
-            fallbackCopyTextToClipboard(text);
-        }
-    };
-
-    // 古いブラウザ用のコピー関数
-    const fallbackCopyTextToClipboard = (text) => {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-
-        textArea.style.position = "fixed";
-        textArea.style.top = "0";
-        textArea.style.left = "0";
-        textArea.style.width = "2em";
-        textArea.style.height = "2em";
-        textArea.style.padding = "0";
-        textArea.style.border = "none";
-        textArea.style.outline = "none";
-        textArea.style.boxShadow = "none";
-        textArea.style.background = "transparent";
-
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-
-        try {
-            document.execCommand('copy');
-            alert('クリップボードにコピーしました！');
-        } catch (err) {
-            console.error('コピーに失敗しました: ', err);
-            alert('コピーに失敗しました。');
-        }
-
-        document.body.removeChild(textArea);
+        } 
     };
 });

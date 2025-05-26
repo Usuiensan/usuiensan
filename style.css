@@ -20,19 +20,10 @@ body {
 }
 
 /* 箇条書きを左揃えにする */
-.container ul {
+.container ul, .container li {
     text-align: left;
     margin-bottom: 8px; /* 各リストアイテムの下に8pxの余白を追加 */
     line-height: 1.6;   /* 行の高さを調整して文字の上下にゆとりを持たせる */
-
-}
-
-/* 必要であれば、リストの項目も左揃えにする（通常はulに指定すればOK） */
-.container li {
-    text-align: left;
-    margin-bottom: 8px; /* 各リストアイテムの下に8pxの余白を追加 */
-    line-height: 1.6;   /* 行の高さを調整して文字の上下にゆとりを持たせる */
-
 }
 
 /* 長い単語やURLが枠からはみ出さないように改行を許可する */
