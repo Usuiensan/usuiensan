@@ -1,57 +1,39 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>パスワード生成</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=OCR+B&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
-<body>
-    <div class="container">
-        <h1>ランダム文字列生成</h1>
-        <h2>パスワードに使うも、何に使うもよし！</h2>
-        <label for="length">文字数:</label>
-        <input type="number" id="length" value="15" min="1">
-        <br>
-        <label for="count">生成数:</label>
-        <input type="number" id="count" value="2" min="1">
-        <br>
-        <label for="mode">モード:</label>
-        <select id="mode">
-            <option value="url">URL向け</option>
-            <option value="noConfuse">見間違いなし</option>
-            <option value="numberOnly">数字</option>
-            <option value="numberAndLower">数字+小文字</option>
-            <option value="nomberAndApper">数字+大文字</option>
-            <option value="numberAndAlphabet">数字+文字</option>
-            <option value="numberAndAlphabetAndSymbols">数字+文字+記号</option>
-            <option value="ulid" selected>ULID</option>
-        </select>
-        <br>
-        <label for="hyphenate">5文字ごとにハイフン:</label>
-        <input type="checkbox" id="hyphenate" checked>
-        <div id="character-info"></div>
-        <button id="generate">生成</button>
-        <div id="result">
-        </div>
-        <div id="timestamp-display" style="margin-top: 10px; font-weight: bold;"></div>
-        <!-- <button id="copy">クリップボードにコピー</button> -->
-    <p>
-        💡知っていましたか？
-        <br>
-        パスワードを使い回すことは危険です。覚えきれない場合、他者に見られないノートなどにに書いて大切に保管するか、パスワードマネージャーを使いましょう。
-        <br>パソコンに"password1234"と付箋を貼ることは絶対にやめましょう。
-        <br>パスワードマネージャーに設定したパスワードは、絶対に忘れないようにしましょう。
-        <br>また、２要素認証を設定することも大変重要です。
-    </p>
-        <a href="https://www.google.com/search?q=%E3%83%91%E3%82%B9%E3%83%AF%E3%83%BC%E3%83%89%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E3%83%A3%E3%83%BC" target="_blank">パスワードマネージャーについて調べる</a>
-        <br>
-        <a href="phonetic.html" target="_blank">フォネティックコードについて調べる</a>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>
+---
+layout: default
+title: 自動パスワード生成できるくん
+---
+<h1>ランダム文字列生成</h1>
+<h2>パスワードに使うも、何に使うもよし！</h2>
+<label for="length">文字数:</label>
+<input type="number" id="length" value="15" min="1">
+<br>
+<label for="count">生成数:</label>
+<input type="number" id="count" value="2" min="1">
+<br>
+<label for="mode">モード:</label>
+<select id="mode">
+    <option value="url">URL向け</option>
+    <option value="noConfuse">見間違いなし</option>
+    <option value="numberOnly">数字</option>
+    <option value="numberAndLower">数字+小文字</option>
+    <option value="numberAndUpper">数字+大文字</option>
+    <option value="numberAndAlphabet">数字+文字</option>
+    <option value="numberAndAlphabetAndSymbols">数字+文字+記号</option>
+    <option value="ulid" selected>ULID</option>
+</select>
+<br>
+<label for="hyphenate">5文字ごとにハイフン:</label>
+<input type="checkbox" id="hyphenate" checked>
+<div id="character-info"></div>
+<button id="generate">生成</button>
+<div id="result">
+</div>
+<div id="timestamp-display" style="margin-top: 10px; font-weight: bold;"></div>
+<p>
+    💡知っていましたか？
+    <br>
+    パスワードを使い回すことは危険です。覚えきれない場合、他者に見られないノートなどにに書いて大切に保管するか、パスワードマネージャーを使いましょう。
+    <br>パソコンに"password1234"と付箋を貼ることは絶対にやめましょう。
+    <br>パスワードマネージャーに設定したパスワードは、絶対に忘れないようにしましょう。
+    <br>また、２要素認証を設定することも大変重要です。
+</p>

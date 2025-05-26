@@ -19,6 +19,30 @@ body {
     max-width: 600px;
 }
 
+/* 箇条書きを左揃えにする */
+.container ul {
+    text-align: left;
+    margin-bottom: 8px; /* 各リストアイテムの下に8pxの余白を追加 */
+    line-height: 1.6;   /* 行の高さを調整して文字の上下にゆとりを持たせる */
+
+}
+
+/* 必要であれば、リストの項目も左揃えにする（通常はulに指定すればOK） */
+.container li {
+    text-align: left;
+    margin-bottom: 8px; /* 各リストアイテムの下に8pxの余白を追加 */
+    line-height: 1.6;   /* 行の高さを調整して文字の上下にゆとりを持たせる */
+
+}
+
+/* 長い単語やURLが枠からはみ出さないように改行を許可する */
+.container p,
+.container li,
+.container a {
+    word-wrap: break-word; /* 非推奨だが広くサポートされている */
+    overflow-wrap: break-word; /* より新しい標準 */
+}
+
 h1 {
     font-weight: 600;
     margin-bottom: 20px;
