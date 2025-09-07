@@ -50,6 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'numberAndAlphabetAndSymbols':
                 characterSetDescription = "使用文字: 0-9 A-Z a-z(紛らわしい文字を除く) -!?@#$%&=";
                 break;
+            case 'ulid':
+                characterSetDescription = "使用文字: 0-9 I,L,O,Uを除く大文字";
+                break;
             default:
                 characterSetDescription = "";
         }

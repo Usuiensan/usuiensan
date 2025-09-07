@@ -15,5 +15,9 @@
 ## その他
 
 - [robots.txt](/usuiensan/robots.txt)
-- [_headers](/usuiensan/_headers)
-- [_config.yml](/usuiensan/_config.yml)
+- [wikipedia](https://www.wikipedia.org/)
+- [usecue.com 自称世界一読み込みが早いウェブサイト](https://www.usecue.com/blog/the-fastest-website-in-the-world/)
+- [阿部寛のホームページ](http://abehiroshi.la.coocan.jp/)
+- [ナウル共和国政府観光局日本事務所](https://nauru.jp/)
+- [neverssl.com 公共wifiネットワーク等で、エラー発生時などに便利](http://majesticfinewholepoem.neverssl.com/online/)
+
