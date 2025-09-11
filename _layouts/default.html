@@ -14,8 +14,16 @@
 <body>
   <div class="container">
     {{ content }}
-    <script src="{{ site.baseurl }}/script.js"></script>
-  <br><a href="{{ site.baseurl }}/sitemap.html">サイトマップ兼リンク集</a>
+    <!-- <script src="{{ site.baseurl }}/script.js"></script> -->
+  <div class="mini-nav">
+    <a href="{{ site.baseurl }}/index.html">ランダム文字列生成</a>
+    <span class="mini-sep">・</span>
+    <a href="{{ site.baseurl }}/count.html">文字カウンタ</a>
+    <span class="mini-sep">・</span>
+    <a href="{{ site.baseurl }}/sitemap.html">サイトマップ</a>
+    <span class="mini-sep">・</span>
+    <a href="{{ site.baseurl }}/links.html">リンク集</a>
+  </div>
   </div>
 </body>
 </html>
