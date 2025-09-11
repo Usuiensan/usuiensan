@@ -1,0 +1,94 @@
+---
+layout: default
+title: 文字カウンタ
+---
+
+<style>
+    #textInput {
+        width: 100%;
+        height: 100px;
+        font-size: 1.2em;
+        margin-bottom: 1em;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #ccc;
+        padding: 0.8em;
+        text-align: left;
+    }
+    th {
+        background-color: #f4f4f4;
+        width: 40%;
+    }
+    td {
+        font-weight: bold;
+        font-size: 1.2em;
+        text-align: right;
+    }
+    .description {
+        font-size: 0.6em;
+        color: #555;
+    }
+</style>
+
+<h1>{{ page.title }}</h1>
+<p>
+    テキストエリアに文字を入力して、様々な方法で文字数を数えた場合の違いを確認してみましょう。<br>
+</p>
+
+<textarea id="textInput" placeholder="ここに文字を入力してください...">あ🍣が👍🏿👨‍👩‍👧‍👦葛󠄀</textarea>
+
+<table>
+    <tr>
+        <th>数え方</th>
+        <th>文字数</th>
+    </tr>
+    <tr>
+        <td>
+            バイト数 (UTF-8)
+            <div class="description">データを保存・通信する際のサイズ。UTF-8ではバイト数=コードユニット数になる</div>
+        </td>
+        <td id="byteCount">0</td>
+    </tr>
+    <tr>
+        <td>
+            コードユニット数 (UTF-16) (<code>.length</code>)
+            <div class="description">サロゲートペアの文字は2と数えられる。</div>
+        </td>
+        <td id="codeUnitCount">0</td>
+    </tr>
+    <tr>
+        <td>
+            コードポイント数
+            <div class="description">Unicode上の文字の数。</div>
+        </td>
+        <td id="codePointCount">0</td>
+    </tr>
+    <tr>
+        <td>
+            書記素クラスタ数 (<code>Intl.Segmenter</code>)
+            <div class="description">人間が「1文字」と認識する数。「か」+「゛」も1文字になる。</div>
+        </td>
+        <td id="graphemeCount">0</td>
+    </tr>
+    <tr>
+        <td>
+            異体字セレクタ (IVS)
+            <div class="description">異体字セレクタ(U+FE00..FE0F、U+E0100..E01EF)の有無を表示します。</div>
+        </td>
+        <td id="vsIndicator">未検査</td>
+    </tr>
+    <tr>
+        <td>
+            Shift_JIS互換性チェック
+            <div class="description">Shift_JISに収録されていない可能性のある文字を検出します（簡易判定）。</div>
+        </td>
+        <td id="shiftJisStatus">未検査</td>
+    </tr>
+</table>
+
+<script src="https://unpkg.com/encoding-japanese@2.2.0/encoding.min.js"></script>
+<script src="{{ '/assets/js/countscript.js' | relative_url }}"></script>

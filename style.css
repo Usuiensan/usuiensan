@@ -228,3 +228,59 @@ p {
 #readme-content li {
     margin-bottom: 5px;
 }
+
+/* 小さく目立たない横並びのリンク (フッターやヘッダー用) */
+.mini-nav {
+    margin-top: 18px;
+    font-size: 0.75rem; /* 小さい文字 */
+    color: #666; /* 控えめな色 */
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap; /* 小さい画面で折り返す */
+    align-items: center;
+}
+.mini-nav a {
+    color: #666;
+    text-decoration: none;
+    opacity: 0.8;
+}
+.mini-nav a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+.mini-sep {
+    color: #999;
+    user-select: none;
+}
+
+/* ハイライト表示用 */
+.highlight-nonsjis {
+    background: linear-gradient(90deg, rgba(255,230,230,0.9), rgba(255,200,200,0.9));
+    border-radius: 4px;
+    padding: 1px 3px;
+    margin: 0 1px;
+    display: inline-block;
+}
+
+.highlight-vs {
+    background: linear-gradient(90deg, rgba(230,245,255,0.9), rgba(200,235,255,0.9));
+    border-radius: 4px;
+    padding: 1px 3px;
+    margin: 0 1px;
+    display: inline-block;
+}
+
+/* 両方ハイライトされるケース */
+.highlight-nonsjis.highlight-vs {
+    background: linear-gradient(90deg, rgba(255,230,230,0.9), rgba(200,235,255,0.9));
+}
+
+#preview {
+    margin-top: 12px;
+    text-align: left;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+.muted { color: #999; }
