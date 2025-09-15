@@ -6,3 +6,4 @@
 - [neverssl.com](http://majesticfinewholepoem.neverssl.com/online/)
 - [The case of the 500-mile email](https://www.ibiblio.org/harris/500milemail.html)
 - [JST Clock](https://www.ibiblio.org/harris/500milemail.html)
+- [DuckDuckGo] (https://html.duckduckgo.com/html/)
