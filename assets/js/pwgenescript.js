@@ -45,13 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 characterSetDescription = "使用文字: 0-9 A-Z";
                 break;
             case 'numberAndAlphabet':
-                characterSetDescription = "使用文字: 0-9 A-Z a-z(紛らわしい文字を除く)";
+                characterSetDescription = "使用文字: 0-9 A-Z a-z(I,O,lを除く)";
                 break;
             case 'numberAndAlphabetAndSymbols':
-                characterSetDescription = "使用文字: 0-9 A-Z a-z(紛らわしい文字を除く) -!?@#$%&=";
+                characterSetDescription = "使用文字: 0-9 A-Z a-z(I,O,lを除く) -!?@#$%&=";
                 break;
             case 'ulid':
-                characterSetDescription = "使用文字: 0-9 I,L,O,Uを除く大文字";
+                characterSetDescription = "使用文字: A-Z 2-7 (長さは26文字固定)";
                 break;
             default:
                 characterSetDescription = "";
@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('クリップボードにコピーしました！');
                 })
                 .catch(err => {
-                    console.error('コピーに失敗しました: ', err);
+                    console.error('クリップボード APIでのコピーに失敗しました: ', err);
                     fallbackCopyTextToClipboard(text);
                 });
         } else {
@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             document.execCommand('copy');
-            alert('クリップボードにコピーしました！');
+            alert('クリップボードにコピーしました（互換モード）');
         } catch (err) {
             console.error('コピーに失敗しました: ', err);
             alert('コピーに失敗しました。');
