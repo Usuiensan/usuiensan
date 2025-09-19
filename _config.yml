@@ -1,6 +1,7 @@
 # _config.yml
 baseurl: ""
-title: "Usuiensan"
+title: "Usuiensan.dev"
+author: "うすいえんさん"
 description: "personal blogs and portfolios"
 plugins:
   - jekyll-sitemap

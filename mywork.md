@@ -1,6 +1,5 @@
 ---
 layout: default
-title: 制作物|うすいえんさん
 ---
 
 # 制作物

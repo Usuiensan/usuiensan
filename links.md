@@ -1,8 +1,7 @@
 ---
 layout: default
-title: 外部リンク集|うすいえんさん
 ---
-# リンク集
+# 外部リンク集
 - [wikipedia](https://www.wikipedia.org/)
 - [usecue.com 自称世界一読み込みが早いウェブサイト](https://www.usecue.com/blog/the-fastest-website-in-the-world/)
 - [阿部寛のホームページ](http://abehiroshi.la.coocan.jp/)
