@@ -6,4 +6,4 @@
 📝[nits] → ささいな指摘(nitpick)  
 ❓[ask] → 質問  
 ℹ️[fyi] → 参考情報
-<!-- for GitHub Copilot review rule-->
+<!-- for GitHub Copilot review rule -->
