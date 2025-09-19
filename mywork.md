@@ -7,7 +7,7 @@ title: 制作物|うすいえんさん
 
 ## PauseKey
 キーボードの使わないキー代表格の"Pause"を押すと、YYYY-MM-DD (DDD) hh:mm形式で日時を一発入力できるソフトウェア  
-githubリポジトリ：[Usuiensan/PauseKey](https://github.com/Usuiensan/PauseKey)
+githubリポジトリ：[Usuiensan/PauseKey](https://github.com/Usuiensan/PauseKey)  
 ファイル名について: 半角ハイフン、半角括弧、全角コロンを使用しているため、環境によっては一部ソフトウェアの誤動作を誘発する可能性があります。ご注意ください。  
 [ダウンロード Pause2TimeStamp.exe](https://github.com/Usuiensan/PauseKey/releases/download/latest/Pause2TimeStamp.exe)
 
