@@ -7,9 +7,15 @@ layout: default
 ## PauseKey
 キーボードの使わないキー代表格の"Pause"を押すと、YYYY-MM-DD (DDD) hh:mm形式で日時を一発入力できるソフトウェア  
 githubリポジトリ：[Usuiensan/PauseKey](https://github.com/Usuiensan/PauseKey)  
-ファイル名について: 半角ハイフン、半角括弧、全角コロンを使用しているため、環境によっては一部ソフトウェアの誤動作を誘発する可能性があります。ご注意ください。  
-[ダウンロード Pause2TimeStamp.exe](https://github.com/Usuiensan/PauseKey/releases/download/latest/Pause2TimeStamp.exe)
+例:2025-09-20 （Sat） 07：30  
+[ダウンロード:Pause2TimeStamp.exe](https://github.com/Usuiensan/PauseKey/releases/download/latest/Pause2TimeStamp.exe)
 
+ファイル名について:  
+半角ハイフン、半角括弧、全角コロンを使用しているため、環境によっては一部ソフトウェアの誤動作を誘発する可能性があります。ご注意ください。  
+
+職場での使用について:  
+ほとんどの職場では、セキュリティのため外部のソフトウェアの持ち込みが固く禁じられています。職場のルールに従いご利用ください。  
+ソースコードもMITライセンスで公開していますのでよろしければご活用下さい。
 ## 出典くん
 ページのタイトル、URL、アクセス日を簡単にコピーするChrome拡張機能です。  
 [出典くん - Chrome ウェブストア](https://chromewebstore.google.com/detail/kjlnbjeohfbpcjhjejbefejogkfdnklg)  
