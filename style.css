@@ -13,7 +13,7 @@ body {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    text-align: left;
     border: 1px solid rgba(255, 255, 255, 0.2);
     width: 80%;
     max-width: 600px;
@@ -156,7 +156,7 @@ input[type="checkbox"] {
 }
 
 p {
-    color: #666;
+    color: #101010;
     font-size: 0.9em;
     margin-top: 20px;
     text-align: left;
