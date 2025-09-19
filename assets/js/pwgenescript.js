@@ -1,11 +1,76 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const generateButton = document.getElementById('generate');
+    // 初期値セット: URLパラメータ > cookie > HTML
+
+    // Cookie操作関数
+
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramLength = urlParams.get('length');
+    const paramCount = urlParams.get('count');
+    const paramMode = urlParams.get('mode');
+    const paramHyphenate = urlParams.get('hyphenate');
+    const cookieLength = getCookie('pwgen_length');
+    const cookieCount = getCookie('pwgen_count');
+    const cookieMode = getCookie('pwgen_mode');
+    const cookieHyphenate = getCookie('pwgen_hyphenate');
+
+    // URLパラメータが存在する場合は自動生成＆コピー
+    const hasUrlParams = paramLength !== null || paramCount !== null || paramMode !== null || paramHyphenate !== null;
+    function autoGenerateAndCopyIfNeeded() {
+        if (hasUrlParams) {
+            generateButton.click();
+            // 生成結果が1件なら自動コピー
+            setTimeout(() => {
+                const codeBlocks = document.querySelectorAll('.code-block-container code');
+                if (codeBlocks.length === 1) {
+                    copyTextToClipboard(codeBlocks[0].textContent);
+                }
+            }, 100); // DOM更新待ち
+        }
+    }
+
     const lengthInput = document.getElementById('length');
-    const resultDiv = document.getElementById('result');
-    const modeSelect = document.getElementById('mode');
-    const characterInfo = document.getElementById('character-info');
     const countInput = document.getElementById('count');
+    const modeSelect = document.getElementById('mode');
     const hyphenateCheckbox = document.getElementById('hyphenate');
+
+    if (paramLength !== null) {
+        lengthInput.value = paramLength;
+    } else if (cookieLength) {
+        lengthInput.value = cookieLength;
+    }
+    if (paramCount !== null) {
+        countInput.value = paramCount;
+    } else if (cookieCount) {
+        countInput.value = cookieCount;
+    }
+    if (paramMode !== null) {
+        modeSelect.value = paramMode;
+    } else if (cookieMode) {
+        modeSelect.value = cookieMode;
+    }
+    if (paramHyphenate !== null) {
+        hyphenateCheckbox.checked = paramHyphenate === 'true' || paramHyphenate === '1';
+    } else if (cookieHyphenate) {
+        hyphenateCheckbox.checked = cookieHyphenate === 'true';
+    }
+    const generateButton = document.getElementById('generate');
+    const resultDiv = document.getElementById('result');
+    const characterInfo = document.getElementById('character-info');
+
+    // Cookie操作関数
+    function setCookie(name, value, days = 365) {
+        const expires = new Date(Date.now() + days * 864e5).toUTCString();
+        document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
+    }
+    function getCookie(name) {
+        return document.cookie.split('; ').reduce((r, v) => {
+            const parts = v.split('=');
+            return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+        }, '');
+    }
+
 
     // ランダム文字列を生成する関数
     const generateRandomString = (length, characters) => {
@@ -63,6 +128,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // モード変更時のイベントリスナー
     modeSelect.addEventListener('change', updateDescription);
     updateDescription(); // 初期表示
+    // 初期表示後に自動生成＆コピー判定
+    autoGenerateAndCopyIfNeeded();
 
     // ULIDモード時のハイフンチェックボックスの制御
     modeSelect.addEventListener('change', () => {
@@ -99,24 +166,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const length = parseInt(lengthInput.value);
         const count = parseInt(countInput.value);
 
+        // 入力値をcookie保存
+        setCookie('pwgen_length', lengthInput.value);
+        setCookie('pwgen_count', countInput.value);
+        setCookie('pwgen_mode', modeSelect.value);
+        setCookie('pwgen_hyphenate', hyphenateCheckbox.checked);
+
         if (isNaN(length) || length <= 0) {
             alert('有効な文字数を入力してください。');
             return;
         }
-
         if (isNaN(count) || count <= 0) {
             alert('有効な生成回数を入力してください。');
             return;
         }
-
         const selectedMode = modeSelect.value;
         let characters = '';
-
-        resultDiv.innerHTML = ''; // 結果をクリア
-
+        resultDiv.innerHTML = '';
         for (let i = 0; i < count; i++) {
             let randomString;
-
             if (selectedMode === 'ulid') {
                 const timestamp = Math.floor(Date.now()).toString(32).toUpperCase().padStart(10, '0');
                 const randomPart = Array.from({ length: 16 }, () => {
