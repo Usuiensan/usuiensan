@@ -15,4 +15,4 @@ title: 外部リンク集|うすいえんさん
 - [neverssl.com](http://majesticfinewholepoem.neverssl.com/online/)  
 公共Wi-Fiネットワークでログインページが表示されない場合に、直打ちすると強制的に認証ページを開ける  
 ↓neverssl.comのQRコード  
-![neverssl.comのQRコード](assets\img\qrcode_neverssl.jpg)
+![neverssl.comのQRコード](assets/img/qrcode_neverssl.jpg)
