@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, '');
     }
 
-    // 初期値セット: URLパラメータ > cookie > HTML
     const urlParams = new URLSearchParams(window.location.search);
     const paramLength = urlParams.get('length');
     const paramCount = urlParams.get('count');
