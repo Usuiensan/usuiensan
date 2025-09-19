@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 初期値セット: URLパラメータ > cookie > HTML
-
-    // ...existing code...
     // Cookie操作関数
     function setCookie(name, value, days = 365) {
         const expires = new Date(Date.now() + days * 864e5).toUTCString();
