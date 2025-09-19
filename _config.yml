@@ -2,3 +2,5 @@
 baseurl: ""
 title: "Usuiensan"
 description: "personal blogs and portfolios"
+plugins:
+  - jekyll-sitemap
