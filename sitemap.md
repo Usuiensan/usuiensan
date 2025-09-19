@@ -2,18 +2,16 @@
 
 ## ページ一覧
 
-- [ホーム](/usuiensan/index.html)
-- [文字カウンタ](/usuiensan/count.html)
+{% for page in site.pages %}
+{% unless page.name == 'sitemap.md' %}
+- [{{ page.title | default: page.name }}]({{ page.url }})
+{% endunless %}
+{% endfor %}
 
-- [Git 基本操作と共同開発ガイド](/usuiensan/git-essentials-teamwork.html)
-- [Git セットアップガイド](/usuiensan/git-setup-guide.html)
-
-## アセット
-
-- [スタイルシート](/usuiensan/style.css)
-- [スクリプト](/usuiensan/script.js)
-- [ファビコン](/usuiensan/favicon.ico)
-
-## その他
-
-- [robots.txt](/usuiensan/robots.txt)
+---
+## アセット・その他
+- [robots.txt]({{ site.baseurl }}/robots.txt)
+- [sitemap.xml（サイト用XML）]({{ site.baseurl }}/sitemap.xml)
+- [スタイルシート]({{ site.baseurl }}/style.css)
+- [スクリプト]({{ site.baseurl }}/script.js)
+- [ファビコン]({{ site.baseurl }}/favicon.ico)
