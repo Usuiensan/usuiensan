@@ -27,7 +27,7 @@ githubリポジトリ：[Usuiensan/shukken-kun](https://github.com/Usuiensan/shu
 リンクとして埋め込みたい場合に便利です。
 
 3. Markdown形式
-表示例:`[ページタイトル](https://example.com)`  
+表示例: `[ページタイトル](https://example.com)`  
 Markdown形式のドキュメントにそのまま貼り付けられます。
 
 ## e-govに載っている条文の「第○条」を算用数字に変える拡張機能
