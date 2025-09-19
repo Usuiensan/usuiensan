@@ -8,7 +8,7 @@ title: 外部リンク集|うすいえんさん
 - [阿部寛のホームページ](http://abehiroshi.la.coocan.jp/)
 - [ナウル共和国政府観光局日本事務所](https://nauru.jp/)
 - [The case of the 500-mile email](https://www.ibiblio.org/harris/500milemail.html)
-- [JST Clock](https://www3.nict.go.jp/JST/JST.html)
+- [JST Clock](https://www.nict.go.jp/JST/JST5.html)
 - [DuckDuckGo](https://html.duckduckgo.com/html/)
 
 ---
