@@ -2,15 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 初期値セット: URLパラメータ > cookie > HTML
 
     // Cookie操作関数
-    function setCookie(name, value, days = 365) {
-        const expires = new Date(Date.now() + days * 864e5).toUTCString();
-        document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
-    }
-    function getCookie(name) {
-        return document.cookie.split('; ').reduce((r, v) => {
-            const parts = v.split('=');
-            return parts[0] === name ? decodeURIComponent(parts[1]) : r;
-        }, '');
+
     }
 
     const urlParams = new URLSearchParams(window.location.search);
