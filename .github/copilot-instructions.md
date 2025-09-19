@@ -3,7 +3,7 @@
 - 必要に応じて、ユーザに質問を行い、要求を明確にすること
 - 作業後、作業内容とユーザが次に取れる行動を説明すること
 - 作業項目が多い場合は、段階に区切り、git commit を行いながら進めること
-  - semantic commit を使用する
+  - semantic commit（例: "feat:", "fix:", "docs:" などのprefixを付ける。詳細は [Conventional Commits](https://www.conventionalcommits.org/ja/v1.0.0/) を参照）を使用する
 - コマンドの出力が確認できない場合、 get last command / check background terminal を使用して確認すること
   
 # レビューに関して
