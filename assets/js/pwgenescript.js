@@ -1,7 +1,7 @@
 const __pwgen_init = () => {
     // 初期値セット: URLパラメータ > cookie > HTML
     // 必要なDOM要素を安全に初期化
-    let lastGeneratedScore = null;
+    let lastGeneratedScore;
     const modeSelect = document.getElementById('mode');
     const hyphenateSelect = document.getElementById('hyphenateSelect');
     const hyphenLengthInput = document.getElementById('hyphenLength');

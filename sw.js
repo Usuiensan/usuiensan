@@ -5,7 +5,7 @@
 //   - package.jsonのversionを埋め込む
 //   - ビルド時に自動でUNIXタイムスタンプを挿入する（推奨: ビルドスクリプトで置換）
 // 更新しないとキャッシュが正しく切り替わらないため、必ず変更時に更新してください。
-const VERSION = 1758354393;
+const VERSION = 1758355248;
 const PRECACHE = `precache-${VERSION}`;
 const RUNTIME = `runtime-${VERSION}`;
 

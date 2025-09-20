@@ -120,9 +120,9 @@ title: 自動パスワード生成できるくん
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var modeSelect = document.getElementById('mode');
-  var hyphenLengthInput = document.getElementById('hyphenLength');
-  var hyphenWarning = document.getElementById('hyphen-warning');
+  const modeSelect = document.getElementById('mode');
+  const hyphenLengthInput = document.getElementById('hyphenLength');
+  const hyphenWarning = document.getElementById('hyphen-warning');
   function updateHyphenWarning() {
     if (modeSelect.value === 'uuid' || modeSelect.value === 'ulid') {
       hyphenLengthInput.disabled = true;
@@ -134,22 +134,5 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   modeSelect.addEventListener('change', updateHyphenWarning);
   updateHyphenWarning();
-
-  // --- 新規: visible select と隠し checkbox を同期する ---
-  var hyphenSelect = document.getElementById('hyphenateSelect');
-  var hyphenCheckbox = document.getElementById('hyphenate'); // 互換性用 (隠し)
-
-  // 初期状態を select に反映
-  if (hyphenCheckbox && hyphenSelect) {
-    hyphenSelect.value = hyphenCheckbox.checked ? 'true' : 'false';
-  }
-
-  // select が変わったら隠し checkbox を更新
-  if (hyphenSelect && hyphenCheckbox) {
-    hyphenSelect.addEventListener('change', function () {
-      hyphenCheckbox.checked = (hyphenSelect.value === 'true');
-    });
-  }
-  // ----------------------------------------------------
 });
 </script>
