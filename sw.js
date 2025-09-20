@@ -1,7 +1,7 @@
 //VERSIONの値は、バージョンアップ時に更新すること。
 //UNIXタイムスタンプを利用。
 // package.jsonのversionを埋め込むか、ビルド時にUNIXタイムスタンプを自動挿入することを推奨
-const VERSION = process.env.VERSION || Date.now().toString();
+const VERSION = 1758354393;
 const PRECACHE = `precache-${VERSION}`;
 const RUNTIME = `runtime-${VERSION}`;
 
