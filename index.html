@@ -2,8 +2,8 @@
 layout: default
 title: 自動パスワード生成できるくん
 ---
-<h1>ランダム文字列生成</h1>
-<h2>パスワードに使うも、何に使うもよし！</h2>
+<h1>パスワード自動生成</h1>
+<h2>安全なパスワードをすぐに生成できます。</h2>
 <label for="length">文字数:</label>
 <input type="number" id="length" value="15" min="1">
 <br>
@@ -13,30 +13,49 @@ title: 自動パスワード生成できるくん
 <label for="mode">モード:</label>
 <select id="mode">
     <option value="url">URL向け</option>
-    <option value="noConfuse" selected>見間違いなし</option>
+    <option value="noConfuse">見間違いなし</option>
     <option value="numberOnly">数字</option>
     <option value="numberAndLower">数字+小文字</option>
     <option value="numberAndUpper">数字+大文字</option>
     <option value="numberAndAlphabet">数字+文字</option>
-    <option value="numberAndAlphabetAndSymbols">数字+文字+記号</option>
-    <option value="ulid">ULID (字数・ハイフン機能使用不可)</option>
+    <option value="numberAndAlphabetAndSymbols" selected>数字+文字+記号</option>
+    <option value="ulid">ULID（26文字固定）</option>
+    <option value="uuid">UUID (v4)</option>
 </select>
 <br>
-<label for="hyphenate">5文字ごとにハイフン:</label>
+<label for="hyphenate">ハイフン区切り:</label>
 <input type="checkbox" id="hyphenate" checked>
+<label for="hyphenLength">区切り文字数:</label>
+<input type="number" id="hyphenLength" value="5" min="1" style="width:4em;">
+<div class="note" id="hyphen-warning" style="display:none;">このモードでは区切り文字数は指定できません</div>
 <div id="character-info"></div>
 <button id="generate">生成</button>
 <div id="result">
 </div>
 <div id="timestamp-display" style="margin-top: 10px; font-weight: bold;"></div>
-
-<p>
-    🚧備忘録
-    <br>ファイル名に安心して使える半角記号は、アットマーク(@)、ハイフン(-)、アンダースコア(_)のみ。
-    <br>全角文字は文字化けの恐れがあるため、不特定多数に共有する場合等、OSをまたぐ可能性がある場合は避ける。
-    <br><a href="https://ascii.jp/elem/000/004/030/4030753/2/" target="_blank" rel="noopener">参考リンク</a>
+<p style="margin:1em 0;">
+  <a href="password_gene_info.html">自動パスワード生成の詳細情報はこちら</a>
 </p>
-<p>
-
-</p>
+<h4>🔒 パスワードを生成する仕組み</h4>
+<p>当サイトでは、パスワードを生成する際にクライアント側で処理を行っています。これは、パスワード生成のプロセスが、今お使いのあなたの端末（パソコンやスマートフォン）のブラウザ内で完結することを意味します。<br>そのため、生成されたパスワードをあなた以外が知ることは<b>絶対にありません。</b><br>また、タブをひとたび閉じればそのパスワードは再生成されることはありません。そのため、使用したパスワードはご自身で管理してください。</p>
+<h4>🍪 Cookieの利用について</h4>
+<p>当サイトでは、パスワード生成の設定(文字数・設定数・モード・ハイフンで区切るか・ハイフンで区切る文字数)をCookieを使用し記録しています。<br>これにより、次回利用時にもう一度設定し直す手間が省け、スムーズにご利用いただけます。<br>パスワード自体は一切含まれません。あくまで、パスワード生成の<b>「設定」</b>情報のみを匿名で保存していますので、ご安心ください。<br>また、Cookie情報を記録しない・または削除した場合でもまったく問題なくご利用いただけます。</p>
 <script src="{{ '/assets/js/pwgenescript.js' | relative_url }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var modeSelect = document.getElementById('mode');
+  var hyphenLengthInput = document.getElementById('hyphenLength');
+  var hyphenWarning = document.getElementById('hyphen-warning');
+  function updateHyphenWarning() {
+    if (modeSelect.value === 'uuid' || modeSelect.value === 'ulid') {
+      hyphenLengthInput.disabled = true;
+      hyphenWarning.style.display = '';
+    } else {
+      hyphenLengthInput.disabled = false;
+      hyphenWarning.style.display = 'none';
+    }
+  }
+  modeSelect.addEventListener('change', updateHyphenWarning);
+  updateHyphenWarning();
+});
+</script>

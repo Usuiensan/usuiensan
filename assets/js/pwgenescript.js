@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const countInput = document.getElementById('count');
     const modeSelect = document.getElementById('mode');
     const hyphenateCheckbox = document.getElementById('hyphenate');
+    const hyphenLengthInput = document.getElementById('hyphenLength');
 
     if (paramLength !== null) {
         lengthInput.value = paramLength;
@@ -66,6 +67,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const generateButton = document.getElementById('generate');
     const resultDiv = document.getElementById('result');
     const characterInfo = document.getElementById('character-info');
+    const hyphenWarning = document.getElementById('hyphen-warning');
+
+    function updateUlidHyphenWarning() {
+        if (modeSelect.value === 'ulid' && hyphenateCheckbox.checked) {
+            hyphenWarning.innerHTML = 'ハイフン区切りはULIDの規格に定められていません。<br>単なるランダムな文字列としてご利用ください。';
+            hyphenWarning.style.display = '';
+            } else if (modeSelect.value === 'uuid' && hyphenateCheckbox.checked) {
+                hyphenWarning.innerHTML = '※ UUIDモードでは区切り文字数は指定できません'; // 本文と同じ色で表示
+                hyphenWarning.style.display = '';
+        } else {
+            hyphenWarning.style.display = 'none';
+        }
+    }
+    modeSelect.addEventListener('change', updateUlidHyphenWarning);
+    hyphenateCheckbox.addEventListener('change', updateUlidHyphenWarning);
+    updateUlidHyphenWarning();
 
     // Cookie操作関数
     function setCookie(name, value, days = 365) {
@@ -90,10 +107,24 @@ document.addEventListener('DOMContentLoaded', () => {
         return randomString;
     };
 
-    // 文字列を5文字ごとにハイフンで区切る関数
+    // 文字列を指定文字数ごとにハイフンで区切る関数（ULIDモードは5-5-4-4-4-4区切り）
     const hyphenate = (str) => {
-        const regex = /.{5}/g;
-        return str.match(regex)?.join('-') + (str.length % 5 !== 0 ? '-' + str.substring(str.length - (str.length % 5)) : '');
+        // ULIDモードは26文字固定: 5-5-4-4-4-4
+        if (modeSelect.value === 'ulid' && str.length === 26) {
+            return str.slice(0,5) + '-' +
+                   str.slice(5,10) + '-' +
+                   str.slice(10,14) + '-' +
+                   str.slice(14,18) + '-' +
+                   str.slice(18,22) + '-' +
+                   str.slice(22,26);
+        }
+        // 通常は指定文字数ごと
+        let len = 5;
+        if (hyphenLengthInput && hyphenLengthInput.value) {
+            len = Math.max(1, parseInt(hyphenLengthInput.value));
+        }
+        const regex = new RegExp(`.{1,${len}}`, 'g');
+        return str.match(regex)?.join('-');
     };
 
     // モードに応じた説明を更新する関数
@@ -126,6 +157,9 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'ulid':
                 characterSetDescription = "使用文字: A-Z 2-7 (長さは26文字固定)";
                 break;
+            case 'uuid':
+                characterSetDescription = "使用文字: 0-9 a-f (長さは36文字固定、8-4-4-4-12のハイフン区切り)";
+                break;
             default:
                 characterSetDescription = "";
         }
@@ -139,28 +173,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // 初期表示後に自動生成＆コピー判定
     autoGenerateAndCopyIfNeeded();
 
-    // ULIDモード時のハイフンチェックボックスの制御
-    modeSelect.addEventListener('change', () => {
-        if (modeSelect.value === 'ulid') {
-            hyphenateCheckbox.disabled = true;
-            hyphenateCheckbox.checked = false;
-        } else {
-            hyphenateCheckbox.disabled = false;
-        }
-    });
-
-    // 現在時刻とULID形式の時刻を表示する関数
     const updateTimestampDisplay = () => {
         const timestampDisplay = document.getElementById('timestamp-display');
         const currentTimestamp = new Date().toLocaleString();
         const ulidTimestamp = Math.floor(Date.now()).toString(32).toUpperCase().padStart(10, '0');
+        const unixTimestamp = Math.floor(Date.now() / 1000);
 
-        timestampDisplay.innerHTML = `現在時刻: ${currentTimestamp}<br>ULID上10桁: <span id='ulid-timestamp' style='font-family: "OCR B", monospace; cursor: pointer;'>${ulidTimestamp}</span>`;
+        timestampDisplay.innerHTML = `現在時刻: ${currentTimestamp}<br>ULID上10桁: <span id='ulid-timestamp' style='font-family: "OCR B", monospace; cursor: pointer;'>${ulidTimestamp}</span><br>UNIXタイムスタンプ: <span id='unix-timestamp' style='font-family: monospace; cursor: pointer;'>${unixTimestamp}</span>`;
 
         const ulidTimestampElement = document.getElementById('ulid-timestamp');
         ulidTimestampElement.addEventListener('click', () => {
             navigator.clipboard.writeText(ulidTimestamp).then(() => {
                 alert('ULID形式の時刻をコピーしました！');
+            }).catch(err => {
+                console.error('コピーに失敗しました: ', err);
+            });
+        });
+
+        const unixTimestampElement = document.getElementById('unix-timestamp');
+        unixTimestampElement.addEventListener('click', () => {
+            navigator.clipboard.writeText(unixTimestamp.toString()).then(() => {
+                alert('UNIXタイムスタンプをコピーしました！');
             }).catch(err => {
                 console.error('コピーに失敗しました: ', err);
             });
@@ -181,59 +214,72 @@ document.addEventListener('DOMContentLoaded', () => {
         setCookie('pwgen_hyphenate', hyphenateCheckbox.checked);
 
         if (isNaN(length) || length <= 0) {
-            alert('有効な文字数を入力してください。');
+            alert('1以上の値を入力してください。');
             return;
         }
         if (isNaN(count) || count <= 0) {
-            alert('有効な生成回数を入力してください。');
+            alert('1以上の値を入力してください。');
             return;
         }
         const selectedMode = modeSelect.value;
         let characters = '';
         resultDiv.innerHTML = '';
         for (let i = 0; i < count; i++) {
-            let randomString;
-            if (selectedMode === 'ulid') {
-                const timestamp = Math.floor(Date.now()).toString(32).toUpperCase().padStart(10, '0');
-                const randomPart = Array.from({ length: 16 }, () => {
-                    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-                    return chars[Math.floor(Math.random() * chars.length)];
-                }).join('');
-                randomString = `${timestamp}${randomPart}`;
-            } else {
-                switch (selectedMode) {
-                    case 'url':
-                        characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_';
-                        break;
-                    case 'noConfuse':
-                        characters = '0123456789ACFHKLMPXY';
-                        break;
-                    case 'numberOnly':
-                        characters = '0123456789';
-                        break;
-                    case 'numberAndLower':
-                        characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-                        break;
-                    case 'numberAndUpper':
-                        characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                        break;
-                    case 'numberAndAlphabet':
-                        characters = '0123456789ACFHKLMPXYBDEJNQRSTUVWZabcdefghkmnpqrstuvwxyz';
-                        break;
-                    case 'numberAndAlphabetAndSymbols':
-                        characters = '0123456789ACFHKLMPXYBDEJNQRSTUVWZabcdefghkmnpqrstuvwxyz-!?@#$%&=';
-                        break;
-                    default:
-                        alert('モードを選択してください。');
-                        return;
-                }
 
-                randomString = generateRandomString(length, characters);
-
-                if (hyphenateCheckbox.checked) {
-                    randomString = hyphenate(randomString);
+                let randomString;
+                if (selectedMode === 'ulid') {
+                    const timestamp = Math.floor(Date.now()).toString(32).toUpperCase().padStart(10, '0');
+                    const randomPart = Array.from({ length: 16 }, () => {
+                        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+                        return chars[Math.floor(Math.random() * chars.length)];
+                    }).join('');
+                    randomString = `${timestamp}${randomPart}`;
+                    if (hyphenateCheckbox.checked) {
+                        randomString = hyphenate(randomString);
+                    }
+                } else if (selectedMode === 'uuid') {
+                    if (window.crypto && window.crypto.randomUUID) {
+                        randomString = window.crypto.randomUUID();
+                    } else {
+                        // crypto.randomUUID が使えない場合の簡易実装
+                        alert('このブラウザはUUIDv4の生成に完全には対応していません。生成されるUUIDは厳密には規格に準拠しない場合があります。');
+                        randomString = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                            return v.toString(16);
+                        });
+                    }
+                } else {
+                    switch (selectedMode) {
+                        case 'url':
+                            characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_';
+                            break;
+                        case 'noConfuse':
+                            characters = '0123456789ACFHKLMPXY';
+                            break;
+                        case 'numberOnly':
+                            characters = '0123456789';
+                            break;
+                        case 'numberAndLower':
+                            characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+                            break;
+                        case 'numberAndUpper':
+                            characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                            break;
+                        case 'numberAndAlphabet':
+                            characters = '0123456789ACFHKLMPXYBDEJNQRSTUVWZabcdefghkmnpqrstuvwxyz';
+                            break;
+                        case 'numberAndAlphabetAndSymbols':
+                            characters = '0123456789ACFHKLMPXYBDEJNQRSTUVWZabcdefghkmnpqrstuvwxyz-!?@#$%&=';
+                            break;
+                        default:
+                            alert('モードを選択してください。');
+                            return;
+                    }
+                    randomString = generateRandomString(length, characters);
+                    if (hyphenateCheckbox.checked) {
+                        randomString = hyphenate(randomString);
+                    }
                 }
-            }
 
             const codeBlockContainer = document.createElement('div');
             codeBlockContainer.classList.add('code-block-container');
