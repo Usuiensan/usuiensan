@@ -314,10 +314,22 @@ const __pwgen_init = () => {
         }, 2200);
     };
 
+    // Crockford Base32 encoding for ULID timestamp (48-bit ms, 10 chars)
+    const crockfordBase32Encode = (num, length = 10) => {
+        const alphabet = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+        let encoded = '';
+        let value = num;
+        for (let i = 0; i < length; i++) {
+            encoded = alphabet[value % 32] + encoded;
+            value = Math.floor(value / 32);
+        }
+        return encoded;
+    };
+
     const updateTimestampDisplay = () => {
         const timestampDisplay = document.getElementById('timestamp-display');
         const currentTimestamp = new Date().toLocaleString();
-        const ulidTimestamp = Math.floor(Date.now()).toString(32).toUpperCase().padStart(10, '0');
+        const ulidTimestamp = crockfordBase32Encode(Math.floor(Date.now()), 10);
         const unixTimestamp = Math.floor(Date.now() / 1000);
 
         // clear and build semantic structure
