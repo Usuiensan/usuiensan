@@ -5,7 +5,7 @@
 //   - package.jsonのversionを埋め込む
 //   - ビルド時に自動でUNIXタイムスタンプを挿入する（推奨: ビルドスクリプトで置換）
 // 更新しないとキャッシュが正しく切り替わらないため、必ず変更時に更新してください。
-const VERSION = 1758355248;
+const VERSION = 1758355639;
 const PRECACHE = `precache-${VERSION}`;
 const RUNTIME = `runtime-${VERSION}`;
 
@@ -16,7 +16,13 @@ const PRECACHE_URLS = [
   '/manifest.json',
   '/assets/js/sw-register.js',
   '/assets/icons/192.png',
-  '/assets/icons/512.png'
+  '/assets/icons/512.png',
+  '/count.html',
+  '/assets/css/style.css',
+  '/assets/js/pwgenescript.js',
+  '/assets/js/zxcvbn.js',
+  '/index.html',
+  '/sitemap.html'
 ];
 
 self.addEventListener('install', event => {
