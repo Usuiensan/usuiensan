@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('コピーに失敗しました: ', err);
             });
         });
-
+// UNIXタイムスタンプのクリックでコピー
         const unixTimestampElement = document.getElementById('unix-timestamp');
         unixTimestampElement.addEventListener('click', () => {
             navigator.clipboard.writeText(unixTimestamp.toString()).then(() => {
