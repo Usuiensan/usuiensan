@@ -2,6 +2,10 @@ const CACHE_NAME = 'usuiensan-v1';
 const urlsToCache = [
   '/',
   '/index.html',
+  '/what-is-ulid.html',
+  '/count.html',
+  '/mywork.html',
+  '/links.html',
   '/style.css',
   '/assets/js/pwgenescript.js',
   '/assets/js/countscript.js',

@@ -1,5 +1,5 @@
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: "M+ 1p", "Rounded M+ 1m", "Myrica M", sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -32,28 +32,20 @@ body {
     pointer-events: auto;
 }
 
-/* 箇条書きを左揃えにする */
-.container ul {
-    text-align: left;
-    margin-bottom: 8px; /* 各リストアイテムの下に8pxの余白を追加 */
-    line-height: 1.6;   /* 行の高さを調整して文字の上下にゆとりを持たせる */
-
-}
-
-/* 必要であれば、リストの項目も左揃えにする（通常はulに指定すればOK） */
-.container li {
-    text-align: left;
-    margin-bottom: 8px; /* 各リストアイテムの下に8pxの余白を追加 */
-    line-height: 1.6;   /* 行の高さを調整して文字の上下にゆとりを持たせる */
-
-}
-
-/* 長い単語やURLが枠からはみ出さないように改行を許可する */
+/* 共通のテキストスタイル */
 .container p,
 .container li,
 .container a {
-    word-wrap: break-word; /* 非推奨だが広くサポートされている */
-    overflow-wrap: break-word; /* より新しい標準 */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* リストのスタイル */
+.container ul,
+.container li {
+    text-align: left;
+    margin-bottom: 8px;
+    line-height: 1.6;
 }
 
 h1 {
@@ -62,48 +54,63 @@ h1 {
     color: #333;
 }
 
-input[type="number"], select {
+input[type="number"], select, textarea {
     padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 12px; /* 角を丸くする */
+    border-radius: 12px;
     margin: 5px 0 15px;
     background-color: #f8f8f8;
     color: #333;
     font-size: 16px;
     outline: none;
-    width: calc(100% - 80px); /* inputの幅をコンテナに合わせる */
+    width: calc(100% - 24px);
     box-sizing: border-box;
-    vertical-align: middle; /* inputを中央揃え */
+    vertical-align: middle;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
 }
 
 input[type="number"]::placeholder {
     color: #999;
 }
 
-button {
+button,
+#copy-url-btn,
+#generate-url-btn,
+.regenerate-btn {
     padding: 12px 24px;
-    background-color: #007bff;
-    color: white;
+    background-color: #339988; /* 生成ボタンと同一 */
+    color: #fff;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.18s ease, color 0.18s ease;
     font-size: 16px;
     margin-top: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     width: 100%;
     box-sizing: border-box;
 }
 
-button:hover {
-    background-color: #0056b3;
+/* hover: 濃すぎず文字が常に読みやすい色合いに調整 */
+button:hover,
+#copy-url-btn:hover,
+#generate-url-btn:hover,
+.regenerate-btn:hover {
+    background-color: #2b7a66; /* #25705f よりやや明るめで可読性向上 */
+    color: #fff;
 }
 
-#result {
-    margin-top: 30px;
-    font-size: 1.2em;
-    font-weight: bold;
-    word-wrap: break-word;
+/* アクセシビリティ: フォーカス時の見やすさを確保 */
+button:focus,
+#copy-url-btn:focus,
+#generate-url-btn:focus,
+.regenerate-btn:focus {
+    outline: 3px solid rgba(51, 153, 136, 0.18);
+    outline-offset: 2px;
 }
 
 #result pre {
@@ -120,22 +127,7 @@ button:hover {
 }
 
 #result code {
-    font-family: "SourceHanCodeJP-Regular",
-               "M+ 1m",
-               "Rounded M+ 1m regular",
-               "Rounded M+ 2m regular",
-               "Rounded Mgen+ 1m regular",
-               "Rounded Mgen+ 2m regular",
-               "Yutapon coding Regular",
-               "Myrica M",
-               "MyricaM M",
-               "Ricty Diminished Discord",
-               "Ricty Diminished",
-               "Migu 1M",
-               "Migu 2M",
-               "VL ゴシック",
-               "MeiryoKe_Gothic",
-               monospace; /* フォントをOCR-Bに変更 */
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
     font-size: 1em;
     color: #333;
 }
@@ -163,17 +155,67 @@ input[type="checkbox"] {
 #url-description,
 #noConfuse-description {
     font-size: 0.8em;
-    color: #777;
+    color: #444;
     margin-left: 5px;
     vertical-align: middle;
 }
 
-p {
-    color: #000;
-    font-size: 0.9em;
-    margin-top: 20px;
+/* テーブルスタイル */
+label {
+    display: inline-block;
+    width: auto;
+    margin: 10px 0 5px;
+    color: #333;
+    font-size: 16px;
     text-align: left;
-    line-height: 1.6;
+    vertical-align: middle; /* 縦方向中央揃え */
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #333;
+}
+
+td {
+    color: #555;
+}
+
+.description {
+    font-size: 0.8em;
+    color: #444;
+    margin-top: 4px;
+}
+
+/* フォームテーブルスタイル */
+.form-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.form-table td {
+    border: none;
+    padding: 8px 12px;
+    vertical-align: middle;
+}
+
+.form-table td:first-child {
+    text-align: right;
+    width: 30%;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-table td:last-child {
+    text-align: left;
+    width: 70%;
 }
 
 #character-info {
@@ -189,28 +231,14 @@ p {
     margin: 5px;
 }
 
-.copy-button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    padding: 0; /* paddingを削除 */
-    width: 24px; /* 幅を指定 */
-    height: 24px; /* 高さを指定 */
-    background-color: rgba(0, 123, 255, 0.3); /* 半透明にする */
-    color: white;
-    border: none;
-    border-radius: 50%; /* 丸くする */
+.code-block-container pre {
     cursor: pointer;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
+    transition: background-color 0.3s ease, border 0.3s ease;
 }
 
-.code-block-container:hover .copy-button {
-    opacity: 1;
+.code-block-container pre:hover {
+    background-color: rgba(128, 192, 170, 0.2);
+    border: 1px solid #80c0aa;
 }
 
 #readme-content {
@@ -254,7 +282,7 @@ p {
     align-items: center;
 }
 .mini-nav a {
-    color: #666;
+    color: #444;
     text-decoration: none;
     opacity: 0.8;
 }
@@ -263,7 +291,7 @@ p {
     text-decoration: underline;
 }
 .mini-sep {
-    color: #999;
+    color: #444;
     user-select: none;
 }
 
@@ -296,4 +324,317 @@ p {
     white-space: pre-wrap;
 }
 
-.muted { color: #999; }
+.muted { color: #444; }
+
+/* タイムスタンプ表示のスタイル */
+.timestamp-display {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: rgba(192, 255, 238, 0.3);
+    border: 1px solid #c0ffee;
+    border-radius: 6px;
+    font-weight: normal;
+    color: #333;
+    font-size: 0.9em;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* timestamp 内の小要素を整列 */
+.timestamp-display .ts-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+.timestamp-display .ts-label {
+    font-size: 0.85em;
+    color: #333;
+    margin-right: 0.25rem;
+}
+.timestamp-display .ts-value {
+    font-family: "OCR B", monospace;
+    background: rgba(255,255,255,0.6);
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.06);
+    cursor: pointer;
+    user-select: all;
+}
+.timestamp-display .copy-hint {
+    font-size: 0.8em;
+    color: #666;
+}
+
+/* 生成ボタン下のコピー説明 */
+.copy-hint {
+    font-size: 0.8em;
+    color: #444;
+    margin: 5px 0;
+    text-align: center;
+}
+
+/* シンプルなトースト通知 */
+.toast {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    background: rgba(20,20,20,0.9);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 220ms ease, transform 220ms ease;
+    z-index: 1200;
+    pointer-events: none;
+}
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* 強度表示バッジ */
+
+.strength-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 6px 10px;
+    border-radius: 999px;
+    color: #fff;
+    font-weight: 600;
+}
+/* パスワードの強さ表示用の色 */
+.strength-0 { background: #FF4B00; color: #000; font-size: 1.2em; } /* 非常に危険 */
+.strength-1 { background: #F6AA00; color: #000; font-size: 1.2em; } /* 解読されやすく危険 */
+.strength-2 { background: #F2E700; color: #000; font-size: 1.2em; } /* やや解読されやすい */
+.strength-3 { background: #00B06B; color: #fff; font-size: 1.2em; } /* 良好 */
+.strength-4 { background: #1971FF; color: #fff; font-size: 1.2em; } /* 強い安全域 */
+.strength-icon {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* アイコン円（色の強さに合わせて目立たせる） */
+.strength-icon {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.08) inset;
+}
+
+/* URL 生成セクション用スタイル */
+#pwgen-url-params-info {
+    border: 1px solid rgba(0,0,0,0.06);
+    padding: 1rem;
+}
+#pwgen-url-form {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+#pwgen-url-form label {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    background: rgba(255,255,255,0.6);
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.04);
+}
+#generated-url {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #fff;
+}
+#copy-url-btn, #generate-url-btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    background: #80c0aa;
+    color: #fff;
+    cursor: pointer;
+}
+#copy-url-btn:hover, #generate-url-btn:hover {
+    background: #60a090;
+}
+
+@media (max-width: 520px) {
+    #pwgen-url-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    #pwgen-url-form label {
+        width: 100%;
+    }
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    input[type="number"], select, textarea {
+        width: calc(100% - 24px);
+    }
+    
+    table {
+        font-size: 0.9em;
+    }
+    
+    th, td {
+        padding: 8px;
+    }
+}
+
+/* カスタムモーダルダイアログ */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #d32f2f;
+    font-size: 1.25em;
+    font-weight: 600;
+}
+
+.modal-body {
+    padding: 20px 24px;
+}
+
+.modal-body p {
+    margin: 0;
+    line-height: 1.6;
+    color: #333;
+    white-space: pre-line;
+}
+
+.modal-footer {
+    padding: 16px 24px 20px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.modal-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.modal-btn-primary {
+    background-color: #d32f2f;
+    color: white;
+}
+
+.modal-btn-primary:hover {
+    background-color: #FF4B00;
+}
+
+.modal-btn-secondary {
+    background-color: #339988;
+    color: #fff;
+    border: 1px solid #ddd;
+}
+
+/* テーマ変数 */
+:root {
+	--main: #C0FFEE;              /* メインカラー（薄いミント系、爽やかで軽やかな印象） */
+	--main-h: 164;               /* おおよその色相（緑寄りシアン） */
+	--main-s: 100%;
+	--main-l: 88%;
+
+	/* コントラスト用ダークバリエーション（strength 3/4 用） */
+	--main-contrast: hsl(var(--main-h) var(--main-s) 50%);   /* やや暗め（strength-3） */
+	--main-contrast-dark: hsl(var(--main-h) 60% 38%);       /* さらに暗め（strength-4） */
+
+	--text-on-light: #000000;
+	--text-on-dark: #ffffff;
+
+	--btn-shadow: rgba(0,0,0,0.08);
+}
+
+/* ボタン系（main を基準に調整） */
+.btn {
+	background: var(--main);
+	color: var(--text-on-light);
+	border: 1px solid rgba(0,0,0,0.08);
+	padding: 0.5rem 1rem;
+	border-radius: 6px;
+	box-shadow: 0 2px 6px var(--btn-shadow);
+	cursor: pointer;
+}
+
+/* 強めのボタン（暗め背景での白文字を想定） */
+.btn--strong {
+	background: var(--main-contrast);
+	color: var(--text-on-dark);
+	border: none;
+	box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+}
+
+/* ホバーの微調整（視覚的に控えめ） */
+.btn:hover {
+	filter: brightness(0.98);
+}
+
+/* 最低限のアクセシビリティ補助 */
+.box { display:inline-block; min-width:8rem; text-align:center; }
+
+/* 最低限のアクセシビリティ補助 */
+.box { display:inline-block; min-width:8rem; text-align:center; }
+

@@ -4,43 +4,115 @@ title: 自動パスワード生成できるくん
 ---
 <h1>パスワード自動生成</h1>
 <h2>安全なパスワードをすぐに生成できます。</h2>
-<label for="length">文字数:</label>
-<input type="number" id="length" value="15" min="1">
-<br>
-<label for="count">生成数:</label>
-<input type="number" id="count" value="2" min="1">
-<br>
-<label for="mode">モード:</label>
-<select id="mode">
-    <option value="url">URL向け</option>
-    <option value="noConfuse">見間違いなし</option>
-    <option value="numberOnly">数字</option>
-    <option value="numberAndLower">数字+小文字</option>
-    <option value="numberAndUpper">数字+大文字</option>
-    <option value="numberAndAlphabet">数字+文字</option>
-    <option value="numberAndAlphabetAndSymbols" selected>数字+文字+記号</option>
-    <option value="ulid">ULID（26文字固定）</option>
-    <option value="uuid">UUID (v4)</option>
-</select>
-<br>
-<label for="hyphenate">ハイフン区切り:</label>
-<input type="checkbox" id="hyphenate" checked>
-<label for="hyphenLength">区切り文字数:</label>
-<input type="number" id="hyphenLength" value="5" min="1" style="width:4em;">
+<table class="form-table">
+  <tr>
+    <td><label for="length">文字数:</label></td>
+    <td><input type="number" id="length" value="15" min="1"></td>
+  </tr>
+  <tr>
+    <td><label for="count">生成数:</label></td>
+    <td><input type="number" id="count" value="2" min="1"></td>
+  </tr>
+  <tr>
+    <td><label for="mode">モード:</label></td>
+    <td>
+      <select id="mode">
+      <option value="url">URL向け</option>
+      <option value="noConfuse">見間違いなし</option>
+      <option value="numberOnly">数字</option>
+      <option value="numberAndLower">数字+小文字</option>
+      <option value="numberAndUpper">数字+大文字</option>
+      <option value="numberAndAlphabet">数字+文字</option>
+      <option value="numberAndAlphabetAndSymbols" selected>数字+文字+記号</option>
+      <option value="ulid">ULID（26文字固定）</option>
+      <option value="uuid">UUID (v4)</option>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <label for="hyphenLength">区切り文字数:</label></td>
+    <td>
+    <input type="number" id="hyphenLength" value="5" min="1" style="width:4em;"></td>
+  </tr>
+  <tr>
+    <td>
+      <label for="hyphenateSelect">ハイフン区切り:</label>
+    </td>
+    <td>
+      <!-- チェックボックスは廃止。全て select で扱う -->
+      <select id="hyphenateSelect" aria-label="ハイフン区切りの選択">
+        <option value="true" selected>する</option>
+        <option value="false">しない</option>
+      </select>
+    </td>
+  </tr>
+</table>
+
+<!-- モードの使用文字説明（JS の updateDescription で書き込まれる領域） -->
+<div id="character-info" style="margin-top:8px; color:#444;"></div>
+
 <div class="note" id="hyphen-warning" style="display:none;">このモードでは区切り文字数は指定できません</div>
-<div id="character-info"></div>
+<div id="strength-info" role="status" aria-live="polite" style="margin-top:8px; font-size:0.95em; color:#333;"></div>
 <button id="generate">生成</button>
+<p class="copy-hint">生成されたパスワードをクリックするとコピーできます</p>
 <div id="result">
 </div>
-<div id="timestamp-display" style="margin-top: 10px; font-weight: bold;"></div>
-<p style="margin:1em 0;">
-  <a href="password_gene_info.html">自動パスワード生成の詳細情報はこちら</a>
-</p>
+<div id="timestamp-display" class="timestamp-display"></div>
 <h4>🔒 パスワードを生成する仕組み</h4>
 <p>当サイトでは、パスワードを生成する際にクライアント側で処理を行っています。これは、パスワード生成のプロセスが、今お使いのあなたの端末（パソコンやスマートフォン）のブラウザ内で完結することを意味します。<br>そのため、生成されたパスワードをあなた以外が知ることは<b>絶対にありません。</b><br>また、タブをひとたび閉じればそのパスワードは再生成されることはありません。そのため、使用したパスワードはご自身で管理してください。</p>
 <h4>🍪 Cookieの利用について</h4>
 <p>当サイトでは、パスワード生成の設定(文字数・設定数・モード・ハイフンで区切るか・ハイフンで区切る文字数)をCookieを使用し記録しています。<br>これにより、次回利用時にもう一度設定し直す手間が省け、スムーズにご利用いただけます。<br>パスワード自体は一切含まれません。あくまで、パスワード生成の<b>「設定」</b>情報のみを匿名で保存していますので、ご安心ください。<br>また、Cookie情報を記録しない・または削除した場合でもまったく問題なくご利用いただけます。</p>
-<script src="{{ '/assets/js/pwgenescript.js' | relative_url }}"></script>
+<p>
+    🚧備忘録
+    <br>ファイル名に安心して使える半角記号は、アットマーク(@)、ハイフン(-)、アンダースコア(_)のみ。
+    <br>全角文字は文字化けの恐れがあるため、不特定多数に共有する場合等、OSをまたぐ可能性がある場合は避ける。
+    <br><a href="https://ascii.jp/elem/000/004/030/4030753/2/" target="_blank" rel="noopener">参考リンク</a>
+</p>
+<!-- カスタムモーダルダイアログ -->
+<div id="danger-modal" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="modal-title">危険なパスワードの警告</h3>
+    </div>
+    <div class="modal-body">
+      <p id="modal-message"></p>
+    </div>
+    <div class="modal-footer">
+      <button id="modal-regenerate" class="modal-btn modal-btn-secondary">パスワードを作り直す</button>
+      <button id="modal-proceed" class="modal-btn modal-btn-primary">危険性を理解してコピー</button>
+    </div>
+  </div>
+</div>
+
+<!-- zxcvbn loader: prefer local /assets/js/zxcvbn.js, otherwise load CDN. Then load pwgenescript.js -->
+<script>
+  (function() {
+  const localPath = '{{ "/assets/js/zxcvbn.js" | relative_url }}';
+    const cdn = 'https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js';
+    function loadScript(src, onload) {
+      const s = document.createElement('script');
+      s.src = src;
+      s.onload = function() { console.log('loaded script:', src); if (typeof onload === 'function') onload(); };
+      s.onerror = function(e) { console.error('failed to load script:', src, e); if (typeof onload === 'function') onload(new Error('load error')); };
+      document.head.appendChild(s);
+      return s;
+    }
+    // try local first
+    loadScript(localPath, function(err) {
+      if (err) {
+        // fallback to CDN
+        loadScript(cdn, function() {
+          // after zxcvbn loaded, load pwgenescript
+          loadScript('{{ "/assets/js/pwgenescript.js" | relative_url }}');
+        });
+      } else {
+        // local loaded OK
+  loadScript('{{ "/assets/js/pwgenescript.js" | relative_url }}');
+      }
+    });
+  })();
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var modeSelect = document.getElementById('mode');
@@ -57,5 +129,22 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   modeSelect.addEventListener('change', updateHyphenWarning);
   updateHyphenWarning();
+
+  // --- 新規: visible select と隠し checkbox を同期する ---
+  var hyphenSelect = document.getElementById('hyphenateSelect');
+  var hyphenCheckbox = document.getElementById('hyphenate'); // 互換性用 (隠し)
+
+  // 初期状態を select に反映
+  if (hyphenCheckbox && hyphenSelect) {
+    hyphenSelect.value = hyphenCheckbox.checked ? 'on' : 'off';
+  }
+
+  // select が変わったら隠し checkbox を更新
+  if (hyphenSelect && hyphenCheckbox) {
+    hyphenSelect.addEventListener('change', function () {
+      hyphenCheckbox.checked = (hyphenSelect.value === 'on');
+    });
+  }
+  // ----------------------------------------------------
 });
 </script>
