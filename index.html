@@ -136,13 +136,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // 初期状態を select に反映
   if (hyphenCheckbox && hyphenSelect) {
-    hyphenSelect.value = hyphenCheckbox.checked ? 'on' : 'off';
+    hyphenSelect.value = hyphenCheckbox.checked ? 'true' : 'false';
   }
 
   // select が変わったら隠し checkbox を更新
   if (hyphenSelect && hyphenCheckbox) {
     hyphenSelect.addEventListener('change', function () {
-      hyphenCheckbox.checked = (hyphenSelect.value === 'on');
+      hyphenCheckbox.checked = (hyphenSelect.value === 'true');
     });
   }
   // ----------------------------------------------------
