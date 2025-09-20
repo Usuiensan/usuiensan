@@ -4,6 +4,7 @@
   <link rel="icon" type="image/x-xicon" href="{{ site.baseurl }}/favicon.ico">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#C0ffee">
   <title>
   {% if page.title %}{{ page.title }}{% endif %}
   {% if site.author %} - {{ site.author }}{% endif %}
@@ -14,6 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=OCR+B&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="manifest" href="{{ site.baseurl }}/manifest.json">
+  <link rel="apple-touch-icon" href="/assets/icons/192.png">
 </head>
 <body>
   <div class="container">
@@ -29,17 +31,7 @@
     <a href="{{ site.baseurl }}/links.html">リンク集</a>
   </div>
   </div>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('{{ site.baseurl }}/sw.js')
-          .then(function(registration) {
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-          }, function(err) {
-            console.log('ServiceWorker registration failed: ', err);
-          });
-      });
-    }
-  </script>
+  <!-- サービスワーカー登録スクリプト -->
+  <script src="/assets/js/sw-register.js" defer></script>
 </body>
 </html>
