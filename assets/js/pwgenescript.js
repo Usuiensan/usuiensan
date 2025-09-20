@@ -13,21 +13,34 @@ const __pwgen_init = () => {
     // Cookie操作関数
     function setCookie(name, value, days = 365) {
         const expires = new Date(Date.now() + days * 864e5).toUTCString();
-        document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
+        document.cookie = name + '=' + encodeURIComponent(String(value)) + '; expires=' + expires + '; path=/';
     }
     function getCookie(name) {
-        return document.cookie.split('; ').reduce((r, v) => {
-            const parts = v.split('=');
-            return parts[0] === name ? decodeURIComponent(parts[1]) : r;
-        }, '');
+        const cookies = document.cookie.split('; ');
+        for (const row of cookies) {
+            const eqIdx = row.indexOf('=');
+            if (eqIdx > 0 && row.substring(0, eqIdx) === name) {
+                return decodeURIComponent(row.substring(eqIdx + 1));
+            }
+        }
+        return null;
     }
     // updateUlidHyphenWarning が定義されていない場合に備え、簡易実装を用意
     const updateUlidHyphenWarning = () => {
         const hyphenWarning = document.getElementById('hyphen-warning');
-        if (!modeSelect || !hyphenLengthInput) return;
-        if (modeSelect.value === 'uuid' || modeSelect.value === 'ulid') {
+        if (!modeSelect || !hyphenLengthInput || !hyphenateSelect) return;
+        if (modeSelect.value === 'uuid') {
             hyphenLengthInput.disabled = true;
-            if (hyphenWarning) hyphenWarning.style.display = '';
+            if (hyphenWarning) {
+                hyphenWarning.textContent = 'UUIDは自動的にハイフン区切りされます。';
+                hyphenWarning.style.display = '';
+            }
+        } else if (modeSelect.value === 'ulid' && hyphenateSelect.value === 'true') {
+            hyphenLengthInput.disabled = true;
+            if (hyphenWarning) {
+                hyphenWarning.textContent = 'ULIDをハイフン区切りで表示しています（5-5-4-4-4-4）。規格を逸脱している点に注意してください。';
+                hyphenWarning.style.display = '';
+            }
         } else {
             hyphenLengthInput.disabled = false;
             if (hyphenWarning) hyphenWarning.style.display = 'none';
@@ -43,6 +56,8 @@ const __pwgen_init = () => {
         const savedHyphen = getCookie('pwgen_hyphenate');
         if (hyphenateSelect && (savedHyphen === 'true' || savedHyphen === 'false')) {
             hyphenateSelect.value = savedHyphen;
+        } else if (hyphenateSelect) {
+            hyphenateSelect.value = 'false'; // 初期値
         }
     } catch (e) {
         // noop - cookie 読み込みに失敗しても初期表示はそのままにする
