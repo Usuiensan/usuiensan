@@ -93,6 +93,11 @@ title: 自動パスワード生成できるくん
     function loadScript(src, onload) {
       const s = document.createElement('script');
       s.src = src;
+      // If loading from CDN, set SRI and crossOrigin
+      if (src === 'https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js') {
+        s.integrity = 'sha256-+Qw1kQwZ5qX6Ch12yvDqOiiMHDL/95B2S/bRMyCV2lA=';
+        s.crossOrigin = 'anonymous';
+      }
       s.onload = function() { console.log('loaded script:', src); if (typeof onload === 'function') onload(); };
       s.onerror = function(e) { console.error('failed to load script:', src, e); if (typeof onload === 'function') onload(new Error('load error')); };
       document.head.appendChild(s);
