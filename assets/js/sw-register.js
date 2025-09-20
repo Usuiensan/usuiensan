@@ -1,6 +1,9 @@
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').then(reg => {
+    navigator.serviceWorker.register(
+      (window.__BASEURL || '') + '/sw.js',
+      { scope: (window.__BASEURL || '') + '/' }
+    ).then(reg => {
       console.log('SW registered:', reg);
       if (reg.waiting) {
         console.log('SW waiting - update available');
