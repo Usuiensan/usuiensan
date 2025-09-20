@@ -615,8 +615,8 @@ const __pwgen_init = () => {
 };
 
 // If the script is loaded after DOMContentLoaded fired, run immediately.
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', __pwgen_init);
-} else {
+if (document.readyState !== 'loading') {
     __pwgen_init();
+} else {
+    document.addEventListener('DOMContentLoaded', __pwgen_init);
 }
