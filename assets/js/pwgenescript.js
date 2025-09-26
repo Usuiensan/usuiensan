@@ -51,17 +51,66 @@ const __pwgen_init = () => {
     if (hyphenateSelect) hyphenateSelect.addEventListener('change', updateUlidHyphenWarning);
     updateUlidHyphenWarning();
 
-    // 保存済み Cookie から hyphenate の設定を復元する
+    // 保存済み Cookie から設定を復元する
     try {
+        // length の復元
+        const savedLength = getCookie('pwgen_length');
+        if (lengthInput && savedLength && !isNaN(savedLength)) {
+            lengthInput.value = savedLength;
+        }
+
+        // count の復元
+        const savedCount = getCookie('pwgen_count');
+        if (countInput && savedCount && !isNaN(savedCount)) {
+            countInput.value = savedCount;
+        }
+
+        // mode の復元
+        const savedMode = getCookie('pwgen_mode');
+        if (modeSelect && savedMode) {
+            const modeOptions = Array.from(modeSelect.options).map(option => option.value);
+            if (modeOptions.includes(savedMode)) {
+                modeSelect.value = savedMode;
+            }
+        }
+
+        // hyphenLength の復元
+        const savedHyphenLength = getCookie('pwgen_hyphenLength');
+        if (hyphenLengthInput && savedHyphenLength && !isNaN(savedHyphenLength)) {
+            hyphenLengthInput.value = savedHyphenLength;
+        }
+
+        // hyphenate の復元
         const savedHyphen = getCookie('pwgen_hyphenate');
         if (hyphenateSelect && (savedHyphen === 'true' || savedHyphen === 'false')) {
             hyphenateSelect.value = savedHyphen;
         } else if (hyphenateSelect) {
-            hyphenateSelect.value = 'false'; // 初期値
+            hyphenateSelect.value = 'true'; // 初期値をtrueに変更（デフォルト設定に合わせる）
         }
     } catch (e) {
         // noop - cookie 読み込みに失敗しても初期表示はそのままにする
+        console.warn('Cookie読み込みでエラーが発生しました:', e);
     }
+
+    // 設定変更時にもCookieを保存するイベントリスナーを追加
+    const saveCurrentSettings = () => {
+        try {
+            if (lengthInput) setCookie('pwgen_length', lengthInput.value);
+            if (countInput) setCookie('pwgen_count', countInput.value);
+            if (modeSelect) setCookie('pwgen_mode', modeSelect.value);
+            if (hyphenLengthInput) setCookie('pwgen_hyphenLength', hyphenLengthInput.value);
+            if (hyphenateSelect) setCookie('pwgen_hyphenate', hyphenateSelect.value);
+        } catch (e) {
+            console.warn('Cookie保存でエラーが発生しました:', e);
+        }
+    };
+
+    // 各入力要素に変更イベントリスナーを追加
+    if (lengthInput) lengthInput.addEventListener('change', saveCurrentSettings);
+    if (countInput) countInput.addEventListener('change', saveCurrentSettings);
+    if (modeSelect) modeSelect.addEventListener('change', saveCurrentSettings);
+    if (hyphenLengthInput) hyphenLengthInput.addEventListener('change', saveCurrentSettings);
+    if (hyphenateSelect) hyphenateSelect.addEventListener('change', saveCurrentSettings);
 
     // UI の反映は script 後半で行う（updateStrengthDisplay はその後に定義され呼ばれます）
 
@@ -434,6 +483,7 @@ const __pwgen_init = () => {
         setCookie('pwgen_length', lengthInput.value);
         setCookie('pwgen_count', countInput.value);
         setCookie('pwgen_mode', modeSelect.value);
+        setCookie('pwgen_hyphenLength', hyphenLengthInput.value);
         setCookie('pwgen_hyphenate', (hyphenateSelect && (hyphenateSelect.value === 'true')) ? 'true' : 'false');
 
         if (isNaN(length) || length <= 0) {
