@@ -483,16 +483,16 @@ const __pwgen_init = () => {
                             characters = '0123456789';
                             break;
                         case 'numberAndLower':
-                            characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+                            characters = 'abcdefghkmnpqrstuvwxyz0123456789';
                             break;
                         case 'numberAndUpper':
-                            characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                            characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789';
                             break;
                         case 'numberAndAlphabet':
-                            characters = '0123456789ACFHKLMPXYBDEJNQRSTUVWZabcdefghkmnpqrstuvwxyz';
+                            characters = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghkmnpqrstuvwxyz';
                             break;
                         case 'numberAndAlphabetAndSymbols':
-                            characters = '0123456789ACFHKLMPXYBDEJNQRSTUVWZabcdefghkmnpqrstuvwxyz-!?@#$%&=';
+                            characters = '!#$%&-0123456789=?@ABCDEFGHJKLMNPQRSTUVWXYZabcdefghkmnpqrstuvwxyz';
                             break;
                         default:
                             alert('モードを選択してください。');
