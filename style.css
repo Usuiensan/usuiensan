@@ -1,5 +1,11 @@
 body {
-    font-family: "M+ 1p", "Rounded M+ 1m", "Myrica M", sans-serif;
+    font-family: "M+ 1p", "Rounded M+ 1m", "Myrica M", 
+                 "Noto Sans", "Noto Sans CJK JP", "Noto Sans JP",
+                 "Noto Sans Symbols", "Noto Sans Symbols 2", 
+                 "Noto Sans Math", "Noto Color Emoji",
+                 "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+                 "Hiragino Sans", "Yu Gothic UI", "Meiryo UI", 
+                 sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -71,6 +77,16 @@ input[type="number"], select, textarea {
 textarea {
     resize: vertical;
     min-height: 100px;
+    /* レアな文字の表示を改善するためのフォント設定 */
+    font-family: "M+ 1p", "Rounded M+ 1m", "Myrica M", 
+                 "Noto Sans", "Noto Sans CJK JP", "Noto Sans JP",
+                 "Noto Sans Symbols", "Noto Sans Symbols 2", 
+                 "Noto Sans Math", "Noto Color Emoji",
+                 "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+                 "Hiragino Sans", "Yu Gothic UI", "Meiryo UI", 
+                 monospace, sans-serif;
+    font-feature-settings: "liga" 1, "kern" 1;
+    line-height: 1.5;
 }
 
 input[type="number"]::placeholder {
@@ -322,9 +338,58 @@ td {
     text-align: left;
     word-break: break-word;
     white-space: pre-wrap;
+    /* レアな文字やユニコード記号の表示を改善 */
+    font-family: "M+ 1p", "Rounded M+ 1m", "Myrica M", 
+                 "Noto Sans", "Noto Sans CJK JP", "Noto Sans JP",
+                 "Noto Sans Symbols", "Noto Sans Symbols 2", 
+                 "Noto Sans Math", "Noto Color Emoji",
+                 "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+                 "Hiragino Sans", "Yu Gothic UI", "Meiryo UI", 
+                 monospace, sans-serif;
+    font-feature-settings: "liga" 1, "kern" 1;
+    line-height: 1.6;
+    font-variant-numeric: tabular-nums;
 }
 
 .muted { color: #444; }
+
+/* レアな文字・古代文字・特殊記号の表示改善 */
+.rare-chars, .ancient-scripts, .special-symbols {
+    font-family: "Noto Sans Symbols 2", "Noto Sans Symbols", "Noto Sans Math",
+                 "Noto Sans", "Noto Sans CJK JP", "Noto Sans JP",
+                 "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji",
+                 "Segoe UI Symbol", "Symbola", "DejaVu Sans",
+                 "Unifont", "Code2000", monospace, sans-serif;
+    font-feature-settings: "liga" 1, "kern" 1, "calt" 1;
+    font-variant-ligatures: common-ligatures contextual;
+    text-rendering: optimizeQuality;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Unicode Private Use Area等の特殊範囲をサポート */
+.unicode-pua {
+    font-family: "LastResort", "Noto Sans Symbols 2", "Noto Sans Symbols",
+                 ".AppleSymbolsFB", "Symbola", "DejaVu Sans", 
+                 monospace, sans-serif;
+}
+
+/* Shift-JIS互換性チェック結果のスタイル */
+.sjis-compatible {
+    color: #0d7377;
+    background-color: rgba(192, 255, 238, 0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border-left: 3px solid #0d7377;
+}
+
+.sjis-incompatible {
+    color: #d63384;
+    background-color: rgba(255, 228, 230, 0.7);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border-left: 3px solid #d63384;
+}
 
 /* タイムスタンプ表示のスタイル */
 .timestamp-display {
