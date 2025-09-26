@@ -40,7 +40,6 @@ title: 自動パスワード生成できるくん
       <label for="hyphenateSelect">ハイフン区切り:</label>
     </td>
     <td>
-      <!-- チェックボックスは廃止。全て select で扱う -->
       <select id="hyphenateSelect" aria-label="ハイフン区切りの選択">
         <option value="true" selected>する</option>
         <option value="false">しない</option>
@@ -85,7 +84,7 @@ title: 自動パスワード生成できるくん
   </div>
 </div>
 
-<!-- zxcvbn loader: prefer local /assets/js/zxcvbn.js, otherwise load CDN. Then load pwgenescript.js -->
+
 <script>
   (function() {
   const localPath = '{{ "/assets/js/zxcvbn.js" | relative_url }}';
