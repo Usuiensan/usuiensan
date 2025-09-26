@@ -52,20 +52,23 @@ function splitIntoUnits(normalized) {
     return units;
 }
 
-// Shift_JISに収録されていない文字を調べる（encoding.js を利用）
+// Shift_JISに収録されていない文字を調べる（encoding-japanese を利用）
 function findNonShiftJISChars(str) {
     const nonShiftJISChars = new Set(); // 重複を避けるためSetを使用
 
-    // encoding.js のグローバル名はいくつかあるため、両方をチェック
-    const enc = (typeof encoding !== 'undefined') ? encoding : (typeof Encoding !== 'undefined' ? Encoding : null);
+    // encoding-japanese のグローバル変数をチェック（CDN版では Encoding が使用される）
+    const enc = (typeof Encoding !== 'undefined') ? Encoding : null;
 
-    if (!enc || typeof enc.convert !== 'function') {
+    if (!enc || typeof enc.convert !== 'function' || typeof enc.stringToCode !== 'function') {
         // フォールバック: NFC 正規化してから簡易判定（クラスタ単位で判定）
+        console.warn('encoding-japanese ライブラリが利用できません。簡易判定にフォールバックします。');
         const normalized = (typeof str.normalize === 'function') ? str.normalize('NFC') : str;
         const units = splitIntoUnits(normalized);
         for (const ch of units) {
             const cp = ch.codePointAt(0);
-            if (cp > 0xFF) {
+            // より厳密な判定：Shift-JIS範囲外の文字を特定
+            // ASCII、JIS X 0201のカタカナ、JIS X 0208の範囲外をチェック
+            if (cp > 0x7F && !isLikelyShiftJISChar(cp)) {
                 nonShiftJISChars.add(ch);
             }
         }
@@ -78,16 +81,23 @@ function findNonShiftJISChars(str) {
 
     for (const char of units) {
         try {
-            // 1文字（クラスタ）をSJISに変換（配列で受け取る）
-            let sjisBytes;
-            try {
-                sjisBytes = enc.convert(char, { to: 'SJIS', from: 'UNICODE', type: 'array' });
-            } catch (e) {
-                sjisBytes = enc.convert(char, 'SJIS');
+            // 1文字（クラスタ）を文字コード配列に変換
+            const unicodeArray = enc.stringToCode(char);
+            
+            // UnicodeからSJISに変換
+            const sjisArray = enc.convert(unicodeArray, {
+                to: 'SJIS',
+                from: 'UNICODE'
+            });
+
+            // SJISに変換できない場合
+            if (!sjisArray || sjisArray.length === 0) {
+                nonShiftJISChars.add(char);
+                continue;
             }
 
             // SJISにマッピングできない文字は '?' (0x3F) になることがある
-            const isConvertedToQuestionMark = (char !== '?' && Array.isArray(sjisBytes) && sjisBytes.length === 1 && sjisBytes[0] === 0x3F);
+            const isConvertedToQuestionMark = (char !== '?' && sjisArray.length === 1 && sjisArray[0] === 0x3F);
 
             if (isConvertedToQuestionMark) {
                 nonShiftJISChars.add(char);
@@ -95,34 +105,116 @@ function findNonShiftJISChars(str) {
             }
 
             // 復元して比較する
-            let restored;
-            try {
-                restored = enc.convert(sjisBytes, { to: 'UNICODE', from: 'SJIS' });
-            } catch (e) {
-                restored = enc.convert(sjisBytes, 'UNICODE');
-            }
-
-            let restoredChar;
-            if (Array.isArray(restored)) {
-                if (typeof enc.codeToString === 'function') {
-                    restoredChar = enc.codeToString(restored);
-                } else {
-                    restoredChar = String.fromCharCode.apply(null, restored);
-                }
-            } else {
-                restoredChar = restored;
-            }
-
-            if (restoredChar !== char) {
+            const restoredArray = enc.convert(sjisArray, {
+                to: 'UNICODE',
+                from: 'SJIS'
+            });
+            
+            const restored = enc.codeToString(restoredArray);
+            
+            // 復元された文字列と元の文字を比較
+            if (restored !== char) {
                 nonShiftJISChars.add(char);
             }
         } catch (e) {
             // 変換に失敗したら非収録と見なす
+            console.debug('Shift-JIS変換エラー:', char, e.message);
             nonShiftJISChars.add(char);
         }
     }
 
     return Array.from(nonShiftJISChars); // Setを配列に変換して返す
+}
+
+// Shift-JISに収録されている可能性が高い文字かどうかの簡易判定
+function isLikelyShiftJISChar(codePoint) {
+    // ひらがな (U+3041-U+3096)
+    if (codePoint >= 0x3041 && codePoint <= 0x3096) return true;
+    // カタカナ (U+30A1-U+30F6)
+    if (codePoint >= 0x30A1 && codePoint <= 0x30F6) return true;
+    // CJK統合漢字の一部 (U+4E00-U+9FAF) - ただし全てがShift-JISに含まれるわけではない
+    if (codePoint >= 0x4E00 && codePoint <= 0x9FAF) return true;
+    // その他の一般的な記号
+    if (codePoint >= 0xFF01 && codePoint <= 0xFF5E) return true; // 全角英数記号
+    
+    return false;
+}
+
+// 文字のタイプを検出する関数（レア文字、古代文字、特殊記号など）
+function detectCharacterType(char) {
+    const result = {
+        isRare: false,
+        isAncient: false,
+        isSymbol: false,
+        isPUA: false
+    };
+    
+    for (const ch of char) {
+        const cp = ch.codePointAt(0);
+        
+        // 私用領域 (Private Use Area)
+        if ((cp >= 0xE000 && cp <= 0xF8FF) || 
+            (cp >= 0xF0000 && cp <= 0xFFFFD) || 
+            (cp >= 0x100000 && cp <= 0x10FFFD)) {
+            result.isPUA = true;
+        }
+        
+        // 古代文字系（例: リニアB、楔形文字、象形文字など）
+        if ((cp >= 0x10000 && cp <= 0x1007F) ||  // Linear B Syllabary
+            (cp >= 0x10080 && cp <= 0x100FF) ||  // Linear B Ideograms
+            (cp >= 0x10100 && cp <= 0x1013F) ||  // Aegean Numbers
+            (cp >= 0x10140 && cp <= 0x1018F) ||  // Ancient Greek Numbers
+            (cp >= 0x10190 && cp <= 0x101CF) ||  // Ancient Symbols
+            (cp >= 0x101D0 && cp <= 0x101FF) ||  // Phaistos Disc
+            (cp >= 0x10280 && cp <= 0x1029F) ||  // Lycian
+            (cp >= 0x102A0 && cp <= 0x102DF) ||  // Carian
+            (cp >= 0x12000 && cp <= 0x123FF) ||  // Cuneiform
+            (cp >= 0x13000 && cp <= 0x1342F) ||  // Egyptian Hieroglyphs
+            (cp >= 0x14400 && cp <= 0x1467F)) {  // Anatolian Hieroglyphs
+            result.isAncient = true;
+        }
+        
+        // 特殊記号・装飾文字
+        if ((cp >= 0x2000 && cp <= 0x206F) ||   // General Punctuation
+            (cp >= 0x2070 && cp <= 0x209F) ||   // Superscripts and Subscripts
+            (cp >= 0x20A0 && cp <= 0x20CF) ||   // Currency Symbols
+            (cp >= 0x20D0 && cp <= 0x20FF) ||   // Combining Diacritical Marks for Symbols
+            (cp >= 0x2100 && cp <= 0x214F) ||   // Letterlike Symbols
+            (cp >= 0x2150 && cp <= 0x218F) ||   // Number Forms
+            (cp >= 0x2190 && cp <= 0x21FF) ||   // Arrows
+            (cp >= 0x2200 && cp <= 0x22FF) ||   // Mathematical Operators
+            (cp >= 0x2300 && cp <= 0x23FF) ||   // Miscellaneous Technical
+            (cp >= 0x2400 && cp <= 0x243F) ||   // Control Pictures
+            (cp >= 0x2440 && cp <= 0x245F) ||   // Optical Character Recognition
+            (cp >= 0x2460 && cp <= 0x24FF) ||   // Enclosed Alphanumerics
+            (cp >= 0x2500 && cp <= 0x257F) ||   // Box Drawing
+            (cp >= 0x2580 && cp <= 0x259F) ||   // Block Elements
+            (cp >= 0x25A0 && cp <= 0x25FF) ||   // Geometric Shapes
+            (cp >= 0x2600 && cp <= 0x26FF) ||   // Miscellaneous Symbols
+            (cp >= 0x2700 && cp <= 0x27BF) ||   // Dingbats
+            (cp >= 0x27C0 && cp <= 0x27EF) ||   // Miscellaneous Mathematical Symbols-A
+            (cp >= 0x27F0 && cp <= 0x27FF) ||   // Supplemental Arrows-A
+            (cp >= 0x2800 && cp <= 0x28FF) ||   // Braille Patterns
+            (cp >= 0x2900 && cp <= 0x297F) ||   // Supplemental Arrows-B
+            (cp >= 0x2980 && cp <= 0x29FF) ||   // Miscellaneous Mathematical Symbols-B
+            (cp >= 0x2A00 && cp <= 0x2AFF) ||   // Supplemental Mathematical Operators
+            (cp >= 0x2B00 && cp <= 0x2BFF)) {   // Miscellaneous Symbols and Arrows
+            result.isSymbol = true;
+        }
+        
+        // レア文字（高いコードポイント、使用頻度の低い文字）
+        if (cp > 0x10000 || 
+            (cp >= 0xA000 && cp <= 0xA48F) ||   // Yi Syllables
+            (cp >= 0xA490 && cp <= 0xA4CF) ||   // Yi Radicals
+            (cp >= 0xA700 && cp <= 0xA71F) ||   // Modifier Tone Letters
+            (cp >= 0xA720 && cp <= 0xA7FF) ||   // Latin Extended-D
+            (cp >= 0xA800 && cp <= 0xA82F) ||   // Syloti Nagri
+            (cp >= 0xA830 && cp <= 0xA83F)) {   // Common Indic Number Forms
+            result.isRare = true;
+        }
+    }
+    
+    return result;
 }
 
 // HTMLエスケープのヘルパー
@@ -169,12 +261,31 @@ function updateCounts() {
     // 6. Shift_JIS未収録の文字チェック
     if (shiftJisStatusEl) {
         const notInShiftJIS = findNonShiftJISChars(inputText);
+        const enc = (typeof Encoding !== 'undefined') ? Encoding : null;
+        
+        // デバッグ情報をコンソールに出力
+        console.debug('encoding-japanese ライブラリ状況:', {
+            available: !!enc,
+            hasConvert: enc && typeof enc.convert === 'function',
+            hasStringToCode: enc && typeof enc.stringToCode === 'function',
+            hasCodesToString: enc && typeof enc.codeToString === 'function',
+            inputLength: inputText.length,
+            nonShiftJISCount: notInShiftJIS.length
+        });
+        
         if (notInShiftJIS.length === 0) {
-            shiftJisStatusEl.textContent = 'Shift_JISに収録されている可能性があります（簡易判定）';
+            const statusText = enc ? 
+                'すべての文字がShift_JISに変換可能です ✓' : 
+                'Shift_JISに収録されている可能性があります（簡易判定）';
+            shiftJisStatusEl.textContent = statusText;
+            shiftJisStatusEl.className = 'sjis-compatible';
         } else {
-            // 表示は最大10文字までに抑える
-            const sample = notInShiftJIS.slice(0, 10).join(' ');
-            shiftJisStatusEl.textContent = `Shift_JISに収録されていない可能性のある文字：${sample}${notInShiftJIS.length > 10 ? ' …' : ''}`;
+            // 表示は最大8文字までに抑える
+            const sample = notInShiftJIS.slice(0, 8).join(' ');
+            const hasMore = notInShiftJIS.length > 8;
+            const libraryStatus = enc ? '' : '（簡易判定）';
+            shiftJisStatusEl.textContent = `Shift_JIS非対応文字${libraryStatus}：${sample}${hasMore ? ` 他${notInShiftJIS.length - 8}文字` : ''}`;
+            shiftJisStatusEl.className = 'sjis-incompatible';
         }
     }
 
@@ -189,9 +300,22 @@ function updateCounts() {
             const classes = [];
             if (nonSJIS.has(u)) classes.push('highlight-nonsjis');
             if (countVariationSelectors(u) > 0) classes.push('highlight-vs');
+            
+            // レアな文字・特殊記号の検出
+            const charType = detectCharacterType(u);
+            if (charType.isRare) classes.push('rare-chars');
+            if (charType.isAncient) classes.push('ancient-scripts');
+            if (charType.isSymbol) classes.push('special-symbols');
+            if (charType.isPUA) classes.push('unicode-pua');
+            
             const titleParts = [];
             if (classes.includes('highlight-nonsjis')) titleParts.push('Shift_JIS未収録の可能性');
             if (classes.includes('highlight-vs')) titleParts.push('異体字セレクタを含む');
+            if (charType.isRare) titleParts.push('レア文字');
+            if (charType.isAncient) titleParts.push('古代文字');
+            if (charType.isSymbol) titleParts.push('特殊記号');
+            if (charType.isPUA) titleParts.push('私用領域');
+            
             const title = titleParts.length ? titleParts.join(' / ') : '';
             html += `<span class="${classes.join(' ')}"${title ? ` title="${escapeHtml(title)}"` : ''}>${escapeHtml(u)}</span>`;
         }

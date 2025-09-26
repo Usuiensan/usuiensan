@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "encoding-japanese": "^2.2.0",
     "zxcvbn": "^4.4.2"
   }
 }

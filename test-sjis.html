@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shift-JIS テスト</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .result { margin: 10px 0; padding: 10px; border: 1px solid #ccc; }
+        .compatible { background-color: #d4edda; }
+        .incompatible { background-color: #f8d7da; }
+        .test-case { margin: 20px 0; padding: 15px; border-left: 4px solid #007bff; background: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <h1>Shift-JIS 互換性チェック テスト</h1>
+    
+    <div id="library-status"></div>
+    
+    <div class="test-case">
+        <h3>テストケース</h3>
+        <button onclick="testShiftJIS()">テスト実行</button>
+        <div id="test-results"></div>
+    </div>
+
+    <script src="https://unpkg.com/encoding-japanese@2.2.0/encoding.min.js"></script>
+    <script>
+        // ライブラリの読み込み状況を確認
+        function checkLibraryStatus() {
+            const status = document.getElementById('library-status');
+            const enc = (typeof Encoding !== 'undefined') ? Encoding : null;
+            
+            if (enc) {
+                status.innerHTML = `
+                    <div class="result compatible">
+                        <strong>✓ encoding-japanese ライブラリが正常に読み込まれています</strong><br>
+                        convert: ${typeof enc.convert === 'function' ? '✓' : '✗'}<br>
+                        stringToCode: ${typeof enc.stringToCode === 'function' ? '✓' : '✗'}<br>
+                        codeToString: ${typeof enc.codeToString === 'function' ? '✓' : '✗'}
+                    </div>
+                `;
+            } else {
+                status.innerHTML = `
+                    <div class="result incompatible">
+                        <strong>✗ encoding-japanese ライブラリが読み込まれていません</strong>
+                    </div>
+                `;
+            }
+        }
+
+        function testShiftJIS() {
+            const testCases = [
+                { text: 'あいうえお', expected: 'compatible', desc: 'ひらがな' },
+                { text: 'アイウエオ', expected: 'compatible', desc: 'カタカナ' },
+                { text: '漢字', expected: 'compatible', desc: '基本漢字' },
+                { text: 'ABC123', expected: 'compatible', desc: 'ASCII文字' },
+                { text: '🍣🍺', expected: 'incompatible', desc: '絵文字' },
+                { text: '①②③', expected: 'varies', desc: '丸数字（実装依存）' },
+                { text: '髙﨑', expected: 'varies', desc: '異体字' }
+            ];
+
+            const results = document.getElementById('test-results');
+            results.innerHTML = '<h4>テスト結果:</h4>';
+            
+            const enc = (typeof Encoding !== 'undefined') ? Encoding : null;
+            
+            testCases.forEach(testCase => {
+                let result = 'エラー';
+                let isCompatible = false;
+                
+                try {
+                    if (enc) {
+                        // 文字列を文字コード配列に変換
+                        const unicodeArray = enc.stringToCode(testCase.text);
+                        
+                        // UnicodeからShift-JISに変換
+                        const sjisArray = enc.convert(unicodeArray, {
+                            to: 'SJIS',
+                            from: 'UNICODE'
+                        });
+                        
+                        // Shift-JISからUnicodeに戻して比較
+                        const restoredArray = enc.convert(sjisArray, {
+                            to: 'UNICODE',
+                            from: 'SJIS'
+                        });
+                        
+                        const restored = enc.codeToString(restoredArray);
+                        
+                        isCompatible = (restored === testCase.text);
+                        result = isCompatible ? '互換性あり' : '互換性なし';
+                        
+                        console.log(`テスト "${testCase.text}":`, {
+                            original: testCase.text,
+                            unicode: unicodeArray,
+                            sjis: sjisArray,
+                            restored: restored,
+                            compatible: isCompatible
+                        });
+                    } else {
+                        result = 'ライブラリ未読み込み';
+                    }
+                } catch (e) {
+                    result = `エラー: ${e.message}`;
+                    console.error(`テスト "${testCase.text}" でエラー:`, e);
+                }
+                
+                const resultClass = isCompatible ? 'compatible' : 'incompatible';
+                results.innerHTML += `
+                    <div class="result ${resultClass}">
+                        <strong>${testCase.desc}</strong> "${testCase.text}": ${result}
+                    </div>
+                `;
+            });
+        }
+
+        // ページ読み込み時にライブラリ状況をチェック
+        document.addEventListener('DOMContentLoaded', checkLibraryStatus);
+    </script>
+</body>
+</html>
