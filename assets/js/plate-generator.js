@@ -1,0 +1,195 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const generateBtn = document.getElementById('generateBtn');
+    const jpPlateDiv = document.getElementById('jpPlate');
+    const vehicleTypeDiv = document.getElementById('vehicleType');
+    const intPlateDiv = document.getElementById('intPlate');
+
+    let plateData = null;
+    
+    // ひらがなからローマ字への変換マップ
+    const hiraganaToRomaji = {
+        'あ': 'A', 'い': 'I', 'う': 'U', 'え': 'E', 'お': 'O',
+        'か': 'KA', 'き': 'KI', 'く': 'KU', 'け': 'KE', 'こ': 'KO',
+        'さ': 'SA', 'し': 'SI', 'す': 'SU', 'せ': 'SE', 'そ': 'SO',
+        'た': 'TA', 'ち': 'TI', 'つ': 'TU', 'て': 'TE', 'と': 'TO',
+        'な': 'NA', 'に': 'NI', 'ぬ': 'NU', 'ね': 'NE', 'の': 'NO',
+        'は': 'HA', 'ひ': 'HI', 'ふ': 'HU', 'へ': 'HE', 'ほ': 'HO',
+        'ま': 'MA', 'み': 'MI', 'む': 'MU', 'め': 'ME', 'も': 'MO',
+        'や': 'YA', 'ゆ': 'YU', 'よ': 'YO',
+        'ら': 'RA', 'り': 'RI', 'る': 'RU', 'れ': 'RE', 'ろ': 'RO',
+        'わ': 'WA', 'を': 'WO', 'ん': 'N'
+    };
+
+    // JSONファイルを読み込む関数
+    async function loadData() {
+        try {
+            const response = await fetch('assets/json/plate-data.json');
+            plateData = await response.json();
+            generateBtn.disabled = false;
+        } catch (error) {
+            console.error('Error loading plate-data.json:', error);
+            jpPlateDiv.textContent = 'データファイルの読み込みに失敗しました。';
+            intPlateDiv.textContent = 'データファイルの読み込みに失敗しました。';
+            generateBtn.disabled = true;
+        }
+    }
+
+    // ナンバープレートを生成する関数
+    function generatePlate() {
+        if (!plateData) return;
+
+        // 地域名をランダムに選択
+        const areas = Object.keys(plateData.areas);
+        const randomAreaKey = areas[Math.floor(Math.random() * areas.length)];
+        const intAreaCode = plateData.areas[randomAreaKey];
+
+        // 日本の地域名を整形（括弧部分を完全に削除）
+        const jpAreaName = randomAreaKey.replace(/（.*?）|\(.*?\)/g, '');
+
+        // 分類番号を生成
+        const firstDigit = randomItem(Object.keys(plateData.classification.first_digit));
+        const secondDigit = randomItem(plateData.classification.second_digit);
+        const thirdDigit = randomItem(plateData.classification.third_digit);
+
+        const classificationNumber = `${firstDigit}${secondDigit}${thirdDigit}`;
+        
+        // ひらがなを生成
+        const hiraganaType = randomItem(Object.keys(plateData.hiraganas));
+        const randomHiragana = randomItem(plateData.hiraganas[hiraganaType]);
+
+        // 一連指定番号を生成
+        let serialNumber;
+        do {
+            const num = Math.floor(Math.random() * 9999) + 1;
+            const paddedNum = num.toString().padStart(4, '0');
+            const lastTwoDigits = paddedNum.slice(-2);
+            // 欠番ルール42,49,13を避ける
+            if (lastTwoDigits !== '42' && lastTwoDigits !== '49' && lastTwoDigits !== '13') {
+                serialNumber = num;
+                break;
+            }
+        } while (true);
+
+        // 一連指定番号の表示形式を整形
+        let formattedNumber;
+        if (serialNumber < 1000) {
+            formattedNumber = serialNumber.toString().padStart(4, '・').replace(/0/g, '・');
+        } else {
+            formattedNumber = `${serialNumber.toString().slice(0, 2)}-${serialNumber.toString().slice(2)}`;
+        }
+
+        // ナンバープレートの種類判定
+        const isKeiCar = firstDigit === '5' || firstDigit === '7'; // 軽自動車
+        const isBusiness = hiraganaType === '事業用'; // 事業用
+        
+        // プレートタイプのクラス名を決定
+        let plateTypeClass = '';
+        if (isKeiCar) {
+            plateTypeClass = isBusiness ? 'kei-business' : 'kei-private';
+        } else {
+            plateTypeClass = isBusiness ? 'normal-business' : 'normal-private';
+        }
+        
+        // 日本のナンバープレート（本物の配置：地域 分類番号（改行）ひらがな 一連番号）
+        const jpPlateDisplay = `
+            <div class="plate-line-1">
+                <span class="area-name">${jpAreaName}</span>
+                <span class="classification-number">${classificationNumber}</span>
+            </div>
+            <div class="plate-line-2">
+                <span class="hiragana">${randomHiragana}</span>
+                <span class="serial-number">${formattedNumber}</span>
+            </div>
+        `;
+        const jpPlateCopy = `${jpAreaName}${classificationNumber}${randomHiragana}${formattedNumber}`;
+        
+        const jpPlateContent = jpPlateDiv.querySelector('.plate-content');
+        jpPlateContent.innerHTML = jpPlateDisplay;
+        
+        // プレートの種類に応じたクラスを適用
+        jpPlateDiv.className = `license-plate japan-plate ${plateTypeClass}`;
+        jpPlateDiv.onclick = () => copyToClipboard(jpPlateCopy, jpPlateDiv);
+
+        // 車種・用途を表示
+        const vehicleType = plateData.classification.first_digit[firstDigit];
+        const hiraganaPurpose = hiraganaType;
+        // 管轄情報を抽出（括弧内の情報）
+        const jurisdictionMatch = randomAreaKey.match(/[（\(]([^）\)]*)[）\)]/);
+        const jurisdiction = jurisdictionMatch ? jurisdictionMatch[1] : '';
+        
+        vehicleTypeDiv.innerHTML = `
+            <table>
+                <tr>
+                    <th>項目</th>
+                    <th>内容</th>
+                </tr>
+                <tr>
+                    <td>車種</td>
+                    <td>${vehicleType}</td>
+                </tr>
+                <tr>
+                    <td>用途</td>
+                    <td>${hiraganaPurpose}</td>
+                </tr>
+                ${jurisdiction ? `<tr><td>管轄</td><td>${jurisdiction}</td></tr>` : ''}
+                <tr>
+                    <td>国際コード</td>
+                    <td>${intAreaCode}</td>
+                </tr>
+            </table>
+        `;
+        
+        // 国際ナンバープレート（ひらがなをローマ字に変換）
+        const romajiLetter = hiraganaToRomaji[randomHiragana] || randomHiragana;
+        // 国際ナンバープレートでは国際コードを表示
+        const intPlateDisplay = `
+            <div class="plate-line-1">
+                <span class="area-name">${intAreaCode}</span>
+                <span class="classification-number">${classificationNumber}</span>
+            </div>
+            <div class="plate-line-2">
+                <span class="hiragana">${romajiLetter}</span>
+                <span class="serial-number">${serialNumber}</span>
+            </div>
+        `;
+        const intPlateCopy = `${intAreaCode}${classificationNumber}${romajiLetter}${serialNumber}`;
+        
+        const intPlateContent = intPlateDiv.querySelector('.plate-content');
+        intPlateContent.innerHTML = intPlateDisplay;
+        intPlateDiv.onclick = () => copyToClipboard(intPlateCopy, intPlateDiv);
+    }
+
+    // リストからランダムな要素を取得するヘルパー関数
+    function randomItem(list) {
+        return list[Math.floor(Math.random() * list.length)];
+    }
+
+    // クリップボードにコピーする関数
+    window.copyToClipboard = function(text, element) {
+        navigator.clipboard.writeText(text).then(() => {
+            // 成功時のフィードバック
+            element.classList.add('copied');
+            
+            setTimeout(() => {
+                element.classList.remove('copied');
+            }, 2000);
+        }).catch(err => {
+            console.error('コピーに失敗しました:', err);
+            // フォールバック: テキストを選択状態にする
+            const plateContent = element.querySelector('.plate-content');
+            if (plateContent) {
+                const range = document.createRange();
+                range.selectNodeContents(plateContent);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+        });
+    };
+
+    // ボタンのクリックイベントを設定
+    generateBtn.addEventListener('click', generatePlate);
+
+    // ページ読み込み時にデータをロード
+    loadData();
+});

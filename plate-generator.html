@@ -1,0 +1,33 @@
+---
+layout: default
+title: ナンバープレートの番号を生成
+---
+    <h1>ナンバープレート生成ツール</h1>
+    <p>「日本のナンバープレート」と「国際ナンバープレート」を同時に生成します。</p>
+    
+    <button id="generateBtn">生成</button>
+    
+    <hr>
+
+    <div class="plates-container">
+        <div class="plate-section">
+            <h2>日本のナンバープレート</h2>
+            <div id="jpPlate" class="license-plate japan-plate">
+                <div class="plate-content">---</div>
+            </div>
+        </div>
+        
+        <div class="plate-section">
+            <h2>国際ナンバープレート</h2>
+            <div id="intPlate" class="license-plate international-plate">
+                <div class="plate-content">---</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="vehicle-info-section">
+        <h3>車種・用途情報</h3>
+        <div id="vehicleType">---</div>
+    </div>
+
+    <script src="assets/js/plate-generator.js"></script>

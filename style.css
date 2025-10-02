@@ -700,4 +700,237 @@ td {
 /* 最低限のアクセシビリティ補助 */
 .box { display:inline-block; min-width:8rem; text-align:center; }
 
+/* テーブルスタイル */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 15px 0;
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+table th, table td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid #e5e5e5;
+    vertical-align: middle;
+}
+
+table th {
+    background: linear-gradient(135deg, #c0ffee 0%, #b5f5e3 100%);
+    font-weight: 600;
+    color: #2d5a2d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+    border-bottom: 2px solid #a8e6d4;
+}
+
+table td {
+    font-weight: 500;
+    color: #333;
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+table tr:hover {
+    background-color: #f8fffe;
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+/* ナンバープレート表示用のスタイル */
+.plates-container {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.plate-section {
+    flex: 1;
+    min-width: 280px;
+    max-width: 400px;
+    text-align: center;
+}
+
+.plate-section h2 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.license-plate {
+    background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 100%);
+    border: 3px solid #333;
+    border-radius: 12px;
+    padding: 20px 15px;
+    margin: 15px auto;
+    box-shadow: 
+        0 8px 16px rgba(0,0,0,0.15),
+        inset 0 2px 4px rgba(255,255,255,0.8),
+        inset 0 -2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    max-width: 300px;
+}
+
+.license-plate:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 12px 24px rgba(0,0,0,0.2),
+        inset 0 2px 4px rgba(255,255,255,0.8),
+        inset 0 -2px 4px rgba(0,0,0,0.1);
+}
+
+.japan-plate::before {
+    content: "🇯🇵";
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    font-size: 1rem;
+    opacity: 0.7;
+}
+
+.international-plate {
+    background: linear-gradient(145deg, #f8f8ff 0%, #e6f0ff 100%);
+    border-color: #1e3a8a;
+    color: #1a1a1a;
+}
+
+.international-plate::before {
+    content: "🌐";
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    font-size: 1rem;
+    opacity: 0.7;
+}
+
+.plate-content {
+    font-family: "M+ 1p", "Rounded M+ 1m", "Myrica M", 
+                 "Noto Sans", "Noto Sans CJK JP", "Noto Sans JP",
+                 "Hiragino Sans", "Yu Gothic UI", "Meiryo UI", 
+                 sans-serif;
+    text-align: center;
+    line-height: 1.2;
+    padding: 12px 8px;
+    color: inherit;
+}
+
+.plate-line-1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 4px 0;
+    gap: 20px;
+}
+
+.plate-line-2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 4px 0;
+    gap: 25px;
+}
+
+.area-name {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.classification-number {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.hiragana {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.serial-number {
+    font-size: 2.2rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+/* 軽自動車 自家用（黄地黒文字） */
+.kei-private {
+    background: linear-gradient(145deg, #ffeb3b 0%, #ffd600 100%);
+    color: #000000;
+    border-color: #333333;
+}
+
+/* 軽自動車 事業用（黒地黄文字） */
+.kei-business {
+    background: linear-gradient(145deg, #424242 0%, #212121 100%);
+    color: #ffeb3b;
+    border-color: #ffeb3b;
+}
+
+/* 普通車 自家用（白地緑文字） */
+.normal-private {
+    background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 100%);
+    color: #2e7d32;
+    border-color: #2e7d32;
+}
+
+/* 普通車 事業用（緑地白文字） */
+.normal-business {
+    background: linear-gradient(145deg, #4caf50 0%, #2e7d32 100%);
+    color: #ffffff;
+    border-color: #ffffff;
+}
+
+.license-plate::after {
+    content: "📋 クリックでコピー";
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    color: #666;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+}
+
+.license-plate:hover::after {
+    opacity: 1;
+}
+
+.vehicle-info-section {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.vehicle-info-section h3 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+/* 成功時のフィードバック */
+.license-plate.copied {
+    background: linear-gradient(145deg, #90EE90 0%, #98FB98 100%);
+    transform: scale(1.02);
+}
+
+.license-plate.copied::after {
+    content: "✓ コピーしました!";
+    opacity: 1;
+    color: #2d6a2d;
+    font-weight: bold;
+}
+
 /* 最低限のアクセシビリティ補助 */
