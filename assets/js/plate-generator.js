@@ -78,7 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // 一連指定番号の表示形式を整形
         let formattedNumber;
         if (serialNumber < 1000) {
-            formattedNumber = serialNumber.toString().padStart(4, '・').replace(/0/g, '・');
+            // 4桁にパディングしてから、先頭のゼロのみを点に変換
+            const paddedNum = serialNumber.toString().padStart(4, '0');
+            formattedNumber = paddedNum.replace(/^0+/, (match) => '・'.repeat(match.length));
         } else {
             formattedNumber = `${serialNumber.toString().slice(0, 2)}-${serialNumber.toString().slice(2)}`;
         }
