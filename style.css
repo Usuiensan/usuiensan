@@ -234,6 +234,43 @@ td {
     width: 70%;
 }
 
+/* 車種・用途情報テーブルの固定レイアウト */
+.vehicle-info-table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed; /* 固定レイアウトを強制 */
+    margin-bottom: 20px;
+}
+
+.vehicle-info-table th,
+.vehicle-info-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.vehicle-info-table th:first-child,
+.vehicle-info-table td:first-child {
+    width: 25%; /* 項目列の幅を固定（25%） */
+    font-weight: bold;
+    background-color: #f8f9fa;
+}
+
+.vehicle-info-table th:last-child,
+.vehicle-info-table td:last-child {
+    width: 75%; /* 内容列の幅を固定（75%） */
+}
+
+.vehicle-info-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #333;
+}
+
+.vehicle-info-table td {
+    color: #555;
+}
+
 #character-info {
     margin-top: 10px;
     font-size: 0.9em;

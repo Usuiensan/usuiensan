@@ -41,10 +41,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // 地域名をランダムに選択
         const areas = Object.keys(plateData.areas);
         const randomAreaKey = areas[Math.floor(Math.random() * areas.length)];
-        const intAreaCode = plateData.areas[randomAreaKey];
+        const areaInfo = plateData.areas[randomAreaKey];
+        const intAreaCode = areaInfo.code;
 
         // 日本の地域名を整形（括弧部分を完全に削除）
         const jpAreaName = randomAreaKey.replace(/（.*?）|\(.*?\)/g, '');
+        
+        // 都道府県と運輸支局名を取得
+        const prefecture = areaInfo.prefecture;
+        const transportOffice = areaInfo.office;
 
         // 分類番号を生成
         const firstDigit = randomItem(Object.keys(plateData.classification.first_digit));
@@ -118,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const jurisdiction = jurisdictionMatch ? jurisdictionMatch[1] : '';
         
         vehicleTypeDiv.innerHTML = `
-            <table>
+            <table class="vehicle-info-table">
                 <tr>
                     <th>項目</th>
                     <th>内容</th>
@@ -131,9 +136,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>用途</td>
                     <td>${hiraganaPurpose}</td>
                 </tr>
-                ${jurisdiction ? `<tr><td>管轄</td><td>${jurisdiction}</td></tr>` : ''}
                 <tr>
-                    <td>国際コード</td>
+                    <td>都道府県</td>
+                    <td>${prefecture}</td>
+                </tr>
+
+                <tr>
+                    <td>地名表示</td>
                     <td>${intAreaCode}</td>
                 </tr>
             </table>
