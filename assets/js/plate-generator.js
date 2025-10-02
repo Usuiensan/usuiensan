@@ -143,11 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>都道府県</td>
                     <td>${prefecture}</td>
                 </tr>
-
-                <tr>
-                    <td>地名表示</td>
-                    <td>${intAreaCode}</td>
-                </tr>
                 <tr>
                     <td>コード説明</td>
                     <td>${codeExplanation}</td>
