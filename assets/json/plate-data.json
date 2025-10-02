@@ -148,7 +148,7 @@
 "つくば": {
 "code": "IGK",
 "prefecture": "茨城県",
-"codeExplanation": "IbaraGi + Tsukuba → IGK"
+"codeExplanation": "IbaraGi + tsuKuba → IGK"
 },
 "栃木": {
 "code": "TGT",
@@ -345,7 +345,7 @@
 "prefecture": "山梨県",
 "codeExplanation": "Yamanashi + Yamanashi → YN"
 },
-"富士山（旧山梨）": {
+"富士山(旧山梨)": {
 "code": "YNF",
 "prefecture": "山梨県",
 "codeExplanation": "YamaNashi + Fujisan → YNF"
@@ -430,7 +430,7 @@
 "prefecture": "静岡県",
 "codeExplanation": "ShiZuoKa + Izu → SZI"
 },
-"富士山（旧沼津）": {
+"富士山(旧沼津)": {
 "code": "SZF",
 "prefecture": "静岡県",
 "codeExplanation": "ShiZuoKa + Fujisan → SZF"
