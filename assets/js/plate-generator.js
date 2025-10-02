@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 都道府県と運輸支局名を取得
         const prefecture = areaInfo.prefecture;
         const transportOffice = areaInfo.office;
+        const codeExplanation = areaInfo.codeExplanation || '';
 
         // 分類番号を生成
         const firstDigit = randomItem(Object.keys(plateData.classification.first_digit));
@@ -146,6 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <tr>
                     <td>地名表示</td>
                     <td>${intAreaCode}</td>
+                </tr>
+                <tr>
+                    <td>コード説明</td>
+                    <td>${codeExplanation}</td>
                 </tr>
             </table>
         `;

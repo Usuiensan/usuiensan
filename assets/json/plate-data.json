@@ -1,144 +1,697 @@
 {
   "areas": {
-    "札幌": {"code": "SPS", "prefecture": "北海道", "office": "札幌運輸支局"},
-    "函館": {"code": "HDH", "prefecture": "北海道", "office": "函館運輸支局"},
-    "旭川": {"code": "AKA", "prefecture": "北海道", "office": "旭川運輸支局"},
-    "室蘭": {"code": "MRM", "prefecture": "北海道", "office": "室蘭運輸支局"},
-    "苫小牧": {"code": "MRT", "prefecture": "北海道", "office": "室蘭運輸支局苫小牧支所"},
-    "釧路": {"code": "KRK", "prefecture": "北海道", "office": "釧路運輸支局"},
-    "知床(旧釧路)": {"code": "KRS", "prefecture": "北海道", "office": "釧路運輸支局"},
-    "帯広": {"code": "OHO", "prefecture": "北海道", "office": "帯広運輸支局"},
-    "北見": {"code": "KIK", "prefecture": "北海道", "office": "北見運輸支局"},
-    "知床(旧北見)": {"code": "KIS", "prefecture": "北海道", "office": "北見運輸支局"},
-    "青森": {"code": "AMA", "prefecture": "青森県", "office": "青森運輸支局"},
-    "八戸": {"code": "AMH", "prefecture": "青森県", "office": "青森運輸支局八戸支所"},
-    "弘前": {"code": "AMS", "prefecture": "青森県", "office": "青森運輸支局弘前支所"},
-    "岩手": {"code": "ITI", "prefecture": "岩手県", "office": "岩手運輸支局"},
-    "盛岡": {"code": "ITM", "prefecture": "岩手県", "office": "岩手運輸支局"},
-    "平泉": {"code": "ITH", "prefecture": "岩手県", "office": "岩手運輸支局"},
-    "宮城": {"code": "MGM", "prefecture": "宮城県", "office": "宮城運輸支局"},
-    "仙台": {"code": "MGS", "prefecture": "宮城県", "office": "宮城運輸支局"},
-    "秋田": {"code": "ATA", "prefecture": "秋田県", "office": "秋田運輸支局"},
-    "山形": {"code": "YA", "prefecture": "山形県", "office": "山形運輸支局"},
-    "庄内": {"code": "YAS", "prefecture": "山形県", "office": "山形運輸支局庄内支所"},
-    "福島": {"code": "FS", "prefecture": "福島県", "office": "福島運輸支局"},
-    "会津": {"code": "FSA", "prefecture": "福島県", "office": "福島運輸支局会津若松支所"},
-    "いわき": {"code": "FSI", "prefecture": "福島県", "office": "福島運輸支局いわき支所"},
-    "郡山": {"code": "FSK", "prefecture": "福島県", "office": "福島運輸支局郡山支所"},
-    "白河": {"code": "FSS", "prefecture": "福島県", "office": "福島運輸支局"},
-    "茨城": {"code": "IGI", "prefecture": "茨城県", "office": "関東運輸局茨城運輸支局"},
-    "水戸": {"code": "IGM", "prefecture": "茨城県", "office": "関東運輸局茨城運輸支局"},
-    "土浦": {"code": "IGT", "prefecture": "茨城県", "office": "関東運輸局茨城運輸支局土浦支所"},
-    "つくば": {"code": "IGK", "prefecture": "茨城県", "office": "関東運輸局茨城運輸支局"},
-    "栃木": {"code": "TGT", "prefecture": "栃木県", "office": "関東運輸局栃木運輸支局"},
-    "宇都宮": {"code": "TGU", "prefecture": "栃木県", "office": "関東運輸局栃木運輸支局"},
-    "那須": {"code": "TGN", "prefecture": "栃木県", "office": "関東運輸局栃木運輸支局"},
-    "とちぎ": {"code": "TGC", "prefecture": "栃木県", "office": "関東運輸局栃木運輸支局"},
-    "群馬": {"code": "GMG", "prefecture": "群馬県", "office": "関東運輸局群馬運輸支局"},
-    "高崎": {"code": "GMT", "prefecture": "群馬県", "office": "関東運輸局群馬運輸支局"},
-    "前橋": {"code": "GMM", "prefecture": "群馬県", "office": "関東運輸局群馬運輸支局"},
-    "埼玉": {"code": "STS", "prefecture": "埼玉県", "office": "関東運輸局埼玉運輸支局"},
-    "大宮": {"code": "STO", "prefecture": "埼玉県", "office": "関東運輸局埼玉運輸支局"},
-    "川越": {"code": "STG", "prefecture": "埼玉県", "office": "関東運輸局埼玉運輸支局川越支所"},
-    "熊谷": {"code": "STK", "prefecture": "埼玉県", "office": "関東運輸局埼玉運輸支局熊谷支所"},
-    "春日部": {"code": "STB", "prefecture": "埼玉県", "office": "関東運輸局埼玉運輸支局春日部支所"},
-    "川口": {"code": "STW", "prefecture": "埼玉県", "office": "関東運輸局埼玉運輸支局"},
-    "越谷": {"code": "STY", "prefecture": "埼玉県", "office": "関東運輸局埼玉運輸支局"},
-    "千葉": {"code": "CBC", "prefecture": "千葉県", "office": "関東運輸局千葉運輸支局"},
-    "成田": {"code": "CBT", "prefecture": "千葉県", "office": "関東運輸局千葉運輸支局"},
-    "習志野": {"code": "CBN", "prefecture": "千葉県", "office": "関東運輸局千葉運輸支局習志野支所"},
-    "船橋": {"code": "CBF", "prefecture": "千葉県", "office": "関東運輸局千葉運輸支局"},
-    "市川": {"code": "CBI", "prefecture": "千葉県", "office": "関東運輸局千葉運輸支局"},
-    "袖ヶ浦": {"code": "CBS", "prefecture": "千葉県", "office": "関東運輸局千葉運輸支局袖ヶ浦支所"},
-    "市原": {"code": "CBH", "prefecture": "千葉県", "office": "関東運輸局千葉運輸支局"},
-    "野田": {"code": "CBD", "prefecture": "千葉県", "office": "関東運輸局千葉運輸支局野田支所"},
-    "柏": {"code": "CBK", "prefecture": "千葉県", "office": "関東運輸局千葉運輸支局"},
-    "松戸": {"code": "CBM", "prefecture": "千葉県", "office": "関東運輸局千葉運輸支局"},
-    "品川": {"code": "TKS", "prefecture": "東京都", "office": "関東運輸局東京運輸支局"},
-    "練馬": {"code": "TKN", "prefecture": "東京都", "office": "関東運輸局東京運輸支局練馬支所"},
-    "足立": {"code": "TKA", "prefecture": "東京都", "office": "関東運輸局東京運輸支局足立支所"},
-    "八王子": {"code": "TKH", "prefecture": "東京都", "office": "関東運輸局東京運輸支局八王子支所"},
-    "多摩": {"code": "TKT", "prefecture": "東京都", "office": "関東運輸局東京運輸支局多摩支所"},
-    "世田谷": {"code": "TKG", "prefecture": "東京都", "office": "関東運輸局東京運輸支局世田谷支所"},
-    "杉並": {"code": "TKM", "prefecture": "東京都", "office": "関東運輸局東京運輸支局杉並支所"},
-    "板橋": {"code": "TKI", "prefecture": "東京都", "office": "関東運輸局東京運輸支局"},
-    "江東": {"code": "TKK", "prefecture": "東京都", "office": "関東運輸局東京運輸支局"},
-    "葛飾": {"code": "TKU", "prefecture": "東京都", "office": "関東運輸局東京運輸支局"},
-    "横浜": {"code": "KNY", "prefecture": "神奈川県", "office": "関東運輸局神奈川運輸支局"},
-    "川崎": {"code": "KNK", "prefecture": "神奈川県", "office": "関東運輸局神奈川運輸支局川崎支所"},
-    "相模": {"code": "KNS", "prefecture": "神奈川県", "office": "関東運輸局神奈川運輸支局相模支所"},
-    "湘南": {"code": "KNN", "prefecture": "神奈川県", "office": "関東運輸局神奈川運輸支局湘南支所"},
-    "山梨": {"code": "YN", "prefecture": "山梨県", "office": "関東運輸局山梨運輸支局"},
-    "富士山（旧山梨）": {"code": "YNF", "prefecture": "山梨県", "office": "関東運輸局山梨運輸支局"},
-    "新潟": {"code": "NGN", "prefecture": "新潟県", "office": "北陸信越運輸局新潟運輸支局"},
-    "長岡": {"code": "NGO", "prefecture": "新潟県", "office": "北陸信越運輸局新潟運輸支局長岡支所"},
-    "上越": {"code": "NGJ", "prefecture": "新潟県", "office": "北陸信越運輸局新潟運輸支局上越支所"},
-    "富山": {"code": "TYT", "prefecture": "富山県", "office": "北陸信越運輸局富山運輸支局"},
-    "石川": {"code": "IKI", "prefecture": "石川県", "office": "北陸信越運輸局石川運輸支局"},
-    "金沢": {"code": "IKK", "prefecture": "石川県", "office": "北陸信越運輸局石川運輸支局"},
-    "長野": {"code": "NNN", "prefecture": "長野県", "office": "北陸信越運輸局長野運輸支局"},
-    "松本": {"code": "NNM", "prefecture": "長野県", "office": "北陸信越運輸局長野運輸支局松本支所"},
-    "諏訪": {"code": "NNS", "prefecture": "長野県", "office": "北陸信越運輸局長野運輸支局諏訪支所"},
-    "福井": {"code": "FI", "prefecture": "福井県", "office": "北陸信越運輸局福井運輸支局"},
-    "岐阜": {"code": "GFG", "prefecture": "岐阜県", "office": "中部運輸局岐阜運輸支局"},
-    "飛騨": {"code": "GFH", "prefecture": "岐阜県", "office": "中部運輸局岐阜運輸支局飛騨支所"},
-    "静岡": {"code": "SZS", "prefecture": "静岡県", "office": "中部運輸局静岡運輸支局"},
-    "浜松": {"code": "SZH", "prefecture": "静岡県", "office": "中部運輸局静岡運輸支局浜松支所"},
-    "沼津": {"code": "SZN", "prefecture": "静岡県", "office": "中部運輸局静岡運輸支局沼津支所"},
-    "伊豆": {"code": "SZI", "prefecture": "静岡県", "office": "中部運輸局静岡運輸支局"},
-    "富士山（旧沼津）": {"code": "SZF", "prefecture": "静岡県", "office": "中部運輸局静岡運輸支局沼津支所"},
-    "名古屋": {"code": "ACN", "prefecture": "愛知県", "office": "中部運輸局愛知運輸支局"},
-    "豊橋": {"code": "ACT", "prefecture": "愛知県", "office": "中部運輸局愛知運輸支局豊橋支所"},
-    "岡崎": {"code": "ACZ", "prefecture": "愛知県", "office": "中部運輸局愛知運輸支局西三河支所"},
-    "三河": {"code": "ACM", "prefecture": "愛知県", "office": "中部運輸局愛知運輸支局"},
-    "豊田": {"code": "ACY", "prefecture": "愛知県", "office": "中部運輸局愛知運輸支局"},
-    "一宮": {"code": "ACI", "prefecture": "愛知県", "office": "中部運輸局愛知運輸支局"},
-    "尾張小牧": {"code": "ACO", "prefecture": "愛知県", "office": "中部運輸局愛知運輸支局小牧支所"},
-    "春日井": {"code": "ACK", "prefecture": "愛知県", "office": "中部運輸局愛知運輸支局"},
-    "三重": {"code": "MEM", "prefecture": "三重県", "office": "中部運輸局三重運輸支局"},
-    "鈴鹿": {"code": "MES", "prefecture": "三重県", "office": "中部運輸局三重運輸支局"},
-    "四日市": {"code": "MEY", "prefecture": "三重県", "office": "中部運輸局三重運輸支局"},
-    "伊勢志摩": {"code": "MEI", "prefecture": "三重県", "office": "中部運輸局三重運輸支局"},
-    "滋賀": {"code": "SIS", "prefecture": "滋賀県", "office": "近畿運輸局滋賀運輸支局"},
-    "京都": {"code": "KTK", "prefecture": "京都府", "office": "近畿運輸局京都運輸支局"},
-    "大阪": {"code": "OSO", "prefecture": "大阪府", "office": "近畿運輸局大阪運輸支局"},
-    "なにわ": {"code": "OSN", "prefecture": "大阪府", "office": "近畿運輸局大阪運輸支局"},
-    "泉": {"code": "OSI", "prefecture": "大阪府", "office": "近畿運輸局大阪運輸支局"},
-    "和泉": {"code": "OSZ", "prefecture": "大阪府", "office": "近畿運輸局大阪運輸支局和泉支所"},
-    "堺": {"code": "OSS", "prefecture": "大阪府", "office": "近畿運輸局大阪運輸支局"},
-    "神戸": {"code": "HGK", "prefecture": "兵庫県", "office": "近畿運輸局兵庫陸運部"},
-    "姫路": {"code": "HGH", "prefecture": "兵庫県", "office": "近畿運輸局兵庫陸運部姫路支所"},
-    "奈良": {"code": "NRN", "prefecture": "奈良県", "office": "近畿運輸局奈良運輸支局"},
-    "飛鳥": {"code": "NRA", "prefecture": "奈良県", "office": "近畿運輸局奈良運輸支局"},
-    "和歌山": {"code": "WKW", "prefecture": "和歌山県", "office": "近畿運輸局和歌山運輸支局"},
-    "鳥取": {"code": "TTT", "prefecture": "鳥取県", "office": "中国運輸局鳥取運輸支局"},
-    "島根": {"code": "SN", "prefecture": "島根県", "office": "中国運輸局島根運輸支局"},
-    "出雲": {"code": "SNI", "prefecture": "島根県", "office": "中国運輸局島根運輸支局"},
-    "岡山": {"code": "OYO", "prefecture": "岡山県", "office": "中国運輸局岡山運輸支局"},
-    "倉敷": {"code": "OYK", "prefecture": "岡山県", "office": "中国運輸局岡山運輸支局"},
-    "広島": {"code": "HSH", "prefecture": "広島県", "office": "中国運輸局広島運輸支局"},
-    "福山": {"code": "HSF", "prefecture": "広島県", "office": "中国運輸局広島運輸支局福山支所"},
-    "山口": {"code": "YUY", "prefecture": "山口県", "office": "中国運輸局山口運輸支局"},
-    "下関": {"code": "YUS", "prefecture": "山口県", "office": "中国運輸局山口運輸支局下関支所"},
-    "徳島": {"code": "TST", "prefecture": "徳島県", "office": "四国運輸局徳島運輸支局"},
-    "香川": {"code": "KAK", "prefecture": "香川県", "office": "四国運輸局香川運輸支局"},
-    "高松": {"code": "KAT", "prefecture": "香川県", "office": "四国運輸局香川運輸支局"},
-    "愛媛": {"code": "EH", "prefecture": "愛媛県", "office": "四国運輸局愛媛運輸支局"},
-    "高知": {"code": "KCK", "prefecture": "高知県", "office": "四国運輸局高知運輸支局"},
-    "福岡": {"code": "FOF", "prefecture": "福岡県", "office": "九州運輸局福岡運輸支局"},
-    "北九州": {"code": "FOK", "prefecture": "福岡県", "office": "九州運輸局福岡運輸支局北九州支所"},
-    "久留米": {"code": "FOR", "prefecture": "福岡県", "office": "九州運輸局福岡運輸支局久留米支所"},
-    "筑豊": {"code": "FOC", "prefecture": "福岡県", "office": "九州運輸局福岡運輸支局筑豊支所"},
-    "佐賀": {"code": "SAS", "prefecture": "佐賀県", "office": "九州運輸局佐賀運輸支局"},
-    "長崎": {"code": "NS", "prefecture": "長崎県", "office": "九州運輸局長崎運輸支局"},
-    "佐世保": {"code": "NSS", "prefecture": "長崎県", "office": "九州運輸局長崎運輸支局佐世保支所"},
-    "熊本": {"code": "KUK", "prefecture": "熊本県", "office": "九州運輸局熊本運輸支局"},
-    "大分": {"code": "OT", "prefecture": "大分県", "office": "九州運輸局大分運輸支局"},
-    "宮崎": {"code": "MZ", "prefecture": "宮崎県", "office": "九州運輸局宮崎運輸支局"},
-    "鹿児島": {"code": "KOK", "prefecture": "鹿児島県", "office": "九州運輸局鹿児島運輸支局"},
-    "奄美": {"code": "KOA", "prefecture": "鹿児島県", "office": "九州運輸局鹿児島運輸支局"},
-    "沖縄": {"code": "ONO", "prefecture": "沖縄県", "office": "沖縄総合事務局陸運事務所"}
-  },
+"札幌": {
+"code": "SPS",
+"prefecture": "北海道",
+"codeExplanation": "SaPporo + Sapporo → SPS"
+},
+"函館": {
+"code": "HDH",
+"prefecture": "北海道",
+"codeExplanation": "HakoDate + Hakodate → HDH"
+},
+"旭川": {
+"code": "AKA",
+"prefecture": "北海道",
+"codeExplanation": "AsahiKawa + Asahikawa → AKA"
+},
+"室蘭": {
+"code": "MRM",
+"prefecture": "北海道",
+"codeExplanation": "MuroRan + Muroran → MRM"
+},
+"苫小牧": {
+"code": "MRT",
+"prefecture": "北海道",
+"codeExplanation": "MuroRan + Tomakomai → MRT"
+},
+"釧路": {
+"code": "KRK",
+"prefecture": "北海道",
+"codeExplanation": "KushiRo + Kushiro → KRK"
+},
+"知床(旧釧路)": {
+"code": "KRS",
+"prefecture": "北海道",
+"codeExplanation": "ShiRetoko + Shiretoko → KRS"
+},
+"帯広": {
+"code": "OHO",
+"prefecture": "北海道",
+"codeExplanation": "ObiHiro + Obihiro → OHO"
+},
+"北見": {
+"code": "KIK",
+"prefecture": "北海道",
+"codeExplanation": "Kitami + Kitami → KIK"
+},
+"知床(旧北見)": {
+"code": "KIS",
+"prefecture": "北海道",
+"codeExplanation": "Kitami + ShiRetoko → KIS"
+},
+"青森": {
+"code": "AMA",
+"prefecture": "青森県",
+"codeExplanation": "AoMori + Aomori → AMA"
+},
+"八戸": {
+"code": "AMH",
+"prefecture": "青森県",
+"codeExplanation": "AoMori + Hachinohe → AMH"
+},
+"弘前": {
+"code": "AMS",
+"prefecture": "青森県",
+"codeExplanation": "AoMori + Hirosaki → AMS"
+},
+"岩手": {
+"code": "ITI",
+"prefecture": "岩手県",
+"codeExplanation": "IwaTe + Iwate → ITI"
+},
+"盛岡": {
+"code": "ITM",
+"prefecture": "岩手県",
+"codeExplanation": "IwaTe + Morioka → ITM"
+},
+"平泉": {
+"code": "ITH",
+"prefecture": "岩手県",
+"codeExplanation": "IwaTe + Hiraizumi → ITH"
+},
+"宮城": {
+"code": "MGM",
+"prefecture": "宮城県",
+"codeExplanation": "MiyaGi + Miyagi → MGM"
+},
+"仙台": {
+"code": "MGS",
+"prefecture": "宮城県",
+"codeExplanation": "MiyaGi + Sendai → MGS"
+},
+"秋田": {
+"code": "ATA",
+"prefecture": "秋田県",
+"codeExplanation": "AkiTa + Akita → ATA"
+},
+"山形": {
+"code": "YA",
+"prefecture": "山形県",
+"codeExplanation": "YamagAta → YA（山口との重複回避）"
+},
+"庄内": {
+"code": "YAS",
+"prefecture": "山形県",
+"codeExplanation": "YamagAta + Shonai → YAS"
+},
+"福島": {
+"code": "FS",
+"prefecture": "福島県",
+"codeExplanation": "FukuShima → FS"
+},
+"会津": {
+"code": "FSA",
+"prefecture": "福島県",
+"codeExplanation": "FukuShima + Aizu → FSA"
+},
+"いわき": {
+"code": "FSI",
+"prefecture": "福島県",
+"codeExplanation": "FukuShima + Iwaki → FSI"
+},
+"郡山": {
+"code": "FSK",
+"prefecture": "福島県",
+"codeExplanation": "FukuShima + Koriyama → FSK"
+},
+"白河": {
+"code": "FSS",
+"prefecture": "福島県",
+"codeExplanation": "FukuShima + Shirakawa → FSS"
+},
+"茨城": {
+"code": "IGI",
+"prefecture": "茨城県",
+"codeExplanation": "IbaraGi + Ibaraki → IGI"
+},
+"水戸": {
+"code": "IGM",
+"prefecture": "茨城県",
+"codeExplanation": "IbaraGi + Mito → IGM"
+},
+"土浦": {
+"code": "IGT",
+"prefecture": "茨城県",
+"codeExplanation": "IbaraGi + Tsuchiura → IGT"
+},
+"つくば": {
+"code": "IGK",
+"prefecture": "茨城県",
+"codeExplanation": "IbaraGi + Tsukuba → IGK"
+},
+"栃木": {
+"code": "TGT",
+"prefecture": "栃木県",
+"codeExplanation": "TochiGi + Tochigi → TGT"
+},
+"宇都宮": {
+"code": "TGU",
+"prefecture": "栃木県",
+"codeExplanation": "TochiGi + Utsunomiya → TGU"
+},
+"那須": {
+"code": "TGN",
+"prefecture": "栃木県",
+"codeExplanation": "TochiGi + Nasu → TGN"
+},
+"とちぎ": {
+"code": "TGC",
+"prefecture": "栃木県",
+"codeExplanation": "TochiGi + Tochigi → TGC"
+},
+"群馬": {
+"code": "GMG",
+"prefecture": "群馬県",
+"codeExplanation": "GunMa + Gunma → GMG"
+},
+"高崎": {
+"code": "GMT",
+"prefecture": "群馬県",
+"codeExplanation": "GunMa + Takasaki → GMT"
+},
+"前橋": {
+"code": "GMM",
+"prefecture": "群馬県",
+"codeExplanation": "GunMa + Maebashi → GMM"
+},
+"埼玉": {
+"code": "STS",
+"prefecture": "埼玉県",
+"codeExplanation": "SaiTama + Saitama → STS"
+},
+"大宮": {
+"code": "STO",
+"prefecture": "埼玉県",
+"codeExplanation": "SaiTama + Omiya → STO"
+},
+"川越": {
+"code": "STG",
+"prefecture": "埼玉県",
+"codeExplanation": "SaiTama + KawaGoe → STG（重複回避）"
+},
+"熊谷": {
+"code": "STK",
+"prefecture": "埼玉県",
+"codeExplanation": "SaiTama + Kumagaya → STK（重複回避）"
+},
+"春日部": {
+"code": "STB",
+"prefecture": "埼玉県",
+"codeExplanation": "SaiTama + kasukaBe → STB（重複回避）"
+},
+"川口": {
+"code": "STW",
+"prefecture": "埼玉県",
+"codeExplanation": "SaiTama + Kawaguchi → STW"
+},
+"越谷": {
+"code": "STY",
+"prefecture": "埼玉県",
+"codeExplanation": "SaiTama + koshigaYa → STY"
+},
+"千葉": {
+"code": "CBC",
+"prefecture": "千葉県",
+"codeExplanation": "ChiBa + Chiba → CBC"
+},
+"成田": {
+"code": "CBT",
+"prefecture": "千葉県",
+"codeExplanation": "ChiBa + Narita → CBT"
+},
+"習志野": {
+"code": "CBN",
+"prefecture": "千葉県",
+"codeExplanation": "ChiBa + Narashino → CBN"
+},
+"船橋": {
+"code": "CBF",
+"prefecture": "千葉県",
+"codeExplanation": "ChiBa + Funabashi → CBF"
+},
+"市川": {
+"code": "CBI",
+"prefecture": "千葉県",
+"codeExplanation": "ChiBa + Ichikawa → CBI"
+},
+"袖ヶ浦": {
+"code": "CBS",
+"prefecture": "千葉県",
+"codeExplanation": "ChiBa + Sodegaura → CBS"
+},
+"市原": {
+"code": "CBH",
+"prefecture": "千葉県",
+"codeExplanation": "ChiBa + ichiHara → CBH"
+},
+"野田": {
+"code": "CBD",
+"prefecture": "千葉県",
+"codeExplanation": "ChiBa + noDa → CBD"
+},
+"柏": {
+"code": "CBK",
+"prefecture": "千葉県",
+"codeExplanation": "ChiBa + Kashiwa → CBK"
+},
+"松戸": {
+"code": "CBM",
+"prefecture": "千葉県",
+"codeExplanation": "ChiBa + Matsudo → CBM"
+},
+"品川": {
+"code": "TKS",
+"prefecture": "東京都",
+"codeExplanation": "Tokyo + Shinagawa → TKS"
+},
+"練馬": {
+"code": "TKN",
+"prefecture": "東京都",
+"codeExplanation": "Tokyo + Nerima → TKN"
+},
+"足立": {
+"code": "TKA",
+"prefecture": "東京都",
+"codeExplanation": "Tokyo + Adachi → TKA"
+},
+"八王子": {
+"code": "TKH",
+"prefecture": "東京都",
+"codeExplanation": "Tokyo + Hachioji → TKH"
+},
+"多摩": {
+"code": "TKT",
+"prefecture": "東京都",
+"codeExplanation": "Tokyo + Tama → TKT"
+},
+"世田谷": {
+"code": "TKG",
+"prefecture": "東京都",
+"codeExplanation": "Tokyo + setaGaya → TKG"
+},
+"杉並": {
+"code": "TKM",
+"prefecture": "東京都",
+"codeExplanation": "Tokyo + suginaMi → TKM"
+},
+"板橋": {
+"code": "TKI",
+"prefecture": "東京都",
+"codeExplanation": "Tokyo + Itabashi → TKI"
+},
+"江東": {
+"code": "TKK",
+"prefecture": "東京都",
+"codeExplanation": "Tokyo + Koto → TKK"
+},
+"葛飾": {
+"code": "TKU",
+"prefecture": "東京都",
+"codeExplanation": "Tokyo + katsUshika → TKU"
+},
+"横浜": {
+"code": "KNY",
+"prefecture": "神奈川県",
+"codeExplanation": "KaNagawa + Yokohama → KNY"
+},
+"川崎": {
+"code": "KNK",
+"prefecture": "神奈川県",
+"codeExplanation": "KaNagawa + Kawasaki → KNK"
+},
+"相模": {
+"code": "KNS",
+"prefecture": "神奈川県",
+"codeExplanation": "KaNagawa + Sagami → KNS"
+},
+"湘南": {
+"code": "KNN",
+"prefecture": "神奈川県",
+"codeExplanation": "KaNagawa + Shonan → KNN"
+},
+"山梨": {
+"code": "YN",
+"prefecture": "山梨県",
+"codeExplanation": "Yamanashi + Yamanashi → YN"
+},
+"富士山（旧山梨）": {
+"code": "YNF",
+"prefecture": "山梨県",
+"codeExplanation": "YamaNashi + Fujisan → YNF"
+},
+"新潟": {
+"code": "NGN",
+"prefecture": "新潟県",
+"codeExplanation": "NiiGata + Niigata → NGN"
+},
+"長岡": {
+"code": "NGO",
+"prefecture": "新潟県",
+"codeExplanation": "NiiGata + Nagaoka → NGO"
+},
+"上越": {
+"code": "NGJ",
+"prefecture": "新潟県",
+"codeExplanation": "NiiGata + Joetsu → NGJ"
+},
+"富山": {
+"code": "TYT",
+"prefecture": "富山県",
+"codeExplanation": "ToYama + Toyama → TYT"
+},
+"石川": {
+"code": "IKI",
+"prefecture": "石川県",
+"codeExplanation": "IshiKawa + Ishikawa → IKI"
+},
+"金沢": {
+"code": "IKK",
+"prefecture": "石川県",
+"codeExplanation": "IshiKawa + Kanazawa → IKK"
+},
+"長野": {
+"code": "NNN",
+"prefecture": "長野県",
+"codeExplanation": "NagaNo + Nagano → NNN"
+},
+"松本": {
+"code": "NNM",
+"prefecture": "長野県",
+"codeExplanation": "NagaNo + Matsumoto → NNM"
+},
+"諏訪": {
+"code": "NNS",
+"prefecture": "長野県",
+"codeExplanation": "NagaNo + Suwa → NNS"
+},
+"福井": {
+"code": "FI",
+"prefecture": "福井県",
+"codeExplanation": "FukuI → FI"
+},
+"岐阜": {
+"code": "GFG",
+"prefecture": "岐阜県",
+"codeExplanation": "GiFu + Gifu → GFG"
+},
+"飛騨": {
+"code": "GFH",
+"prefecture": "岐阜県",
+"codeExplanation": "GiFu + Hida → GFH"
+},
+"静岡": {
+"code": "SZS",
+"prefecture": "静岡県",
+"codeExplanation": "ShiZuoKa + Shizuoka → SZS"
+},
+"浜松": {
+"code": "SZH",
+"prefecture": "静岡県",
+"codeExplanation": "ShiZuoKa + Hamamatsu → SZH"
+},
+"沼津": {
+"code": "SZN",
+"prefecture": "静岡県",
+"codeExplanation": "ShiZuoKa + Numazu → SZN"
+},
+"伊豆": {
+"code": "SZI",
+"prefecture": "静岡県",
+"codeExplanation": "ShiZuoKa + Izu → SZI"
+},
+"富士山（旧沼津）": {
+"code": "SZF",
+"prefecture": "静岡県",
+"codeExplanation": "ShiZuoKa + Fujisan → SZF"
+},
+"名古屋": {
+"code": "ACN",
+"prefecture": "愛知県",
+"codeExplanation": "AiChi + Nagoya → ACN"
+},
+"豊橋": {
+"code": "ACT",
+"prefecture": "愛知県",
+"codeExplanation": "AiChi + Toyohashi → ACT"
+},
+"岡崎": {
+"code": "ACZ",
+"prefecture": "愛知県",
+"codeExplanation": "AiChi + Okazaki → ACZ"
+},
+"三河": {
+"code": "ACM",
+"prefecture": "愛知県",
+"codeExplanation": "AiChi + Mikawa → ACM"
+},
+"豊田": {
+"code": "ACY",
+"prefecture": "愛知県",
+"codeExplanation": "AiChi + Toyota → ACY"
+},
+"一宮": {
+"code": "ACI",
+"prefecture": "愛知県",
+"codeExplanation": "AiChi + Ichinomiya → ACI"
+},
+"尾張小牧": {
+"code": "ACO",
+"prefecture": "愛知県",
+"codeExplanation": "AiChi + Owarikomaki → ACO"
+},
+"春日井": {
+"code": "ACK",
+"prefecture": "愛知県",
+"codeExplanation": "AiChi + Kasugai → ACK"
+},
+"三重": {
+"code": "MEM",
+"prefecture": "三重県",
+"codeExplanation": "MiE + Mie → MEM"
+},
+"鈴鹿": {
+"code": "MES",
+"prefecture": "三重県",
+"codeExplanation": "MiE + Suzuka → MES"
+},
+"四日市": {
+"code": "MEY",
+"prefecture": "三重県",
+"codeExplanation": "MiE + Yokkaichi → MEY"
+},
+"伊勢志摩": {
+"code": "MEI",
+"prefecture": "三重県",
+"codeExplanation": "MiE + Iseshima → MEI"
+},
+"滋賀": {
+"code": "SIS",
+"prefecture": "滋賀県",
+"codeExplanation": "ShIga + Shiga → SIS"
+},
+"京都": {
+"code": "KTK",
+"prefecture": "京都府",
+"codeExplanation": "KyoTo + Kyoto → KTK"
+},
+"大阪": {
+"code": "OSO",
+"prefecture": "大阪府",
+"codeExplanation": "OSaka + Osaka → OSO"
+},
+"なにわ": {
+"code": "OSN",
+"prefecture": "大阪府",
+"codeExplanation": "OSaka + Naniwa → OSN"
+},
+"泉": {
+"code": "OSI",
+"prefecture": "大阪府",
+"codeExplanation": "OSaka + Izumi → OSI"
+},
+"和泉": {
+"code": "OSZ",
+"prefecture": "大阪府",
+"codeExplanation": "OSaka + Izumi → OSZ"
+},
+"堺": {
+"code": "OSS",
+"prefecture": "大阪府",
+"codeExplanation": "OSaka + Sakai → OSS"
+},
+"神戸": {
+"code": "HGK",
+"prefecture": "兵庫県",
+"codeExplanation": "HyoGo + Kobe → HGK"
+},
+"姫路": {
+"code": "HGH",
+"prefecture": "兵庫県",
+"codeExplanation": "HyoGo + Himeji → HGH"
+},
+"奈良": {
+"code": "NRN",
+"prefecture": "奈良県",
+"codeExplanation": "NaRa + Nara → NRN"
+},
+"飛鳥": {
+"code": "NRA",
+"prefecture": "奈良県",
+"codeExplanation": "NaRa + Asuka → NRA"
+},
+"和歌山": {
+"code": "WKW",
+"prefecture": "和歌山県",
+"codeExplanation": "WaKayama + Wakayama → WKW"
+},
+"鳥取": {
+"code": "TTT",
+"prefecture": "鳥取県",
+"codeExplanation": "ToTtori + Tottori → TTT"
+},
+"島根": {
+"code": "SN",
+"prefecture": "島根県",
+"codeExplanation": "ShimaNe → SN"
+},
+"出雲": {
+"code": "SNI",
+"prefecture": "島根県",
+"codeExplanation": "ShimaNe + Izumo → SNI"
+},
+"岡山": {
+"code": "OYO",
+"prefecture": "岡山県",
+"codeExplanation": "OkaYama + Okayama → OYO"
+},
+"倉敷": {
+"code": "OYK",
+"prefecture": "岡山県",
+"codeExplanation": "OkaYama + Kurashiki → OYK"
+},
+"広島": {
+"code": "HSH",
+"prefecture": "広島県",
+"codeExplanation": "HiroShima + Hiroshima → HSH"
+},
+"福山": {
+"code": "HSF",
+"prefecture": "広島県",
+"codeExplanation": "HiroShima + Fukuyama → HSF"
+},
+"山口": {
+"code": "YUY",
+"prefecture": "山口県",
+"codeExplanation": "YamagUchi → YU（山形との重複回避）"
+},
+"下関": {
+"code": "YUS",
+"prefecture": "山口県",
+"codeExplanation": "YamagUchi + Shimonoseki → YUS"
+},
+"徳島": {
+"code": "TST",
+"prefecture": "徳島県",
+"codeExplanation": "TokuShima + Tokushima → TST"
+},
+"香川": {
+"code": "KAK",
+"prefecture": "香川県",
+"codeExplanation": "KAgawa + Kagawa → KAK"
+},
+"高松": {
+"code": "KAT",
+"prefecture": "香川県",
+"codeExplanation": "KAgawa + Takamatsu → KAT"
+},
+"愛媛": {
+"code": "EH",
+"prefecture": "愛媛県",
+"codeExplanation": "EHime + Ehime → EH"
+},
+"高知": {
+"code": "KCK",
+"prefecture": "高知県",
+"codeExplanation": "KoChi + Kochi → KCK"
+},
+"福岡": {
+"code": "FOF",
+"prefecture": "福岡県",
+"codeExplanation": "FukuOka + Fukuoka → FOF"
+},
+"北九州": {
+"code": "FOK",
+"prefecture": "福岡県",
+"codeExplanation": "FukuOka + Kitakyushu → FOK"
+},
+"久留米": {
+"code": "FOR",
+"prefecture": "福岡県",
+"codeExplanation": "FukuOka + Kurume → FOR"
+},
+"筑豊": {
+"code": "FOC",
+"prefecture": "福岡県",
+"codeExplanation": "FukuOka + Chikuho → FOC"
+},
+"佐賀": {
+"code": "SAS",
+"prefecture": "佐賀県",
+"codeExplanation": "SAga + Saga → SAS"
+},
+"長崎": {
+"code": "NS",
+"prefecture": "長崎県",
+"codeExplanation": "NagaSaki → NS"
+},
+"佐世保": {
+"code": "NSS",
+"prefecture": "長崎県",
+"codeExplanation": "NagaSaki + Sasebo → NSS"
+},
+"熊本": {
+"code": "KUK",
+"prefecture": "熊本県",
+"codeExplanation": "KUmamoto + Kumamoto → KUK"
+},
+"大分": {
+"code": "OT",
+"prefecture": "大分県",
+"codeExplanation": "OiTa → OT"
+},
+"宮崎": {
+"code": "MZ",
+"prefecture": "宮崎県",
+"codeExplanation": "MiyaZaki → MZ"
+},
+"鹿児島": {
+"code": "KOK",
+"prefecture": "鹿児島県",
+"codeExplanation": "KagOshima + Kagoshima → KOK"
+},
+"奄美": {
+"code": "KOA",
+"prefecture": "鹿児島県",
+"codeExplanation": "KagOshima + Amami → KOA"
+},
+"沖縄": {
+"code": "ONO",
+"prefecture": "沖縄県",
+"codeExplanation": "OkiNawa + Okinawa → ONO"
+  }
+},
+
   "classification": {
     "first_digit": {
       "1": "普通貨物自動車",
@@ -159,5 +712,8 @@
     "自家用": ["さ", "す", "せ", "そ", "た", "ち", "つ", "て", "と", "な", "に", "ぬ", "ね", "の", "は", "ひ", "ふ", "ほ", "ま", "み", "む", "め", "も", "や", "ゆ", "ら", "り", "る"],
     "事業用": ["あ", "い", "う", "え", "か", "き", "く", "け", "こ", "を"],
     "レンタカー": ["れ", "わ"]
-  }
 }
+}
+
+
+
