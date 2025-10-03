@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Object.keys(plateData.areas).forEach(area => {
             const option = document.createElement('option');
             option.value = area;
-            option.textContent = area;
+            option.textContent = `${area} - ${plateData.areas[area].code}`;
             areaSelect.appendChild(option);
         });
 
