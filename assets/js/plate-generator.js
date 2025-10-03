@@ -3,8 +3,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const jpPlateDiv = document.getElementById('jpPlate');
     const vehicleTypeDiv = document.getElementById('vehicleType');
     const intPlateDiv = document.getElementById('intPlate');
+    const copyRomajiBtn = document.getElementById('copyRomajiBtn');
+    const romajiPlateDiv = document.getElementById('romajiPlate');
 
     let plateData = null;
+    let romajiPlateCopy = '';
     
     // ひらがなからローマ字への変換マップ
     const hiraganaToRomaji = {
@@ -49,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 都道府県と運輸支局名を取得
         const prefecture = areaInfo.prefecture;
-        const transportOffice = areaInfo.office;
+        const plateRomaji = areaInfo.romaji || '';
         const codeExplanation = areaInfo.codeExplanation || '';
 
         // 分類番号を生成
@@ -58,11 +61,40 @@ document.addEventListener('DOMContentLoaded', () => {
         const thirdDigit = randomItem(plateData.classification.third_digit);
 
         const classificationNumber = `${firstDigit}${secondDigit}${thirdDigit}`;
-        
-        // ひらがなを生成
-        const hiraganaType = randomItem(Object.keys(plateData.hiraganas));
-        const randomHiragana = randomItem(plateData.hiraganas[hiraganaType]);
-
+        // console.log(`Generated classification number: ${classificationNumber}`);
+        //分類番号に応じてプレートの種類を決定
+        const isKeiCar = (firstDigit, secondDigit) => {
+        // 軽自動車を示す第二桁のリスト
+        const keiSecondDigits = ['8', '9', 'A', 'C', 'F', 'H', 'K', 'L', 'M', 'P', 'X', 'Y'];
+        // firstDigit が 4, 5, 7, 8 のいずれかで、かつ secondDigit が軽自動車のリストに含まれているか
+        return (['4', '5', '7', '8'].includes(firstDigit) && keiSecondDigits.includes(secondDigit));
+        };
+        const isKei = isKeiCar(firstDigit, secondDigit);
+        const hiraganaSet = isKei ? plateData.hiraganas.kei : plateData.hiraganas.normal;
+        // 用途（自家用・事業用・レンタカー）をランダムに選択
+        const hiraganaType = randomItem(Object.keys(hiraganaSet));
+        // 選択された用途から、ランダムにひらがなを選ぶ
+        const randomHiragana = randomItem(hiraganaSet[hiraganaType]);
+        // console.log(`Selected hiragana: ${randomHiragana} for type: ${hiraganaType}`);
+        let plateTypeClass;
+        if (isKei) {
+            if (hiraganaType === "自家用") {
+                plateTypeClass = 'kei-private';
+            } else if (hiraganaType === "事業用") {
+                plateTypeClass = 'kei-business';
+            } else {
+                plateTypeClass = 'kei-private'; // レンタカーは自家用と同じ
+            }
+        } else {
+            if (hiraganaType === "自家用") {
+                plateTypeClass = 'normal-private';
+            } else if (hiraganaType === "事業用") {
+                plateTypeClass = 'normal-business';
+            } else {
+                plateTypeClass = 'normal-private'; // レンタカーは自家用と同じ
+            }
+        }
+        // console.log(`Plate type: ${plateTypeClass}`);
         // 一連指定番号を生成
         let serialNumber;
         do {
@@ -85,18 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             formattedNumber = `${serialNumber.toString().slice(0, 2)}-${serialNumber.toString().slice(2)}`;
         }
-
-        // ナンバープレートの種類判定
-        const isKeiCar = firstDigit === '5' || firstDigit === '7'; // 軽自動車
-        const isBusiness = hiraganaType === '事業用'; // 事業用
-        
-        // プレートタイプのクラス名を決定
-        let plateTypeClass = '';
-        if (isKeiCar) {
-            plateTypeClass = isBusiness ? 'kei-business' : 'kei-private';
-        } else {
-            plateTypeClass = isBusiness ? 'normal-business' : 'normal-private';
-        }
         
         // 日本のナンバープレート（本物の配置：地域 分類番号（改行）ひらがな 一連番号）
         const jpPlateDisplay = `
@@ -109,8 +129,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="serial-number">${formattedNumber}</span>
             </div>
         `;
-        const jpPlateCopy = `${jpAreaName}${classificationNumber}${randomHiragana}${formattedNumber}`;
-        
+        const jpPlateCopy = `${jpAreaName} ${classificationNumber} ${randomHiragana} ${formattedNumber}`;
+        console.log(`${jpAreaName} ${classificationNumber} ${randomHiragana} ${formattedNumber}`);
         const jpPlateContent = jpPlateDiv.querySelector('.plate-content');
         jpPlateContent.innerHTML = jpPlateDisplay;
         
@@ -163,11 +183,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="serial-number">${serialNumber}</span>
             </div>
         `;
-        const intPlateCopy = `${intAreaCode}${classificationNumber}${romajiLetter}${serialNumber}`;
-        
+        const intPlateCopy = `${intAreaCode} ${classificationNumber} ${romajiLetter} ${serialNumber}`;
+        console.log(`${intAreaCode} ${classificationNumber} ${romajiLetter} ${serialNumber}`);
         const intPlateContent = intPlateDiv.querySelector('.plate-content');
         intPlateContent.innerHTML = intPlateDisplay;
         intPlateDiv.onclick = () => copyToClipboard(intPlateCopy, intPlateDiv);
+
+        // ローマ字エリアコードの国際ナンバープレート
+        const romajiAreaCode = plateRomaji;
+        romajiPlateCopy = `${romajiAreaCode} ${classificationNumber} ${romajiLetter} ${serialNumber}`;
+        console.log(`${romajiAreaCode} ${classificationNumber} ${romajiLetter} ${serialNumber}`);
     }
 
     // リストからランダムな要素を取得するヘルパー関数
@@ -183,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             setTimeout(() => {
                 element.classList.remove('copied');
-            }, 2000);
+            }, 1000);
         }).catch(err => {
             console.error('コピーに失敗しました:', err);
             // フォールバック: テキストを選択状態にする
@@ -200,6 +225,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ボタンのクリックイベントを設定
     generateBtn.addEventListener('click', generatePlate);
+
+    // ローマ字コピーボタンのイベント
+    copyRomajiBtn.addEventListener('click', () => {
+        if (romajiPlateCopy) {
+            navigator.clipboard.writeText(romajiPlateCopy).then(() => {
+                // 成功時のフィードバック
+                copyRomajiBtn.textContent = 'コピーしました!';
+                setTimeout(() => {
+                    copyRomajiBtn.textContent = 'ローマ字表記でコピー';
+                }, 1000);
+            }).catch(err => {
+                console.error('コピーに失敗しました:', err);
+            });
+        }
+    });
 
     // ページ読み込み時にデータをロード
     loadData();
