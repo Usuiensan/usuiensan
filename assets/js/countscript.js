@@ -4,6 +4,7 @@ const byteCountEl = document.getElementById('byteCount');
 const codeUnitCountEl = document.getElementById('codeUnitCount');
 const codePointCountEl = document.getElementById('codePointCount');
 const graphemeCountEl = document.getElementById('graphemeCount');
+const previewEl = document.getElementById('preview');
 
 // 新たに追加: 異体字セレクタとShift_JIS互換性の表示要素
 const vsIndicatorEl = document.getElementById('vsIndicator');
@@ -223,8 +224,18 @@ function escapeHtml(s) {
 }
 
 // 文字数を計算して表示を更新する関数
+// 絵文字を span.emoji で囲む関数
+function wrapEmojis(text) {
+    // 絵文字の正規表現（簡易版）
+    const emojiRegex = /(\p{Emoji_Presentation}|\p{Emoji}\uFE0F|\p{Emoji_Modifier_Base}\p{Emoji_Modifier}?|\p{Emoji}\u200D\p{Emoji})+/gu;
+    return text.replace(emojiRegex, '<span class="emoji">$&</span>');
+}
+
 function updateCounts() {
     const inputText = textInput.value;
+
+    // preview を更新（絵文字を可愛く）
+    previewEl.innerHTML = wrapEmojis(inputText);
 
     // 1. バイト数 (UTF-8)
     // TextEncoderを使って文字列をUTF-8のバイト列に変換し、その長さを取得
