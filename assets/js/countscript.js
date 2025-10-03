@@ -226,8 +226,8 @@ function escapeHtml(s) {
 // 文字数を計算して表示を更新する関数
 // 絵文字を span.emoji で囲む関数
 function wrapEmojis(text) {
-    // 絵文字の正規表現（簡易版）
-    const emojiRegex = /(\p{Emoji_Presentation}|\p{Emoji}\uFE0F|\p{Emoji_Modifier_Base}\p{Emoji_Modifier}?|\p{Emoji}\u200D\p{Emoji})+/gu;
+    // 絵文字の範囲を指定した正規表現（Unicodeブロック）
+    const emojiRegex = /[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu;
     return text.replace(emojiRegex, '<span class="emoji">$&</span>');
 }
 
