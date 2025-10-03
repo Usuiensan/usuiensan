@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </tr>
                 <tr>
                     <td>都道府県</td>
-                    <td>${prefecture}</td>
+                    <td id="prefectureCell">${prefecture}</td>
                 </tr>
                 <tr>
                     <td>コード説明</td>
@@ -243,4 +243,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ページ読み込み時にデータをロード
     loadData();
+
+    // 都道府県クリックでコピー
+    document.addEventListener('click', (event) => {
+        if (event.target.id === 'prefectureCell') {
+            const text = event.target.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                event.target.textContent = 'コピーしました!';
+                setTimeout(() => {
+                    event.target.textContent = text;
+                }, 1000);
+            }).catch(err => {
+                console.error('コピーに失敗しました:', err);
+            });
+        }
+    });
 });
