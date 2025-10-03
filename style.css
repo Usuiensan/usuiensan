@@ -1,10 +1,10 @@
 body {
-    font-family: "M+ 1p", "Rounded M+ 1m", "Myrica M", 
+    font-family: "Apple Color Emoji","Noto Color Emoji","M+ 1p", "Rounded M+ 1m", "Myrica M",
                  "Noto Sans", "Noto Sans CJK JP", "Noto Sans JP",
-                 "Noto Sans Symbols", "Noto Sans Symbols 2", 
-                 "Noto Sans Math", "Noto Color Emoji",
-                 "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-                 "Hiragino Sans", "Yu Gothic UI", "Meiryo UI", 
+                 "Noto Sans Symbols", "Noto Sans Symbols 2",
+                 "Noto Sans Math",
+                 "Segoe UI Emoji", "Segoe UI Symbol",
+                 "Hiragino Sans", "Yu Gothic UI", "Meiryo UI",
                  sans-serif;
     display: flex;
     justify-content: center;
@@ -78,13 +78,13 @@ textarea {
     resize: vertical;
     min-height: 100px;
     /* レアな文字の表示を改善するためのフォント設定 */
-    font-family: "M+ 1p", "Rounded M+ 1m", "Myrica M", 
+    font-family: "Apple Color Emoji","Noto Color Emoji","M+ 1p", "Rounded M+ 1m", "Myrica M",
                  "Noto Sans", "Noto Sans CJK JP", "Noto Sans JP",
-                 "Noto Sans Symbols", "Noto Sans Symbols 2", 
-                 "Noto Sans Math", "Noto Color Emoji",
-                 "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-                 "Hiragino Sans", "Yu Gothic UI", "Meiryo UI", 
-                 monospace, sans-serif;
+                 "Noto Sans Symbols", "Noto Sans Symbols 2",
+                 "Noto Sans Math",
+                 "Segoe UI Emoji", "Segoe UI Symbol",
+                 "Hiragino Sans", "Yu Gothic UI", "Meiryo UI",
+                 sans-serif;
     font-feature-settings: "liga" 1, "kern" 1;
     line-height: 1.5;
 }
@@ -376,13 +376,13 @@ td {
     word-break: break-word;
     white-space: pre-wrap;
     /* レアな文字やユニコード記号の表示を改善 */
-    font-family: "M+ 1p", "Rounded M+ 1m", "Myrica M", 
+    font-family: "Apple Color Emoji","Noto Color Emoji","M+ 1p", "Rounded M+ 1m", "Myrica M",
                  "Noto Sans", "Noto Sans CJK JP", "Noto Sans JP",
-                 "Noto Sans Symbols", "Noto Sans Symbols 2", 
-                 "Noto Sans Math", "Noto Color Emoji",
-                 "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-                 "Hiragino Sans", "Yu Gothic UI", "Meiryo UI", 
-                 monospace, sans-serif;
+                 "Noto Sans Symbols", "Noto Sans Symbols 2",
+                 "Noto Sans Math",
+                 "Segoe UI Emoji", "Segoe UI Symbol",
+                 "Hiragino Sans", "Yu Gothic UI", "Meiryo UI",
+                 sans-serif;
     font-feature-settings: "liga" 1, "kern" 1;
     line-height: 1.6;
     font-variant-numeric: tabular-nums;

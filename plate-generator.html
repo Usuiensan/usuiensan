@@ -5,6 +5,34 @@ title: ナンバープレートの番号を生成
 <h1>ナンバープレート生成ツール</h1>
 <p>「日本のナンバープレート」と「国際ナンバープレート」を同時に生成します。</p>
 
+<div class="mode-selection">
+    <h3>生成モード設定</h3>
+    <div class="mode-option">
+        <label><input type="checkbox" id="noAlphabetMode"> 分類番号にアルファベットを使用しない</label>
+    </div>
+    <div class="mode-option">
+        <label>地域選択:</label>
+        <label><input type="radio" name="areaMode" value="random" checked> ランダム</label>
+        <label><input type="radio" name="areaMode" value="manual"> 手動</label>
+        <select id="areaSelect" disabled>
+            <!-- オプションはJSで動的に追加 -->
+        </select>
+    </div>
+    <div class="mode-option">
+        <label>車種選択:</label>
+        <label><input type="radio" name="vehicleMode" value="random" checked> ランダム</label>
+        <label><input type="radio" name="vehicleMode" value="manual"> 手動</label>
+        <select id="vehicleSelect" disabled>
+            <!-- オプションはJSで動的に追加 -->
+        </select>
+    </div>
+    <div class="mode-option">
+        <label>区切り文字:</label>
+        <label><input type="radio" name="separator" value="space" checked> スペース</label>
+        <label><input type="radio" name="separator" value="hyphen"> ハイフン</label>
+    </div>
+</div>
+
 <button id="generateBtn">生成</button>
 <hr>
 <div class="plates-container">

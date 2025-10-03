@@ -5,6 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const intPlateDiv = document.getElementById('intPlate');
     const copyRomajiBtn = document.getElementById('copyRomajiBtn');
     const romajiPlateDiv = document.getElementById('romajiPlate');
+    const noAlphabetMode = document.getElementById('noAlphabetMode');
+    const areaModeRadios = document.querySelectorAll('input[name="areaMode"]');
+    const areaSelect = document.getElementById('areaSelect');
+    const vehicleModeRadios = document.querySelectorAll('input[name="vehicleMode"]');
+    const vehicleSelect = document.getElementById('vehicleSelect');
+    const separatorRadios = document.querySelectorAll('input[name="separator"]');
 
     let plateData = null;
     let romajiPlateCopy = '';
@@ -23,12 +29,41 @@ document.addEventListener('DOMContentLoaded', () => {
         'わ': 'WA', 'を': 'WO', 'ん': 'N'
     };
 
+    // クッキーから設定を読み込む関数
+    function loadSettingsFromCookie() {
+        const cookie = document.cookie.split(';').find(c => c.trim().startsWith('plateSettings='));
+        if (cookie) {
+            const settings = JSON.parse(cookie.split('=')[1]);
+            if (settings.noAlphabet) noAlphabetMode.checked = settings.noAlphabet;
+            if (settings.areaMode) document.querySelector(`input[name="areaMode"][value="${settings.areaMode}"]`).checked = true;
+            if (settings.vehicleMode) document.querySelector(`input[name="vehicleMode"][value="${settings.vehicleMode}"]`).checked = true;
+            if (settings.separator) document.querySelector(`input[name="separator"][value="${settings.separator}"]`).checked = true;
+            if (settings.selectedArea) areaSelect.value = settings.selectedArea;
+            if (settings.selectedVehicle) vehicleSelect.value = settings.selectedVehicle;
+        }
+    }
+
+    // 設定をクッキーに保存する関数
+    function saveSettingsToCookie() {
+        const settings = {
+            noAlphabet: noAlphabetMode.checked,
+            areaMode: document.querySelector('input[name="areaMode"]:checked').value,
+            vehicleMode: document.querySelector('input[name="vehicleMode"]:checked').value,
+            separator: document.querySelector('input[name="separator"]:checked').value,
+            selectedArea: areaSelect.value,
+            selectedVehicle: vehicleSelect.value
+        };
+        document.cookie = `plateSettings=${JSON.stringify(settings)}; max-age=31536000; path=/`;
+    }
+
     // JSONファイルを読み込む関数
     async function loadData() {
         try {
             const response = await fetch('assets/json/plate-data.json');
             plateData = await response.json();
             generateBtn.disabled = false;
+            setupDropdowns();
+            loadSettingsFromCookie();
         } catch (error) {
             console.error('Error loading plate-data.json:', error);
             jpPlateDiv.textContent = 'データファイルの読み込みに失敗しました。';
@@ -37,18 +72,67 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // ドロップダウンを設定する関数
+    function setupDropdowns() {
+        // 地域ドロップダウン
+        areaSelect.innerHTML = '';
+        Object.keys(plateData.areas).forEach(area => {
+            const option = document.createElement('option');
+            option.value = area;
+            option.textContent = area;
+            areaSelect.appendChild(option);
+        });
+
+        // 車種ドロップダウン
+        vehicleSelect.innerHTML = '';
+        Object.entries(plateData.classification.first_digit).forEach(([key, value]) => {
+            const option = document.createElement('option');
+            option.value = key;
+            option.textContent = `${key}: ${value}`;
+            vehicleSelect.appendChild(option);
+        });
+
+        // ラジオボタンのイベントリスナー
+        areaModeRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                areaSelect.disabled = radio.value !== 'manual';
+                saveSettingsToCookie();
+            });
+        });
+        vehicleModeRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                vehicleSelect.disabled = radio.value !== 'manual';
+                saveSettingsToCookie();
+            });
+        });
+        separatorRadios.forEach(radio => {
+            radio.addEventListener('change', saveSettingsToCookie);
+        });
+        noAlphabetMode.addEventListener('change', saveSettingsToCookie);
+        areaSelect.addEventListener('change', saveSettingsToCookie);
+        vehicleSelect.addEventListener('change', saveSettingsToCookie);
+    }
+
     // ナンバープレートを生成する関数
     function generatePlate() {
         if (!plateData) return;
 
-        // 地域名をランダムに選択
-        const areas = Object.keys(plateData.areas);
-        const randomAreaKey = areas[Math.floor(Math.random() * areas.length)];
-        const areaInfo = plateData.areas[randomAreaKey];
+        // 区切り文字を取得
+        const separator = document.querySelector('input[name="separator"]:checked').value === 'space' ? ' ' : '-';
+
+        // 地域を選択
+        let selectedAreaKey;
+        if (document.querySelector('input[name="areaMode"]:checked').value === 'manual') {
+            selectedAreaKey = areaSelect.value;
+        } else {
+            const areas = Object.keys(plateData.areas);
+            selectedAreaKey = areas[Math.floor(Math.random() * areas.length)];
+        }
+        const areaInfo = plateData.areas[selectedAreaKey];
         const intAreaCode = areaInfo.code;
 
         // 日本の地域名を整形（括弧部分を完全に削除）
-        const jpAreaName = randomAreaKey.replace(/（.*?）|\(.*?\)/g, '');
+        const jpAreaName = selectedAreaKey.replace(/（.*?）|\(.*?\)/g, '');
         
         // 都道府県と運輸支局名を取得
         const prefecture = areaInfo.prefecture;
@@ -56,20 +140,37 @@ document.addEventListener('DOMContentLoaded', () => {
         const codeExplanation = areaInfo.codeExplanation || '';
 
         // 分類番号を生成
-        const firstDigit = randomItem(Object.keys(plateData.classification.first_digit));
-        const secondDigit = randomItem(plateData.classification.second_digit);
-        const thirdDigit = randomItem(plateData.classification.third_digit);
+        let availableSecondDigits = plateData.classification.second_digit;
+        let availableThirdDigits = plateData.classification.third_digit;
+        if (noAlphabetMode.checked) {
+            availableSecondDigits = availableSecondDigits.filter(d => /^\d$/.test(d));
+            availableThirdDigits = availableThirdDigits.filter(d => /^\d$/.test(d));
+        }
+
+        let firstDigit;
+        if (document.querySelector('input[name="vehicleMode"]:checked').value === 'manual') {
+            firstDigit = vehicleSelect.value;
+        } else {
+            firstDigit = randomItem(Object.keys(plateData.classification.first_digit));
+        }
+
+        // 軽自動車の場合、secondDigit をフィルタ
+        const isKeiFirst = ['4', '5', '7', '8'].includes(firstDigit);
+        if (isKeiFirst) {
+            let keiSecondDigits = ['8', '9', 'A', 'C', 'F', 'H', 'K', 'L', 'M', 'P', 'X', 'Y'];
+            if (noAlphabetMode.checked) {
+                keiSecondDigits = keiSecondDigits.filter(d => /^\d$/.test(d));
+            }
+            availableSecondDigits = availableSecondDigits.filter(d => keiSecondDigits.includes(d));
+        }
+
+        const secondDigit = randomItem(availableSecondDigits);
+        const thirdDigit = randomItem(availableThirdDigits);
 
         const classificationNumber = `${firstDigit}${secondDigit}${thirdDigit}`;
         // console.log(`Generated classification number: ${classificationNumber}`);
         //分類番号に応じてプレートの種類を決定
-        const isKeiCar = (firstDigit, secondDigit) => {
-        // 軽自動車を示す第二桁のリスト
-        const keiSecondDigits = ['8', '9', 'A', 'C', 'F', 'H', 'K', 'L', 'M', 'P', 'X', 'Y'];
-        // firstDigit が 4, 5, 7, 8 のいずれかで、かつ secondDigit が軽自動車のリストに含まれているか
-        return (['4', '5', '7', '8'].includes(firstDigit) && keiSecondDigits.includes(secondDigit));
-        };
-        const isKei = isKeiCar(firstDigit, secondDigit);
+        const isKei = isKeiFirst && ['8', '9', 'A', 'C', 'F', 'H', 'K', 'L', 'M', 'P', 'X', 'Y'].includes(secondDigit);
         const hiraganaSet = isKei ? plateData.hiraganas.kei : plateData.hiraganas.normal;
         // 用途（自家用・事業用・レンタカー）をランダムに選択
         const hiraganaType = randomItem(Object.keys(hiraganaSet));
@@ -129,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="serial-number">${formattedNumber}</span>
             </div>
         `;
-        const jpPlateCopy = `${jpAreaName} ${classificationNumber} ${randomHiragana} ${formattedNumber}`;
+        const jpPlateCopy = `${jpAreaName}${separator}${classificationNumber}${separator}${randomHiragana}${separator}${formattedNumber}`;
         console.log(`${jpAreaName} ${classificationNumber} ${randomHiragana} ${formattedNumber}`);
         const jpPlateContent = jpPlateDiv.querySelector('.plate-content');
         jpPlateContent.innerHTML = jpPlateDisplay;
@@ -142,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const vehicleType = plateData.classification.first_digit[firstDigit];
         const hiraganaPurpose = hiraganaType;
         // 管轄情報を抽出（括弧内の情報）
-        const jurisdictionMatch = randomAreaKey.match(/[（\(]([^）\)]*)[）\)]/);
+        const jurisdictionMatch = selectedAreaKey.match(/[（\(]([^）\)]*)[）\)]/);
         const jurisdiction = jurisdictionMatch ? jurisdictionMatch[1] : '';
         
         vehicleTypeDiv.innerHTML = `
@@ -183,16 +284,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="serial-number">${serialNumber}</span>
             </div>
         `;
-        const intPlateCopy = `${intAreaCode} ${classificationNumber} ${romajiLetter} ${serialNumber}`;
-        console.log(`${intAreaCode} ${classificationNumber} ${romajiLetter} ${serialNumber}`);
+        const intPlateCopy = `${intAreaCode}${separator}${classificationNumber}${separator}${romajiLetter}${separator}${serialNumber}`;
+        // console.log(`${intAreaCode} ${classificationNumber} ${romajiLetter} ${serialNumber}`);
         const intPlateContent = intPlateDiv.querySelector('.plate-content');
         intPlateContent.innerHTML = intPlateDisplay;
         intPlateDiv.onclick = () => copyToClipboard(intPlateCopy, intPlateDiv);
 
         // ローマ字エリアコードの国際ナンバープレート
         const romajiAreaCode = plateRomaji;
-        romajiPlateCopy = `${romajiAreaCode}-${classificationNumber}-${romajiLetter}-${serialNumber}`;
-        console.log(`${romajiAreaCode} ${classificationNumber} ${romajiLetter} ${serialNumber}`);
+        romajiPlateCopy = `${romajiAreaCode}${separator}${classificationNumber}${separator}${romajiLetter}${separator}${serialNumber}`;
+        // console.log(`${romajiAreaCode} ${classificationNumber} ${romajiLetter} ${serialNumber}`);
     }
 
     // リストからランダムな要素を取得するヘルパー関数
@@ -224,7 +325,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // ボタンのクリックイベントを設定
-    generateBtn.addEventListener('click', generatePlate);
+    generateBtn.addEventListener('click', () => {
+        generatePlate();
+        saveSettingsToCookie();
+    });
 
     // ローマ字コピーボタンのイベント
     copyRomajiBtn.addEventListener('click', () => {
