@@ -815,7 +815,7 @@ table tr:hover {
         inset 0 2px 4px rgba(255,255,255,0.8),
         inset 0 -2px 4px rgba(0,0,0,0.1);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.1s ease;
     position: relative;
     max-width: 300px;
 }
@@ -828,28 +828,10 @@ table tr:hover {
         inset 0 -2px 4px rgba(0,0,0,0.1);
 }
 
-.japan-plate::before {
-    content: "🇯🇵";
-    position: absolute;
-    top: 5px;
-    right: 8px;
-    font-size: 1rem;
-    opacity: 0.7;
-}
-
 .international-plate {
     background: linear-gradient(145deg, #f8f8ff 0%, #e6f0ff 100%);
     border-color: #1e3a8a;
     color: #1a1a1a;
-}
-
-.international-plate::before {
-    content: "🌐";
-    position: absolute;
-    top: 5px;
-    right: 8px;
-    font-size: 1rem;
-    opacity: 0.7;
 }
 
 .plate-content {

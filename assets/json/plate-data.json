@@ -3,692 +3,824 @@
 "札幌": {
 "code": "SPS",
 "prefecture": "北海道",
-"codeExplanation": "SaPporo + Sapporo → SPS"
+"codeExplanation": "SaPporo + Sapporo → SPS",
+"romaji": "Sapporo"
 },
 "函館": {
 "code": "HDH",
 "prefecture": "北海道",
-"codeExplanation": "HakoDate + Hakodate → HDH"
+"codeExplanation": "HakoDate + Hakodate → HDH",
+"romaji": "Hakodate"
 },
 "旭川": {
 "code": "AKA",
 "prefecture": "北海道",
-"codeExplanation": "AsahiKawa + Asahikawa → AKA"
+"codeExplanation": "AsahiKawa + Asahikawa → AKA",
+"romaji": "Asahikawa"
 },
 "室蘭": {
 "code": "MRM",
 "prefecture": "北海道",
-"codeExplanation": "MuroRan + Muroran → MRM"
+"codeExplanation": "MuroRan + Muroran → MRM",
+"romaji": "Muroran"
 },
 "苫小牧": {
 "code": "MRT",
 "prefecture": "北海道",
-"codeExplanation": "MuroRan + Tomakomai → MRT"
+"codeExplanation": "MuroRan + Tomakomai → MRT",
+"romaji": "Tomakomai"
 },
 "釧路": {
 "code": "KRK",
 "prefecture": "北海道",
-"codeExplanation": "KushiRo + Kushiro → KRK"
+"codeExplanation": "KushiRo + Kushiro → KRK",
+"romaji": "Kushiro"
 },
 "知床(旧釧路)": {
 "code": "KRS",
 "prefecture": "北海道",
-"codeExplanation": "ShiRetoko + Shiretoko → KRS"
+"codeExplanation": "ShiRetoko + Shiretoko → KRS",
+"romaji": "Shiretoko"
 },
 "帯広": {
 "code": "OHO",
 "prefecture": "北海道",
-"codeExplanation": "ObiHiro + Obihiro → OHO"
+"codeExplanation": "ObiHiro + Obihiro → OHO",
+"romaji": "Obihiro"
 },
 "北見": {
 "code": "KIK",
 "prefecture": "北海道",
-"codeExplanation": "Kitami + Kitami → KIK"
+"codeExplanation": "Kitami + Kitami → KIK",
+"romaji": "Kitami"
 },
 "知床(旧北見)": {
 "code": "KIS",
 "prefecture": "北海道",
-"codeExplanation": "Kitami + ShiRetoko → KIS"
+"codeExplanation": "Kitami + ShiRetoko → KIS",
+"romaji": "Shiretoko"
 },
 "青森": {
 "code": "AMA",
 "prefecture": "青森県",
-"codeExplanation": "AoMori + Aomori → AMA"
+"codeExplanation": "AoMori + Aomori → AMA",
+"romaji": "Aomori"
 },
 "八戸": {
 "code": "AMH",
 "prefecture": "青森県",
-"codeExplanation": "AoMori + Hachinohe → AMH"
+"codeExplanation": "AoMori + Hachinohe → AMH",
+"romaji": "Hachinohe"
 },
 "弘前": {
 "code": "AMS",
 "prefecture": "青森県",
-"codeExplanation": "AoMori + Hirosaki → AMS"
+"codeExplanation": "AoMori + Hirosaki → AMS",
+"romaji": "Hirosaki"
 },
 "岩手": {
 "code": "ITI",
 "prefecture": "岩手県",
-"codeExplanation": "IwaTe + Iwate → ITI"
+"codeExplanation": "IwaTe + Iwate → ITI",
+"romaji": "Iwate"
 },
 "盛岡": {
 "code": "ITM",
 "prefecture": "岩手県",
-"codeExplanation": "IwaTe + Morioka → ITM"
+"codeExplanation": "IwaTe + Morioka → ITM",
+"romaji": "Morioka"
 },
 "平泉": {
 "code": "ITH",
 "prefecture": "岩手県",
-"codeExplanation": "IwaTe + Hiraizumi → ITH"
+"codeExplanation": "IwaTe + Hiraizumi → ITH",
+"romaji": "Hiraizumi"
 },
 "宮城": {
 "code": "MGM",
 "prefecture": "宮城県",
-"codeExplanation": "MiyaGi + Miyagi → MGM"
+"codeExplanation": "MiyaGi + Miyagi → MGM",
+"romaji": "Miyagi"
 },
 "仙台": {
 "code": "MGS",
 "prefecture": "宮城県",
-"codeExplanation": "MiyaGi + Sendai → MGS"
+"codeExplanation": "MiyaGi + Sendai → MGS",
+"romaji": "Sendai"
 },
 "秋田": {
 "code": "ATA",
 "prefecture": "秋田県",
-"codeExplanation": "AkiTa + Akita → ATA"
+"codeExplanation": "AkiTa + Akita → ATA",
+"romaji": "Akita"
 },
 "山形": {
 "code": "YA",
 "prefecture": "山形県",
-"codeExplanation": "YamagAta → YA（山口との重複回避）"
+"codeExplanation": "YamagAta → YA（山口との重複回避）",
+"romaji": "Yamagata"
 },
 "庄内": {
 "code": "YAS",
 "prefecture": "山形県",
-"codeExplanation": "YamagAta + Shonai → YAS"
+"codeExplanation": "YamagAta + Shonai → YAS",
+"romaji": "Shonai"
 },
 "福島": {
 "code": "FS",
 "prefecture": "福島県",
-"codeExplanation": "FukuShima → FS"
+"codeExplanation": "FukuShima → FS",
+"romaji": "Fukushima"
 },
 "会津": {
 "code": "FSA",
 "prefecture": "福島県",
-"codeExplanation": "FukuShima + Aizu → FSA"
+"codeExplanation": "FukuShima + Aizu → FSA",
+"romaji": "Aizu"
 },
 "いわき": {
 "code": "FSI",
 "prefecture": "福島県",
-"codeExplanation": "FukuShima + Iwaki → FSI"
+"codeExplanation": "FukuShima + Iwaki → FSI",
+"romaji": "Iwaki"
 },
 "郡山": {
 "code": "FSK",
 "prefecture": "福島県",
-"codeExplanation": "FukuShima + Koriyama → FSK"
+"codeExplanation": "FukuShima + Koriyama → FSK",
+"romaji": "Koriyama"
 },
 "白河": {
 "code": "FSS",
 "prefecture": "福島県",
-"codeExplanation": "FukuShima + Shirakawa → FSS"
+"codeExplanation": "FukuShima + Shirakawa → FSS",
+"romaji": "Shirakawa"
 },
 "茨城": {
 "code": "IGI",
 "prefecture": "茨城県",
-"codeExplanation": "IbaraGi + Ibaraki → IGI"
+"codeExplanation": "IbaraGi + Ibaraki → IGI",
+"romaji": "Ibaraki"
 },
 "水戸": {
 "code": "IGM",
 "prefecture": "茨城県",
-"codeExplanation": "IbaraGi + Mito → IGM"
+"codeExplanation": "IbaraGi + Mito → IGM",
+"romaji": "Mito"
 },
 "土浦": {
 "code": "IGT",
 "prefecture": "茨城県",
-"codeExplanation": "IbaraGi + Tsuchiura → IGT"
+"codeExplanation": "IbaraGi + Tsuchiura → IGT",
+"romaji": "Tsuchiura"
 },
 "つくば": {
 "code": "IGK",
 "prefecture": "茨城県",
-"codeExplanation": "IbaraGi + tsuKuba → IGK"
+"codeExplanation": "IbaraGi + tsuKuba → IGK",
+"romaji": "Tsukuba"
 },
 "栃木": {
 "code": "TGT",
 "prefecture": "栃木県",
-"codeExplanation": "TochiGi + Tochigi → TGT"
+"codeExplanation": "TochiGi + Tochigi → TGT",
+"romaji": "Tochigi"
 },
 "宇都宮": {
 "code": "TGU",
 "prefecture": "栃木県",
-"codeExplanation": "TochiGi + Utsunomiya → TGU"
+"codeExplanation": "TochiGi + Utsunomiya → TGU",
+"romaji": "Utsunomiya"
 },
 "那須": {
 "code": "TGN",
 "prefecture": "栃木県",
-"codeExplanation": "TochiGi + Nasu → TGN"
+"codeExplanation": "TochiGi + Nasu → TGN",
+"romaji": "Nasu"
 },
 "とちぎ": {
 "code": "TGC",
 "prefecture": "栃木県",
-"codeExplanation": "TochiGi + Tochigi → TGC"
+"codeExplanation": "TochiGi + Tochigi → TGC",
+"romaji": "Tochigi"
 },
 "群馬": {
 "code": "GMG",
 "prefecture": "群馬県",
-"codeExplanation": "GunMa + Gunma → GMG"
+"codeExplanation": "GunMa + Gunma → GMG",
+"romaji": "Gunma"
 },
 "高崎": {
 "code": "GMT",
 "prefecture": "群馬県",
-"codeExplanation": "GunMa + Takasaki → GMT"
+"codeExplanation": "GunMa + Takasaki → GMT",
+"romaji": "Takasaki"
 },
 "前橋": {
 "code": "GMM",
 "prefecture": "群馬県",
-"codeExplanation": "GunMa + Maebashi → GMM"
+"codeExplanation": "GunMa + Maebashi → GMM",
+"romaji": "Maebashi"
 },
 "埼玉": {
 "code": "STS",
 "prefecture": "埼玉県",
-"codeExplanation": "SaiTama + Saitama → STS"
+"codeExplanation": "SaiTama + Saitama → STS",
+"romaji": "Saitama"
 },
 "大宮": {
 "code": "STO",
 "prefecture": "埼玉県",
-"codeExplanation": "SaiTama + Omiya → STO"
+"codeExplanation": "SaiTama + Omiya → STO",
+"romaji": "Omiya"
 },
 "川越": {
 "code": "STG",
 "prefecture": "埼玉県",
-"codeExplanation": "SaiTama + KawaGoe → STG（重複回避）"
+"codeExplanation": "SaiTama + KawaGoe → STG（重複回避）",
+"romaji": "Kawagoe"
 },
 "熊谷": {
 "code": "STK",
 "prefecture": "埼玉県",
-"codeExplanation": "SaiTama + Kumagaya → STK（重複回避）"
+"codeExplanation": "SaiTama + Kumagaya → STK（重複回避）",
+"romaji": "Kumagaya"
 },
 "春日部": {
 "code": "STB",
 "prefecture": "埼玉県",
-"codeExplanation": "SaiTama + kasukaBe → STB（重複回避）"
+"codeExplanation": "SaiTama + kasukaBe → STB（重複回避）",
+"romaji": "Kasukabe"
 },
 "川口": {
 "code": "STW",
 "prefecture": "埼玉県",
-"codeExplanation": "SaiTama + Kawaguchi → STW"
+"codeExplanation": "SaiTama + Kawaguchi → STW",
+"romaji": "Kawaguchi"
 },
 "越谷": {
 "code": "STY",
 "prefecture": "埼玉県",
-"codeExplanation": "SaiTama + koshigaYa → STY"
+"codeExplanation": "SaiTama + koshigaYa → STY",
+"romaji": "Koshigaya"
 },
 "千葉": {
 "code": "CBC",
 "prefecture": "千葉県",
-"codeExplanation": "ChiBa + Chiba → CBC"
+"codeExplanation": "ChiBa + Chiba → CBC",
+"romaji": "Chiba"
 },
 "成田": {
 "code": "CBT",
 "prefecture": "千葉県",
-"codeExplanation": "ChiBa + Narita → CBT"
+"codeExplanation": "ChiBa + Narita → CBT",
+"romaji": "Narita"
 },
 "習志野": {
 "code": "CBN",
 "prefecture": "千葉県",
-"codeExplanation": "ChiBa + Narashino → CBN"
+"codeExplanation": "ChiBa + Narashino → CBN",
+"romaji": "Narashino"
 },
 "船橋": {
 "code": "CBF",
 "prefecture": "千葉県",
-"codeExplanation": "ChiBa + Funabashi → CBF"
+"codeExplanation": "ChiBa + Funabashi → CBF",
+"romaji": "Funabashi"
 },
 "市川": {
 "code": "CBI",
 "prefecture": "千葉県",
-"codeExplanation": "ChiBa + Ichikawa → CBI"
+"codeExplanation": "ChiBa + Ichikawa → CBI",
+"romaji": "Ichikawa"
 },
 "袖ヶ浦": {
 "code": "CBS",
 "prefecture": "千葉県",
-"codeExplanation": "ChiBa + Sodegaura → CBS"
+"codeExplanation": "ChiBa + Sodegaura → CBS",
+"romaji": "Sodegaura"
 },
 "市原": {
 "code": "CBH",
 "prefecture": "千葉県",
-"codeExplanation": "ChiBa + ichiHara → CBH"
+"codeExplanation": "ChiBa + ichiHara → CBH",
+"romaji": "Ichihara"
 },
 "野田": {
 "code": "CBD",
 "prefecture": "千葉県",
-"codeExplanation": "ChiBa + noDa → CBD"
+"codeExplanation": "ChiBa + noDa → CBD",
+"romaji": "Noda"
 },
 "柏": {
 "code": "CBK",
 "prefecture": "千葉県",
-"codeExplanation": "ChiBa + Kashiwa → CBK"
+"codeExplanation": "ChiBa + Kashiwa → CBK",
+"romaji": "Kashiwa"
 },
 "松戸": {
 "code": "CBM",
 "prefecture": "千葉県",
-"codeExplanation": "ChiBa + Matsudo → CBM"
+"codeExplanation": "ChiBa + Matsudo → CBM",
+"romaji": "Matsudo"
 },
 "品川": {
 "code": "TKS",
 "prefecture": "東京都",
-"codeExplanation": "Tokyo + Shinagawa → TKS"
+"codeExplanation": "Tokyo + Shinagawa → TKS",
+"romaji": "Shinagawa"
 },
 "練馬": {
 "code": "TKN",
 "prefecture": "東京都",
-"codeExplanation": "Tokyo + Nerima → TKN"
+"codeExplanation": "Tokyo + Nerima → TKN",
+"romaji": "Nerima"
 },
 "足立": {
 "code": "TKA",
 "prefecture": "東京都",
-"codeExplanation": "Tokyo + Adachi → TKA"
+"codeExplanation": "Tokyo + Adachi → TKA",
+"romaji": "Adachi"
 },
 "八王子": {
 "code": "TKH",
 "prefecture": "東京都",
-"codeExplanation": "Tokyo + Hachioji → TKH"
+"codeExplanation": "Tokyo + Hachioji → TKH",
+"romaji": "Hachioji"
 },
 "多摩": {
 "code": "TKT",
 "prefecture": "東京都",
-"codeExplanation": "Tokyo + Tama → TKT"
+"codeExplanation": "Tokyo + Tama → TKT",
+"romaji": "Tama"
 },
 "世田谷": {
 "code": "TKG",
 "prefecture": "東京都",
-"codeExplanation": "Tokyo + setaGaya → TKG"
+"codeExplanation": "Tokyo + setaGaya → TKG",
+"romaji": "Setagaya"
 },
 "杉並": {
 "code": "TKM",
 "prefecture": "東京都",
-"codeExplanation": "Tokyo + suginaMi → TKM"
+"codeExplanation": "Tokyo + suginaMi → TKM",
+"romaji": "Suginami"
 },
 "板橋": {
 "code": "TKI",
 "prefecture": "東京都",
-"codeExplanation": "Tokyo + Itabashi → TKI"
+"codeExplanation": "Tokyo + Itabashi → TKI",
+"romaji": "Itabashi"
 },
 "江東": {
 "code": "TKK",
 "prefecture": "東京都",
-"codeExplanation": "Tokyo + Koto → TKK"
+"codeExplanation": "Tokyo + Koto → TKK",
+"romaji": "Koto"
 },
 "葛飾": {
 "code": "TKU",
 "prefecture": "東京都",
-"codeExplanation": "Tokyo + katsUshika → TKU"
+"codeExplanation": "Tokyo + katsUshika → TKU",
+"romaji": "Katsushika"
 },
 "横浜": {
 "code": "KNY",
 "prefecture": "神奈川県",
-"codeExplanation": "KaNagawa + Yokohama → KNY"
+"codeExplanation": "KaNagawa + Yokohama → KNY",
+"romaji": "Yokohama"
 },
 "川崎": {
 "code": "KNK",
 "prefecture": "神奈川県",
-"codeExplanation": "KaNagawa + Kawasaki → KNK"
+"codeExplanation": "KaNagawa + Kawasaki → KNK",
+"romaji": "Kawasaki"
 },
 "相模": {
 "code": "KNS",
 "prefecture": "神奈川県",
-"codeExplanation": "KaNagawa + Sagami → KNS"
+"codeExplanation": "KaNagawa + Sagami → KNS",
+"romaji": "Sagami"
 },
 "湘南": {
 "code": "KNN",
 "prefecture": "神奈川県",
-"codeExplanation": "KaNagawa + Shonan → KNN"
+"codeExplanation": "KaNagawa + Shonan → KNN",
+"romaji": "Shonan"
 },
 "山梨": {
 "code": "YN",
 "prefecture": "山梨県",
-"codeExplanation": "Yamanashi + Yamanashi → YN"
+"codeExplanation": "Yamanashi + Yamanashi → YN",
+"romaji": "Yamanashi"
 },
 "富士山(旧山梨)": {
 "code": "YNF",
 "prefecture": "山梨県",
-"codeExplanation": "YamaNashi + Fujisan → YNF"
+"codeExplanation": "YamaNashi + Fujisan → YNF",
+"romaji": "Fujisan"
 },
 "新潟": {
 "code": "NGN",
 "prefecture": "新潟県",
-"codeExplanation": "NiiGata + Niigata → NGN"
+"codeExplanation": "NiiGata + Niigata → NGN",
+"romaji": "Niigata"
 },
 "長岡": {
 "code": "NGO",
 "prefecture": "新潟県",
-"codeExplanation": "NiiGata + Nagaoka → NGO"
+"codeExplanation": "NiiGata + Nagaoka → NGO",
+"romaji": "Nagaoka"
 },
 "上越": {
 "code": "NGJ",
 "prefecture": "新潟県",
-"codeExplanation": "NiiGata + Joetsu → NGJ"
+"codeExplanation": "NiiGata + Joetsu → NGJ",
+"romaji": "Joetsu"
 },
 "富山": {
 "code": "TYT",
 "prefecture": "富山県",
-"codeExplanation": "ToYama + Toyama → TYT"
+"codeExplanation": "ToYama + Toyama → TYT",
+"romaji": "Toyama"
 },
 "石川": {
 "code": "IKI",
 "prefecture": "石川県",
-"codeExplanation": "IshiKawa + Ishikawa → IKI"
+"codeExplanation": "IshiKawa + Ishikawa → IKI",
+"romaji": "Ishikawa"
 },
 "金沢": {
 "code": "IKK",
 "prefecture": "石川県",
-"codeExplanation": "IshiKawa + Kanazawa → IKK"
+"codeExplanation": "IshiKawa + Kanazawa → IKK",
+"romaji": "Kanazawa"
 },
 "長野": {
 "code": "NNN",
 "prefecture": "長野県",
-"codeExplanation": "NagaNo + Nagano → NNN"
+"codeExplanation": "NagaNo + Nagano → NNN",
+"romaji": "Nagano"
 },
 "松本": {
 "code": "NNM",
 "prefecture": "長野県",
-"codeExplanation": "NagaNo + Matsumoto → NNM"
+"codeExplanation": "NagaNo + Matsumoto → NNM",
+"romaji": "Matsumoto"
 },
 "諏訪": {
 "code": "NNS",
 "prefecture": "長野県",
-"codeExplanation": "NagaNo + Suwa → NNS"
+"codeExplanation": "NagaNo + Suwa → NNS",
+"romaji": "Suwa"
 },
 "福井": {
 "code": "FI",
 "prefecture": "福井県",
-"codeExplanation": "FukuI → FI"
+"codeExplanation": "FukuI → FI",
+"romaji": "Fukui"
 },
 "岐阜": {
 "code": "GFG",
 "prefecture": "岐阜県",
-"codeExplanation": "GiFu + Gifu → GFG"
+"codeExplanation": "GiFu + Gifu → GFG",
+"romaji": "Gifu"
 },
 "飛騨": {
 "code": "GFH",
 "prefecture": "岐阜県",
-"codeExplanation": "GiFu + Hida → GFH"
+"codeExplanation": "GiFu + Hida → GFH",
+"romaji": "Hida"
 },
 "静岡": {
 "code": "SZS",
 "prefecture": "静岡県",
-"codeExplanation": "ShiZuoKa + Shizuoka → SZS"
+"codeExplanation": "ShiZuoKa + Shizuoka → SZS",
+"romaji": "Shizuoka"
 },
 "浜松": {
 "code": "SZH",
 "prefecture": "静岡県",
-"codeExplanation": "ShiZuoKa + Hamamatsu → SZH"
+"codeExplanation": "ShiZuoKa + Hamamatsu → SZH",
+"romaji": "Hamamatsu"
 },
 "沼津": {
 "code": "SZN",
 "prefecture": "静岡県",
-"codeExplanation": "ShiZuoKa + Numazu → SZN"
+"codeExplanation": "ShiZuoKa + Numazu → SZN",
+"romaji": "Numazu"
 },
 "伊豆": {
 "code": "SZI",
 "prefecture": "静岡県",
-"codeExplanation": "ShiZuoKa + Izu → SZI"
+"codeExplanation": "ShiZuoKa + Izu → SZI",
+"romaji": "Izu"
 },
 "富士山(旧沼津)": {
 "code": "SZF",
 "prefecture": "静岡県",
-"codeExplanation": "ShiZuoKa + Fujisan → SZF"
+"codeExplanation": "ShiZuoKa + Fujisan → SZF",
+"romaji": "Fujisan"
 },
 "名古屋": {
 "code": "ACN",
 "prefecture": "愛知県",
-"codeExplanation": "AiChi + Nagoya → ACN"
+"codeExplanation": "AiChi + Nagoya → ACN",
+"romaji": "Nagoya"
 },
 "豊橋": {
 "code": "ACT",
 "prefecture": "愛知県",
-"codeExplanation": "AiChi + Toyohashi → ACT"
+"codeExplanation": "AiChi + Toyohashi → ACT",
+"romaji": "Toyohashi"
 },
 "岡崎": {
 "code": "ACZ",
 "prefecture": "愛知県",
-"codeExplanation": "AiChi + Okazaki → ACZ"
+"codeExplanation": "AiChi + Okazaki → ACZ",
+"romaji": "Okazaki"
 },
 "三河": {
 "code": "ACM",
 "prefecture": "愛知県",
-"codeExplanation": "AiChi + Mikawa → ACM"
+"codeExplanation": "AiChi + Mikawa → ACM",
+"romaji": "Mikawa"
 },
 "豊田": {
 "code": "ACY",
 "prefecture": "愛知県",
-"codeExplanation": "AiChi + Toyota → ACY"
+"codeExplanation": "AiChi + Toyota → ACY",
+"romaji": "Toyota"
 },
 "一宮": {
 "code": "ACI",
 "prefecture": "愛知県",
-"codeExplanation": "AiChi + Ichinomiya → ACI"
+"codeExplanation": "AiChi + Ichinomiya → ACI",
+"romaji": "Ichinomiya"
 },
 "尾張小牧": {
 "code": "ACO",
 "prefecture": "愛知県",
-"codeExplanation": "AiChi + Owarikomaki → ACO"
+"codeExplanation": "AiChi + Owarikomaki → ACO",
+"romaji": "Owari-Komaki"
 },
 "春日井": {
 "code": "ACK",
 "prefecture": "愛知県",
-"codeExplanation": "AiChi + Kasugai → ACK"
+"codeExplanation": "AiChi + Kasugai → ACK",
+"romaji": "Kasugai"
 },
 "三重": {
 "code": "MEM",
 "prefecture": "三重県",
-"codeExplanation": "MiE + Mie → MEM"
+"codeExplanation": "MiE + Mie → MEM",
+"romaji": "Mie"
 },
 "鈴鹿": {
 "code": "MES",
 "prefecture": "三重県",
-"codeExplanation": "MiE + Suzuka → MES"
+"codeExplanation": "MiE + Suzuka → MES",
+"romaji": "Suzuka"
 },
 "四日市": {
 "code": "MEY",
 "prefecture": "三重県",
-"codeExplanation": "MiE + Yokkaichi → MEY"
+"codeExplanation": "MiE + Yokkaichi → MEY",
+"romaji": "Yokkaichi"
 },
 "伊勢志摩": {
 "code": "MEI",
 "prefecture": "三重県",
-"codeExplanation": "MiE + Iseshima → MEI"
+"codeExplanation": "MiE + Iseshima → MEI",
+"romaji": "Ise-Shima"
 },
 "滋賀": {
 "code": "SIS",
 "prefecture": "滋賀県",
-"codeExplanation": "ShIga + Shiga → SIS"
+"codeExplanation": "ShIga + Shiga → SIS",
+"romaji": "Shiga"
 },
 "京都": {
 "code": "KTK",
 "prefecture": "京都府",
-"codeExplanation": "KyoTo + Kyoto → KTK"
+"codeExplanation": "KyoTo + Kyoto → KTK",
+"romaji": "Kyoto"
 },
 "大阪": {
 "code": "OSO",
 "prefecture": "大阪府",
-"codeExplanation": "OSaka + Osaka → OSO"
+"codeExplanation": "OSaka + Osaka → OSO",
+"romaji": "Osaka"
 },
 "なにわ": {
 "code": "OSN",
 "prefecture": "大阪府",
-"codeExplanation": "OSaka + Naniwa → OSN"
-},
-"泉": {
-"code": "OSI",
-"prefecture": "大阪府",
-"codeExplanation": "OSaka + Izumi → OSI"
+"codeExplanation": "OSaka + Naniwa → OSN",
+"romaji": "Naniwa"
 },
 "和泉": {
 "code": "OSZ",
 "prefecture": "大阪府",
-"codeExplanation": "OSaka + Izumi → OSZ"
+"codeExplanation": "OSaka + Izumi → OSZ",
+"romaji": "Izumi"
 },
 "堺": {
 "code": "OSS",
 "prefecture": "大阪府",
-"codeExplanation": "OSaka + Sakai → OSS"
+"codeExplanation": "OSaka + Sakai → OSS",
+"romaji": "Sakai"
 },
 "神戸": {
 "code": "HGK",
 "prefecture": "兵庫県",
-"codeExplanation": "HyoGo + Kobe → HGK"
+"codeExplanation": "HyoGo + Kobe → HGK",
+"romaji": "Kobe"
 },
 "姫路": {
 "code": "HGH",
 "prefecture": "兵庫県",
-"codeExplanation": "HyoGo + Himeji → HGH"
+"codeExplanation": "HyoGo + Himeji → HGH",
+"romaji": "Himeji"
 },
 "奈良": {
 "code": "NRN",
 "prefecture": "奈良県",
-"codeExplanation": "NaRa + Nara → NRN"
+"codeExplanation": "NaRa + Nara → NRN",
+"romaji": "Nara"
 },
 "飛鳥": {
 "code": "NRA",
 "prefecture": "奈良県",
-"codeExplanation": "NaRa + Asuka → NRA"
+"codeExplanation": "NaRa + Asuka → NRA",
+"romaji": "Asuka"
 },
 "和歌山": {
 "code": "WKW",
 "prefecture": "和歌山県",
-"codeExplanation": "WaKayama + Wakayama → WKW"
+"codeExplanation": "WaKayama + Wakayama → WKW",
+"romaji": "Wakayama"
 },
 "鳥取": {
 "code": "TTT",
 "prefecture": "鳥取県",
-"codeExplanation": "ToTtori + Tottori → TTT"
+"codeExplanation": "ToTtori + Tottori → TTT",
+"romaji": "Tottori"
 },
 "島根": {
 "code": "SN",
 "prefecture": "島根県",
-"codeExplanation": "ShimaNe → SN"
+"codeExplanation": "ShimaNe → SN",
+"romaji": "Shimane"
 },
 "出雲": {
 "code": "SNI",
 "prefecture": "島根県",
-"codeExplanation": "ShimaNe + Izumo → SNI"
+"codeExplanation": "ShimaNe + Izumo → SNI",
+"romaji": "Izumo"
 },
 "岡山": {
 "code": "OYO",
 "prefecture": "岡山県",
-"codeExplanation": "OkaYama + Okayama → OYO"
+"codeExplanation": "OkaYama + Okayama → OYO",
+"romaji": "Okayama"
 },
 "倉敷": {
 "code": "OYK",
 "prefecture": "岡山県",
-"codeExplanation": "OkaYama + Kurashiki → OYK"
+"codeExplanation": "OkaYama + Kurashiki → OYK",
+"romaji": "Kurashiki"
 },
 "広島": {
 "code": "HSH",
 "prefecture": "広島県",
-"codeExplanation": "HiroShima + Hiroshima → HSH"
+"codeExplanation": "HiroShima + Hiroshima → HSH",
+"romaji": "Hiroshima"
 },
 "福山": {
 "code": "HSF",
 "prefecture": "広島県",
-"codeExplanation": "HiroShima + Fukuyama → HSF"
+"codeExplanation": "HiroShima + Fukuyama → HSF",
+"romaji": "Fukuyama"
 },
 "山口": {
 "code": "YUY",
 "prefecture": "山口県",
-"codeExplanation": "YamagUchi → YU（山形との重複回避）"
+"codeExplanation": "YamagUchi → YU（山形との重複回避）",
+"romaji": "Yamaguchi"
 },
 "下関": {
 "code": "YUS",
 "prefecture": "山口県",
-"codeExplanation": "YamagUchi + Shimonoseki → YUS"
+"codeExplanation": "YamagUchi + Shimonoseki → YUS",
+"romaji": "Shimonoseki"
 },
 "徳島": {
 "code": "TST",
 "prefecture": "徳島県",
-"codeExplanation": "TokuShima + Tokushima → TST"
+"codeExplanation": "TokuShima + Tokushima → TST",
+"romaji": "Tokushima"
 },
 "香川": {
 "code": "KAK",
 "prefecture": "香川県",
-"codeExplanation": "KAgawa + Kagawa → KAK"
+"codeExplanation": "KAgawa + Kagawa → KAK",
+"romaji": "Kagawa"
 },
 "高松": {
 "code": "KAT",
 "prefecture": "香川県",
-"codeExplanation": "KAgawa + Takamatsu → KAT"
+"codeExplanation": "KAgawa + Takamatsu → KAT",
+"romaji": "Takamatsu"
 },
 "愛媛": {
 "code": "EH",
 "prefecture": "愛媛県",
-"codeExplanation": "EHime + Ehime → EH"
+"codeExplanation": "EHime + Ehime → EH",
+"romaji": "Ehime"
 },
 "高知": {
 "code": "KCK",
 "prefecture": "高知県",
-"codeExplanation": "KoChi + Kochi → KCK"
+"codeExplanation": "KoChi + Kochi → KCK",
+"romaji": "Kochi"
 },
 "福岡": {
 "code": "FOF",
 "prefecture": "福岡県",
-"codeExplanation": "FukuOka + Fukuoka → FOF"
+"codeExplanation": "FukuOka + Fukuoka → FOF",
+"romaji": "Fukuoka"
 },
 "北九州": {
 "code": "FOK",
 "prefecture": "福岡県",
-"codeExplanation": "FukuOka + Kitakyushu → FOK"
+"codeExplanation": "FukuOka + Kitakyushu → FOK",
+"romaji": "Kita-Kyushu"
 },
 "久留米": {
 "code": "FOR",
 "prefecture": "福岡県",
-"codeExplanation": "FukuOka + Kurume → FOR"
+"codeExplanation": "FukuOka + Kurume → FOR",
+"romaji": "Kurume"
 },
 "筑豊": {
 "code": "FOC",
 "prefecture": "福岡県",
-"codeExplanation": "FukuOka + Chikuho → FOC"
+"codeExplanation": "FukuOka + Chikuho → FOC",
+"romaji": "Chikuho"
 },
 "佐賀": {
 "code": "SAS",
 "prefecture": "佐賀県",
-"codeExplanation": "SAga + Saga → SAS"
+"codeExplanation": "SAga + Saga → SAS",
+"romaji": "Saga"
 },
 "長崎": {
 "code": "NS",
 "prefecture": "長崎県",
-"codeExplanation": "NagaSaki → NS"
+"codeExplanation": "NagaSaki → NS",
+"romaji": "Nagasaki"
 },
 "佐世保": {
 "code": "NSS",
 "prefecture": "長崎県",
-"codeExplanation": "NagaSaki + Sasebo → NSS"
+"codeExplanation": "NagaSaki + Sasebo → NSS",
+"romaji": "Sasebo"
 },
 "熊本": {
 "code": "KUK",
 "prefecture": "熊本県",
-"codeExplanation": "KUmamoto + Kumamoto → KUK"
+"codeExplanation": "KUmamoto + Kumamoto → KUK",
+"romaji": "Kumamoto"
 },
 "大分": {
 "code": "OT",
 "prefecture": "大分県",
-"codeExplanation": "OiTa → OT"
+"codeExplanation": "OiTa → OT",
+"romaji": "Oita"
 },
 "宮崎": {
 "code": "MZ",
 "prefecture": "宮崎県",
-"codeExplanation": "MiyaZaki → MZ"
+"codeExplanation": "MiyaZaki → MZ",
+"romaji": "Miyazaki"
 },
 "鹿児島": {
 "code": "KOK",
 "prefecture": "鹿児島県",
-"codeExplanation": "KagOshima + Kagoshima → KOK"
+"codeExplanation": "KagOshima + Kagoshima → KOK",
+"romaji": "Kagoshima"
 },
 "奄美": {
 "code": "KOA",
 "prefecture": "鹿児島県",
-"codeExplanation": "KagOshima + Amami → KOA"
+"codeExplanation": "KagOshima + Amami → KOA",
+"romaji": "Amami"
 },
 "沖縄": {
 "code": "ONO",
 "prefecture": "沖縄県",
-"codeExplanation": "OkiNawa + Okinawa → ONO"
+"codeExplanation": "OkiNawa + Okinawa → ONO",
+"romaji": "Okinawa"
   }
 },
 
@@ -709,10 +841,17 @@
     "third_digit": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "C", "F", "H", "K", "L", "M", "P", "X", "Y"]
     },
   "hiraganas": {
+    "normal": {
     "自家用": ["さ", "す", "せ", "そ", "た", "ち", "つ", "て", "と", "な", "に", "ぬ", "ね", "の", "は", "ひ", "ふ", "ほ", "ま", "み", "む", "め", "も", "や", "ゆ", "ら", "り", "る"],
     "事業用": ["あ", "い", "う", "え", "か", "き", "く", "け", "こ", "を"],
     "レンタカー": ["れ", "わ"]
-}
+    },
+    "kei": {
+    "自家用": ["あ", "い", "う", "え", "か", "き", "く", "け", "こ", "さ", "す", "せ", "そ", "た", "ち", "つ", "て", "と", "な", "に", "ぬ", "ね", "の", "は", "ひ", "ふ", "ほ", "ま", "み", "む", "め", "も", "や", "ゆ", "よ", "ら", "る", "ろ", "を"],
+    "事業用": ["り", "れ"],
+    "レンタカー": ["わ"]
+    }
+  }
 }
 
 
