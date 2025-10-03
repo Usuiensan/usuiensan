@@ -230,8 +230,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="serial-number">${formattedNumber}</span>
             </div>
         `;
-        const jpPlateCopy = `${jpAreaName}${separator}${classificationNumber}${separator}${randomHiragana}${separator}${formattedNumber}`;
-        console.log(`${jpAreaName} ${classificationNumber} ${randomHiragana} ${formattedNumber}`);
+        const jpPlateCopy = `${jpAreaName}${separator}${classificationNumber}${separator}${randomHiragana}${separator}${serialNumber}`;
+        console.log(`${jpAreaName} ${classificationNumber} ${randomHiragana} ${serialNumber}`);
         const jpPlateContent = jpPlateDiv.querySelector('.plate-content');
         jpPlateContent.innerHTML = jpPlateDisplay;
         
