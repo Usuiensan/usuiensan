@@ -154,23 +154,13 @@ document.addEventListener('DOMContentLoaded', () => {
             firstDigit = randomItem(Object.keys(plateData.classification.first_digit));
         }
 
-        // 軽自動車の場合、secondDigit をフィルタ
-        const isKeiFirst = ['4', '5', '7', '8'].includes(firstDigit);
-        if (isKeiFirst) {
-            let keiSecondDigits = ['8', '9', 'A', 'C', 'F', 'H', 'K', 'L', 'M', 'P', 'X', 'Y'];
-            if (noAlphabetMode.checked) {
-                keiSecondDigits = keiSecondDigits.filter(d => /^\d$/.test(d));
-            }
-            availableSecondDigits = availableSecondDigits.filter(d => keiSecondDigits.includes(d));
-        }
-
         const secondDigit = randomItem(availableSecondDigits);
         const thirdDigit = randomItem(availableThirdDigits);
 
         const classificationNumber = `${firstDigit}${secondDigit}${thirdDigit}`;
         // console.log(`Generated classification number: ${classificationNumber}`);
         //分類番号に応じてプレートの種類を決定
-        const isKei = isKeiFirst && ['8', '9', 'A', 'C', 'F', 'H', 'K', 'L', 'M', 'P', 'X', 'Y'].includes(secondDigit);
+        const isKei = ['4', '5', '7', '8'].includes(firstDigit) && ['8', '9', 'A', 'C', 'F', 'H', 'K', 'L', 'M', 'P', 'X', 'Y'].includes(secondDigit);
         const hiraganaSet = isKei ? plateData.hiraganas.kei : plateData.hiraganas.normal;
         // 用途（自家用・事業用・レンタカー）をランダムに選択
         const hiraganaType = randomItem(Object.keys(hiraganaSet));
