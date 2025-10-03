@@ -900,13 +900,13 @@ table tr:hover {
 /* 普通車 自家用（白地緑文字） */
 .normal-private {
     background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 100%);
-    color: #2e7d32;
-    border-color: #2e7d32;
+    color: #2d5a2d;
+    border-color: #2d5a2d;
 }
 
 /* 普通車 事業用（緑地白文字） */
 .normal-business {
-    background: linear-gradient(145deg, #4caf50 0%, #2e7d32 100%);
+    background: linear-gradient(145deg, #347a36 0%, #2d5a2d 100%);
     color: #ffffff;
     border-color: #ffffff;
 }
