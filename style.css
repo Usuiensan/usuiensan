@@ -737,12 +737,6 @@ td {
 /* 最低限のアクセシビリティ補助 */
 .box { display:inline-block; min-width:8rem; text-align:center; }
 
-/* 絵文字のフォント統一（可愛い感じ） */
-.emoji {
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "EmojiOne Mozilla", "Twemoji Mozilla", "Android Emoji", sans-serif;
-    font-variant-emoji: emoji;
-}
-
 /* テーブルスタイル */
 table {
     border-collapse: collapse;
@@ -841,7 +835,6 @@ table tr:hover {
     right: 8px;
     font-size: 1rem;
     opacity: 0.7;
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "EmojiOne Mozilla", "Twemoji Mozilla", "Android Emoji", sans-serif;
 }
 
 .international-plate {
@@ -857,7 +850,6 @@ table tr:hover {
     right: 8px;
     font-size: 1rem;
     opacity: 0.7;
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "EmojiOne Mozilla", "Twemoji Mozilla", "Android Emoji", sans-serif;
 }
 
 .plate-content {
