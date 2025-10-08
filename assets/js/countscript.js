@@ -1,34 +1,42 @@
-// DOM要素を取得
-const textInput = document.getElementById('textInput');
-const byteCountEl = document.getElementById('byteCount');
-const codeUnitCountEl = document.getElementById('codeUnitCount');
-const codePointCountEl = document.getElementById('codePointCount');
-const graphemeCountEl = document.getElementById('graphemeCount');
-const previewEl = document.getElementById('preview');
-
-// 新たに追加: 異体字セレクタとShift_JIS互換性の表示要素
-const vsIndicatorEl = document.getElementById('vsIndicator');
-const shiftJisStatusEl = document.getElementById('shiftJisStatus');
-
-// 書記素クラスタを数えるためのSegmenterを準備
-// 対応していないブラウザの場合はエラーになる可能性があるため、try-catchで囲む
+// DOMContentLoaded後にDOM要素を取得・初期化
+let textInput, byteCountEl, codeUnitCountEl, codePointCountEl, graphemeCountEl;
+let vsIndicatorEl, shiftJisStatusEl;
 let segmenter;
-try {
-    segmenter = new Intl.Segmenter('ja', { granularity: 'grapheme' });
-} catch (e) {
-    console.error('Intl.Segmenter is not supported in this browser.');
-}
+document.addEventListener('DOMContentLoaded', function() {
+    textInput = document.getElementById('textInput');
+    byteCountEl = document.getElementById('byteCount');
+    codeUnitCountEl = document.getElementById('codeUnitCount');
+    codePointCountEl = document.getElementById('codePointCount');
+    graphemeCountEl = document.getElementById('graphemeCount');
+    // previewElは関数内で取得するため、ここでは取得しない
+    vsIndicatorEl = document.getElementById('vsIndicator');
+    shiftJisStatusEl = document.getElementById('shiftJisStatus');
+
+    // Segmenter初期化
+    try {
+        segmenter = new Intl.Segmenter('ja', { granularity: 'grapheme' });
+    } catch (e) {
+        console.error('Intl.Segmenter is not supported in this browser.');
+    }
+
+    // イベントリスナー登録
+    if (textInput) {
+        textInput.addEventListener('input', updateCounts);
+        updateCounts(); // 初回実行
+    }
+});
 
 // 異体字セレクタを含むかを調べる（U+FE00..FE0F および U+E0100..E01EF）
+// SVS（FE00～FE0F）とIVS（E0100～E01EF）を個別にカウント
 function countVariationSelectors(str) {
-    let count = 0;
-    for (const ch of str) {
-        const cp = ch.codePointAt(0);
-        if ((cp >= 0xFE00 && cp <= 0xFE0F) || (cp >= 0xE0100 && cp <= 0xE01EF)) {
-            count++;
-        }
+    let svs = 0, ivs = 0;
+    for (let i = 0; i < str.length; ) {
+        const cp = str.codePointAt(i);
+        if (cp >= 0xFE00 && cp <= 0xFE0F) svs++;
+        else if (cp >= 0xE0100 && cp <= 0xE01EF) ivs++;
+        i += cp > 0xFFFF ? 2 : 1;
     }
-    return count;
+    return { svs, ivs };
 }
 
 // 書記素クラスタ分割ユーティリティ（Segmenterがあればそれを使用、なければ結合文字でクラスタ化）
@@ -141,82 +149,28 @@ function isLikelyShiftJISChar(codePoint) {
     return false;
 }
 
-// 文字のタイプを検出する関数（レア文字、古代文字、特殊記号など）
 function detectCharacterType(char) {
     const result = {
-        isRare: false,
-        isAncient: false,
-        isSymbol: false,
-        isPUA: false
+        isPUA: false,
     };
     
     for (const ch of char) {
         const cp = ch.codePointAt(0);
         
         // 私用領域 (Private Use Area)
-        if ((cp >= 0xE000 && cp <= 0xF8FF) || 
-            (cp >= 0xF0000 && cp <= 0xFFFFD) || 
-            (cp >= 0x100000 && cp <= 0x10FFFD)) {
+        if ((cp >= 0xE000 && cp <= 0xF8FF) || //第0面
+            (cp >= 0xF0000 && cp <= 0xFFFFD) || //第15面
+            (cp >= 0x100000 && cp <= 0x10FFFD)) //第16面
+            {
             result.isPUA = true;
         }
-        
-        // 古代文字系（例: リニアB、楔形文字、象形文字など）
-        if ((cp >= 0x10000 && cp <= 0x1007F) ||  // Linear B Syllabary
-            (cp >= 0x10080 && cp <= 0x100FF) ||  // Linear B Ideograms
-            (cp >= 0x10100 && cp <= 0x1013F) ||  // Aegean Numbers
-            (cp >= 0x10140 && cp <= 0x1018F) ||  // Ancient Greek Numbers
-            (cp >= 0x10190 && cp <= 0x101CF) ||  // Ancient Symbols
-            (cp >= 0x101D0 && cp <= 0x101FF) ||  // Phaistos Disc
-            (cp >= 0x10280 && cp <= 0x1029F) ||  // Lycian
-            (cp >= 0x102A0 && cp <= 0x102DF) ||  // Carian
-            (cp >= 0x12000 && cp <= 0x123FF) ||  // Cuneiform
-            (cp >= 0x13000 && cp <= 0x1342F) ||  // Egyptian Hieroglyphs
-            (cp >= 0x14400 && cp <= 0x1467F)) {  // Anatolian Hieroglyphs
-            result.isAncient = true;
         }
-        
-        // 特殊記号・装飾文字
-        if ((cp >= 0x2000 && cp <= 0x206F) ||   // General Punctuation
-            (cp >= 0x2070 && cp <= 0x209F) ||   // Superscripts and Subscripts
-            (cp >= 0x20A0 && cp <= 0x20CF) ||   // Currency Symbols
-            (cp >= 0x20D0 && cp <= 0x20FF) ||   // Combining Diacritical Marks for Symbols
-            (cp >= 0x2100 && cp <= 0x214F) ||   // Letterlike Symbols
-            (cp >= 0x2150 && cp <= 0x218F) ||   // Number Forms
-            (cp >= 0x2190 && cp <= 0x21FF) ||   // Arrows
-            (cp >= 0x2200 && cp <= 0x22FF) ||   // Mathematical Operators
-            (cp >= 0x2300 && cp <= 0x23FF) ||   // Miscellaneous Technical
-            (cp >= 0x2400 && cp <= 0x243F) ||   // Control Pictures
-            (cp >= 0x2440 && cp <= 0x245F) ||   // Optical Character Recognition
-            (cp >= 0x2460 && cp <= 0x24FF) ||   // Enclosed Alphanumerics
-            (cp >= 0x2500 && cp <= 0x257F) ||   // Box Drawing
-            (cp >= 0x2580 && cp <= 0x259F) ||   // Block Elements
-            (cp >= 0x25A0 && cp <= 0x25FF) ||   // Geometric Shapes
-            (cp >= 0x2600 && cp <= 0x26FF) ||   // Miscellaneous Symbols
-            (cp >= 0x2700 && cp <= 0x27BF) ||   // Dingbats
-            (cp >= 0x27C0 && cp <= 0x27EF) ||   // Miscellaneous Mathematical Symbols-A
-            (cp >= 0x27F0 && cp <= 0x27FF) ||   // Supplemental Arrows-A
-            (cp >= 0x2800 && cp <= 0x28FF) ||   // Braille Patterns
-            (cp >= 0x2900 && cp <= 0x297F) ||   // Supplemental Arrows-B
-            (cp >= 0x2980 && cp <= 0x29FF) ||   // Miscellaneous Mathematical Symbols-B
-            (cp >= 0x2A00 && cp <= 0x2AFF) ||   // Supplemental Mathematical Operators
-            (cp >= 0x2B00 && cp <= 0x2BFF)) {   // Miscellaneous Symbols and Arrows
-            result.isSymbol = true;
-        }
-        
-        // レア文字（高いコードポイント、使用頻度の低い文字）
-        if (cp > 0x10000 || 
-            (cp >= 0xA000 && cp <= 0xA48F) ||   // Yi Syllables
-            (cp >= 0xA490 && cp <= 0xA4CF) ||   // Yi Radicals
-            (cp >= 0xA700 && cp <= 0xA71F) ||   // Modifier Tone Letters
-            (cp >= 0xA720 && cp <= 0xA7FF) ||   // Latin Extended-D
-            (cp >= 0xA800 && cp <= 0xA82F) ||   // Syloti Nagri
-            (cp >= 0xA830 && cp <= 0xA83F)) {   // Common Indic Number Forms
-            result.isRare = true;
-        }
+        return result;
     }
     
-    return result;
-}
+    
+    
+
 
 // HTMLエスケープのヘルパー
 function escapeHtml(s) {
@@ -232,21 +186,16 @@ function wrapEmojis(text) {
 }
 
 function updateCounts() {
-    const inputText = textInput.value;
-
-    // preview を更新（絵文字を可愛く）
+    const previewEl = document.getElementById('preview');
+    if (!previewEl) return;
+    const inputText = textInput ? textInput.value : '';
     previewEl.innerHTML = wrapEmojis(inputText);
-
     // 1. バイト数 (UTF-8)
-    // TextEncoderを使って文字列をUTF-8のバイト列に変換し、その長さを取得
     const byteLength = new TextEncoder().encode(inputText).length;
     byteCountEl.textContent = byteLength;
-
     // 2. コードユニット数 (JavaScriptの .length)
-    // 文字列の .length プロパティはUTF-16のコードユニット数を返す
     const codeUnitLength = inputText.length;
     codeUnitCountEl.textContent = codeUnitLength;
-
     // 3. コードポイント数
     // スプレッド構文(...)で文字列を配列に変換すると、サロゲートペアが1つの要素になる
     const codePointLength = [...inputText].length;
@@ -263,10 +212,17 @@ function updateCounts() {
         graphemeCountEl.textContent = 'N/A';
     }
 
-    // 5. 異体字セレクタの検出
+    // 5. 異体字セレクタの検出（SVS/IVS個別表示）
     if (vsIndicatorEl) {
-        const vsCount = countVariationSelectors(inputText);
-        vsIndicatorEl.textContent = vsCount > 0 ? `異体字セレクタを含みます（${vsCount}個）` : '異体字セレクタは含まれていません';
+        const vs = countVariationSelectors(inputText);
+        if (vs.svs === 0 && vs.ivs === 0) {
+            vsIndicatorEl.textContent = '異体字セレクタは含まれていません';
+        } else {
+            let msg = [];
+            if (vs.svs > 0) msg.push(`SVS（${vs.svs}個）`);
+            if (vs.ivs > 0) msg.push(`IVS（${vs.ivs}個）`);
+            vsIndicatorEl.textContent = `異体字セレクタを含みます：${msg.join(' / ')}`;
+        }
     }
 
     // 6. Shift_JIS未収録の文字チェック
@@ -301,7 +257,6 @@ function updateCounts() {
     }
 
     // 7. ハイライトプレビュー（#preview があれば、クラスタ単位で異体字セレクタ・非Shift_JISをハイライト表示）
-    const previewEl = document.getElementById('preview');
     if (previewEl) {
         const normalized = (typeof inputText.normalize === 'function') ? inputText.normalize('NFC') : inputText;
         const units = splitIntoUnits(normalized);
@@ -310,23 +265,17 @@ function updateCounts() {
         for (const u of units) {
             const classes = [];
             if (nonSJIS.has(u)) classes.push('highlight-nonsjis');
-            if (countVariationSelectors(u) > 0) classes.push('highlight-vs');
-            
+            const vs = countVariationSelectors(u);
+            if (vs.svs > 0 || vs.ivs > 0) classes.push('highlight-vs');
             // レアな文字・特殊記号の検出
             const charType = detectCharacterType(u);
-            if (charType.isRare) classes.push('rare-chars');
-            if (charType.isAncient) classes.push('ancient-scripts');
-            if (charType.isSymbol) classes.push('special-symbols');
-            if (charType.isPUA) classes.push('unicode-pua');
-            
+
             const titleParts = [];
-            if (classes.includes('highlight-nonsjis')) titleParts.push('Shift_JIS未収録の可能性');
-            if (classes.includes('highlight-vs')) titleParts.push('異体字セレクタを含む');
-            if (charType.isRare) titleParts.push('レア文字');
-            if (charType.isAncient) titleParts.push('古代文字');
-            if (charType.isSymbol) titleParts.push('特殊記号');
-            if (charType.isPUA) titleParts.push('私用領域');
-            
+            if (classes.includes('highlight-nonsjis')) titleParts.push('Shift_JIS非対応');
+            if (vs.svs > 0) titleParts.push(`異体字セレクタ（SVS）`);
+            if (vs.ivs > 0) titleParts.push(`異体字セレクタ（IVS）`);
+            if (charType.isPUA) titleParts.push('私用領域の文字（外字）');
+
             const title = titleParts.length ? titleParts.join(' / ') : '';
             html += `<span class="${classes.join(' ')}"${title ? ` title="${escapeHtml(title)}"` : ''}>${escapeHtml(u)}</span>`;
         }
@@ -335,8 +284,10 @@ function updateCounts() {
 }
 
 // テキストエリアに入力があるたびに計算を実行
-textInput.addEventListener('input', updateCounts);
+if (textInput) {
+    textInput.addEventListener('input', updateCounts);
+}
 
 // ページ読み込み時にも一度計算を実行
 // JekyllではDOMContentLoadedの方が安定することがあります
-document.addEventListener('DOMContentLoaded', updateCounts);
+// → updateCountsはDOMContentLoadedで既に呼ばれているので不要

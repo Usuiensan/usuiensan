@@ -7,10 +7,22 @@ title: 文字カウンタ
 <p>
     テキストエリアに文字を入力して、様々な方法で文字数を数えた場合の違いを確認してみましょう。<br>
 </p>
+<div class="input-container">
+  <textarea id="textInput" placeholder="ここに文字を入力してください...">あ🍣が👍🏿👨‍👩‍👧‍👦葛󠄀</textarea>
+</div>
 
-<textarea id="textInput" placeholder="ここに文字を入力してください...">あ🍣が👍🏿👨‍👩‍👧‍👦葛󠄀</textarea>
-
-<div id="preview"></div>
+<div class="preview-container">
+  <div id="preview"></div>
+</div>
+<!-- <div class="preview-legend">
+  <span class="highlight-nonsjis">あ</span>：Shift_JIS未収録の可能性
+  <span class="highlight-vs">い</span>：異体字セレクタを含む
+  <span class="highlight-nonsjis highlight-vs">う</span>：両方該当
+  <span class="rare-chars">𠀋</span>：レア文字
+  <span class="ancient-scripts">𓀀</span>：古代文字
+  <span class="special-symbols">※</span>：特殊記号
+  <span class="unicode-pua"></span>：私用領域
+</div> -->
 
 <table>
     <tr>
