@@ -1,8 +1,8 @@
 body {
-  font-family: 'Consolas', 'Noto Sans', 'Noto Sans CJK JP', 'Noto Sans JP',
-    'Apple Color Emoji', 'Noto Color Emoji', 'Noto Sans Symbols',
-    'Noto Sans Symbols 2', 'Noto Sans Math', 'Segoe UI Emoji', 'Segoe UI Symbol',
-    'Hiragino Sans', 'Yu Gothic UI', 'Meiryo UI', sans-serif;
+  font-family: 'Noto Sans JP', 'Consolas', 'Apple Color Emoji',
+    'Noto Color Emoji', 'Noto Sans Symbols', 'Noto Sans Symbols 2',
+    'Noto Sans Math', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Hiragino Sans',
+    'Yu Gothic UI', 'Meiryo UI', sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
