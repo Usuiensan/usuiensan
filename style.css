@@ -39,6 +39,29 @@ h1 {
     margin-bottom: 20px;
     color: #333;
 }
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #ddd;
+}
+
+th {
+  background-color: #4CAF50;
+  color: white;
+}
 
 input[type="number"], select {
     padding: 12px;
