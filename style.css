@@ -1,8 +1,8 @@
 body {
-  font-family: 'Noto Sans JP', 'Consolas', 'Apple Color Emoji',
+  font-family: 'Hiragino Sans', 'Noto Sans JP', 'Apple Color Emoji',
     'Noto Color Emoji', 'Noto Sans Symbols', 'Noto Sans Symbols 2',
-    'Noto Sans Math', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Hiragino Sans',
-    'Yu Gothic UI', 'Meiryo UI', sans-serif;
+    'Noto Sans Math', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Yu Gothic UI',
+    'Meiryo UI', sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -469,7 +469,7 @@ td {
   margin-right: 0.25rem;
 }
 .timestamp-display .ts-value {
-  font-family: 'OCR B', 'Consolas', monospace;
+  font-family: 'Consolas', monospace;
   background: rgba(255, 255, 255, 0.6);
   padding: 4px 8px;
   border-radius: 6px;
@@ -889,9 +889,8 @@ table tr:hover {
 }
 
 .plate-content {
-  font-family: 'M+ 1p', 'Rounded M+ 1m', 'Myrica M', 'Noto Sans',
-    'Noto Sans CJK JP', 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic UI',
-    'Meiryo UI', sans-serif;
+  font-family: 'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic UI', 'Meiryo UI',
+    sans-serif;
   text-align: center;
   line-height: 1.2;
   padding: 12px 8px;
