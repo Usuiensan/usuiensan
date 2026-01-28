@@ -7,7 +7,9 @@
     if (xhr.status === 200) {
       window.PHONE_AREA_CODES = JSON.parse(xhr.responseText);
     } else {
-      console.error('phone-area-codes.json の読み込みに失敗しました: status=' + xhr.status);
+      console.error(
+        'phone-area-codes.json の読み込みに失敗しました: status=' + xhr.status,
+      );
       window.PHONE_AREA_CODES = {};
     }
   } catch (e) {

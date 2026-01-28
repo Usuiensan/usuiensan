@@ -14,7 +14,10 @@ const formatterCode = fs.readFileSync(
 
 // JSON をテスト環境にロードしておく（eval の中で参照されるため）
 const areaCodes = JSON.parse(
-  fs.readFileSync(path.join(__dirname, 'assets/json/phone-area-codes.json'), 'utf8'),
+  fs.readFileSync(
+    path.join(__dirname, 'assets/json/phone-area-codes.json'),
+    'utf8',
+  ),
 );
 global.window = global;
 global.window.PHONE_AREA_CODES = areaCodes;

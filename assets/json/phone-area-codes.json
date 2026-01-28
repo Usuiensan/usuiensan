@@ -348,22 +348,37 @@
   "01392": { "region": "北海道上磯郡", "isKinki": false },
   "01397": { "region": "北海道奥尻郡", "isKinki": false },
   "01398": { "region": "北海道久遠郡せたな町大成区他", "isKinki": false },
-  "01456": { "region": "北海道沙流郡日高町、新冠郡新冠町里平", "isKinki": false },
+  "01456": {
+    "region": "北海道沙流郡日高町、新冠郡新冠町里平",
+    "isKinki": false
+  },
   "01457": { "region": "北海道沙流郡（平取町等）", "isKinki": false },
   "01466": { "region": "北海道幌泉郡", "isKinki": false },
   "01547": { "region": "北海道釧路市音別町、白糠郡", "isKinki": false },
   "01558": { "region": "北海道中川郡幕別町、広尾郡", "isKinki": false },
-  "01564": { "region": "北海道河東郡（上士幌町及び士幌町に限る。）", "isKinki": false },
+  "01564": {
+    "region": "北海道河東郡（上士幌町及び士幌町に限る。）",
+    "isKinki": false
+  },
   "01586": { "region": "北海道紋別郡湧別町", "isKinki": false },
   "01587": { "region": "北海道常呂郡佐呂間町", "isKinki": false },
-  "01632": { "region": "北海道天塩郡（遠別町、天塩町及び幌延町に限る。）", "isKinki": false },
-  "01634": { "region": "北海道枝幸郡（中頓別町及び浜頓別町に限る。）", "isKinki": false },
+  "01632": {
+    "region": "北海道天塩郡（遠別町、天塩町及び幌延町に限る。）",
+    "isKinki": false
+  },
+  "01634": {
+    "region": "北海道枝幸郡（中頓別町及び浜頓別町に限る。）",
+    "isKinki": false
+  },
   "01635": { "region": "北海道宗谷郡", "isKinki": false },
   "01648": { "region": "北海道苫前郡羽幌町（天売等を含む）", "isKinki": false },
   "01654": { "region": "北海道名寄市（風連町を除く。）", "isKinki": false },
   "01655": { "region": "北海道名寄市風連町、上川郡下川町", "isKinki": false },
   "01656": { "region": "北海道中川郡（音威子府村等）", "isKinki": false },
-  "01658": { "region": "北海道上川郡（愛別町及び上川町に限る。）", "isKinki": false },
+  "01658": {
+    "region": "北海道上川郡（愛別町及び上川町に限る。）",
+    "isKinki": false
+  },
 
   "04992": { "region": "東京都大島町・神津島村等", "isKinki": false },
   "04994": { "region": "東京都御蔵島村・三宅村", "isKinki": false },
@@ -373,14 +388,20 @@
   "05769": { "region": "岐阜県高山市荘川町、大野郡", "isKinki": false },
   "05979": { "region": "三重県南牟婁郡御浜町", "isKinki": true },
 
-  "07468": { "region": "奈良県吉野郡（上北山村及び下北山村に限る。）", "isKinki": true },
+  "07468": {
+    "region": "奈良県吉野郡（上北山村及び下北山村に限る。）",
+    "isKinki": true
+  },
   "08387": { "region": "山口県萩市（特定地域）", "isKinki": false },
   "08388": { "region": "山口県萩市（特定地域）", "isKinki": false },
   "08396": { "region": "山口県美祢市美東町", "isKinki": false },
   "08477": { "region": "広島県庄原市東城町", "isKinki": false },
   "08512": { "region": "島根県隠岐郡隠岐の島町", "isKinki": false },
   "08514": { "region": "島根県隠岐郡（隠岐の島町を除く。）", "isKinki": false },
-  "09802": { "region": "沖縄県島尻郡（北大東村及び南大東村に限る。）", "isKinki": false },
+  "09802": {
+    "region": "沖縄県島尻郡（北大東村及び南大東村に限る。）",
+    "isKinki": false
+  },
   "09912": { "region": "鹿児島県鹿児島郡十島村", "isKinki": false },
   "09913": { "region": "鹿児島県鹿児島郡三島村", "isKinki": false },
   "09969": { "region": "鹿児島県薩摩川内市（鹿島町等）", "isKinki": false }

@@ -34,7 +34,8 @@
       }
     } catch (e) {
       window.PHONE_AREA_CODES = {};
-      if (typeof console !== 'undefined') console.error('PHONE_AREA_CODES load failed', e);
+      if (typeof console !== 'undefined')
+        console.error('PHONE_AREA_CODES load failed', e);
     }
   }
 })();
