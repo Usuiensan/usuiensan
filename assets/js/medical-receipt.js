@@ -183,10 +183,10 @@ function setupPhoneNumberInputs() {
    */
   const formatMobilePhone = (value) => {
     const digits = value.replace(/[^0-9]/g, '');
-    
-    // 最初の1文字が0ではない、または桁数不正
+
+    // 最初の1文字が0ではない場合は数字のみ返す
     if (!digits.startsWith('0')) return digits.slice(0, 11);
-    
+
     // 2文字目が6,7,8,9ではない場合はフォーマットしない
     if (digits.length >= 2 && !'6789'.includes(digits[1])) {
       return digits.slice(0, 11);
@@ -207,48 +207,89 @@ function setupPhoneNumberInputs() {
   };
 
   /**
-   * 固定電話のフォーマット
-   * libphonenumber-js を使用して日本の市外局番に対応
+   * 固定電話のフォーマット（独自実装）
+   * 日本の市外局番パターンに対応
+   *
+   * 対応パターン:
+   * - 2桁市外局番 (03, 06など): XX-XXXX-XXXX
+   * - 3桁市外局番 (075, 078など): XXX-XXX-XXXX
+   * - 4桁市外局番 (0120, 0570など): XXXX-XXX-XXXX
    */
   const formatFixedPhone = (value) => {
     const digits = value.replace(/[^0-9]/g, '');
-    
+
     if (!digits.startsWith('0')) {
       return digits.slice(0, 11);
     }
 
-    try {
-      // libphonenumber-js で解析
-      if (window.libphonenumber && window.libphonenumber.parsePhoneNumber) {
-        const parsed = window.libphonenumber.parsePhoneNumber(
-          '+81' + digits.slice(1),
-          'JP'
-        );
-        if (parsed && parsed.isValid()) {
-          // フォーマット済みの形式を取得
-          const formatted = parsed.formatInternational();
-          // +81-XX-XXXX-XXXX → 0XX-XXXX-XXXX に変換
-          return formatted.replace(/^\+81/, '0').replace(/\s/g, '-');
-        }
-      }
-    } catch (e) {
-      // ライブラリが使用できない場合は手動フォーマット
-    }
-
-    // フォールバック：手動フォーマット
-    // 市外局番の一般的なパターンに対応
     const truncated = digits.slice(0, 11);
 
-    // 0AB-XXXX-XXXX パターン（一般的な固定電話）
-    if (truncated.length <= 3) return truncated;
-    if (truncated.length <= 7)
-      return truncated.slice(0, 3) + '-' + truncated.slice(3);
+    // 3桁目で市外局番の長さを判定
+    const secondChar = truncated[1];
+    const thirdChar = truncated[2];
+
+    // 4桁市外局番パターン: 0[1-5]0[0-9]
+    if (
+      secondChar === '1' ||
+      secondChar === '2' ||
+      secondChar === '3' ||
+      secondChar === '4' ||
+      secondChar === '5'
+    ) {
+      if (
+        thirdChar === '0' ||
+        thirdChar === '2' ||
+        thirdChar === '5' ||
+        thirdChar === '7' ||
+        thirdChar === '9'
+      ) {
+        // フリーダイヤル: 0120, ナビダイヤル: 0570など
+        if (truncated.length <= 4) return truncated;
+        if (truncated.length <= 7)
+          return truncated.slice(0, 4) + '-' + truncated.slice(4);
+        return (
+          truncated.slice(0, 4) +
+          '-' +
+          truncated.slice(4, 7) +
+          '-' +
+          truncated.slice(7)
+        );
+      }
+    }
+
+    // 3桁市外局番パターン: 0[67][0-9]
+    if (
+      (secondChar === '6' ||
+        secondChar === '7' ||
+        secondChar === '8' ||
+        secondChar === '9') &&
+      thirdChar &&
+      thirdChar !== '0'
+    ) {
+      // 075 (京都), 078 (神戸)など
+      if (truncated.length <= 3) return truncated;
+      if (truncated.length <= 6)
+        return truncated.slice(0, 3) + '-' + truncated.slice(3);
+      return (
+        truncated.slice(0, 3) +
+        '-' +
+        truncated.slice(3, 6) +
+        '-' +
+        truncated.slice(6)
+      );
+    }
+
+    // 2桁市外局番パターン: 0[1-6]（デフォルト）
+    // 03 (東京), 06 (大阪)など
+    if (truncated.length <= 2) return truncated;
+    if (truncated.length <= 6)
+      return truncated.slice(0, 2) + '-' + truncated.slice(2);
     return (
-      truncated.slice(0, 3) +
+      truncated.slice(0, 2) +
       '-' +
-      truncated.slice(3, 7) +
+      truncated.slice(2, 6) +
       '-' +
-      truncated.slice(7)
+      truncated.slice(6)
     );
   };
 
