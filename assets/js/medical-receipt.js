@@ -1030,10 +1030,10 @@ async function generateTestPDF(pattern = 'normal') {
     console.log('PDFDocument:', typeof PDFDocument);
     console.log('fontkit:', typeof fontkit);
     console.log('rgb:', typeof rgb);
-    
+
     const pdfDoc = await PDFDocument.create();
     console.log('✓ PDFDocument created');
-    
+
     if (fontkit) {
       pdfDoc.registerFontkit(fontkit);
       console.log('✓ fontkit registered');
@@ -1060,17 +1060,34 @@ async function generateTestPDF(pattern = 'normal') {
 
     // ページを作成
     const page = pdfDoc.addPage([595.28, 841.89]); // A4サイズ
+    const { width, height } = page.getSize();
     console.log('✓ Page created');
 
-    // 背景を白で塗りつぶし
-    page.drawRectangle({
-      x: 0,
-      y: 0,
-      width: 595.28,
-      height: 841.89,
-      color: rgb(1, 1, 1),
-    });
-    console.log('✓ Background filled');
+    // 背景画像の埋め込み（あれば）
+    try {
+      const imageUrl = 'assets/img/medical-receipt-bg.png';
+      const imageBytes = await fetch(imageUrl).then((res) => res.arrayBuffer());
+      const backgroundImage = await pdfDoc.embedPng(imageBytes);
+
+      page.drawImage(backgroundImage, {
+        x: 0,
+        y: 0,
+        width: width,
+        height: height,
+      });
+      console.log('✓ Background image loaded');
+    } catch (error) {
+      console.log('背景画像なし。白紙で生成します。');
+      // 背景を白で塗りつぶし
+      page.drawRectangle({
+        x: 0,
+        y: 0,
+        width: width,
+        height: height,
+        color: rgb(1, 1, 1),
+      });
+      console.log('✓ Background filled');
+    }
 
     // フィールド値を書き込み
     writePDFFieldsFromMappings(page, font, testData);

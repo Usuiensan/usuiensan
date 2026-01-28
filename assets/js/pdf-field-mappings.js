@@ -24,9 +24,9 @@ const PDF_FIELD_MAPPINGS = {
   // 基準点: テキスト左下
   faculty: {
     type: 'text',
-    x: 100, // テキスト左下のx座標
-    y: 760, // テキスト左下のy座標
-    maxWidth: 200,
+    x: 59.8, // テキスト左下のx座標
+    y: 468, // テキスト左下のy座標
+    maxWidth: 100,
     fontSize: 11,
     fontName: 'font',
   },
@@ -35,9 +35,9 @@ const PDF_FIELD_MAPPINGS = {
   // 基準点: テキスト左下
   grade: {
     type: 'text',
-    x: 400, // テキスト左下のx座標
-    y: 760, // テキスト左下のy座標
-    maxWidth: 30,
+    x: 345, // テキスト左下のx座標
+    y: 468, // テキスト左下のy座標
+    maxWidth: 24,
     fontSize: 11,
     fontName: 'font',
   },
@@ -46,9 +46,9 @@ const PDF_FIELD_MAPPINGS = {
   // 基準点: テキスト左下
   studentName: {
     type: 'text',
-    x: 100, // テキスト左下のx座標
-    y: 745, // テキスト左下のy座標
-    maxWidth: 250,
+    x: 380, // テキスト左下のx座標
+    y: 468, // テキスト左下のy座標
+    maxWidth: 125,
     fontSize: 11,
     fontName: 'font',
   },
@@ -57,9 +57,9 @@ const PDF_FIELD_MAPPINGS = {
   // 基準点: テキスト左下
   studentNameKana: {
     type: 'text',
-    x: 100, // テキスト左下のx座標
-    y: 730, // テキスト左下のy座標
-    maxWidth: 250,
+    x: 464, // テキスト左下のx座標
+    y: 498, // テキスト左下のy座標
+    maxWidth: 125,
     fontSize: 11,
     fontName: 'font',
   },
@@ -71,12 +71,12 @@ const PDF_FIELD_MAPPINGS = {
     type: 'digit_boxes',
     digits: 6,
     positions: [
-      { digit: 1, x: 125, y: 700 }, // 1番目の文字の左下が (125, 700)
-      { digit: 2, x: 147, y: 700 },
-      { digit: 3, x: 169, y: 700 },
-      { digit: 4, x: 191, y: 700 },
-      { digit: 5, x: 213, y: 700 },
-      { digit: 6, x: 235, y: 700 },
+      { digit: 1, x: 195, y: 468 }, // 1番目の文字の左下が (125, 81.89)
+      { digit: 2, x: 147, y: 468 }, // 2番目
+      { digit: 3, x: 169, y: 468 },
+      { digit: 4, x: 191, y: 468 },
+      { digit: 5, x: 213, y: 468 },
+      { digit: 6, x: 235, y: 468 },
     ],
     fontSize: 12,
     fontName: 'font', // 日本語フォント
@@ -88,9 +88,9 @@ const PDF_FIELD_MAPPINGS = {
   mobilePhone: {
     type: 'phone_parts',
     parts: [
-      { part: 'area', x: 70, y: 680, maxWidth: 30 }, // 090 の左下が (70, 680)
-      { part: 'exchange', x: 110, y: 680, maxWidth: 40 }, // 1234 の左下が (110, 680)
-      { part: 'subscriber', x: 160, y: 680, maxWidth: 50 }, // 5678 の左下が (160, 680)
+      { part: 'area', x: 113, y: 447, maxWidth: 30 }, // 090 の左下が (70, 680)
+      { part: 'exchange', x: 170, y: 447, maxWidth: 40 }, // 1234 の左下が (110, 680)
+      { part: 'subscriber', x: 225, y: 447, maxWidth: 50 }, // 5678 の左下が (160, 680)
     ],
     fontSize: 11,
     fontName: 'font',
@@ -102,9 +102,9 @@ const PDF_FIELD_MAPPINGS = {
   fixedPhone: {
     type: 'phone_parts',
     parts: [
-      { part: 'area', x: 70, y: 665, maxWidth: 35 }, // 市外局番の左下が (70, 665)
-      { part: 'exchange', x: 120, y: 665, maxWidth: 40 }, // 市内局番の左下が (120, 665)
-      { part: 'subscriber', x: 175, y: 665, maxWidth: 45 }, // 加入者番号の左下が (175, 665)
+      { part: 'area', x: 113, y: 420, maxWidth: 35 }, // 市外局番の左下が (70, 665)
+      { part: 'exchange', x: 170, y: 420, maxWidth: 40 }, // 市内局番の左下が (120, 665)
+      { part: 'subscriber', x: 225, y: 420, maxWidth: 45 }, // 加入者番号の左下が (175, 665)
     ],
     fontSize: 11,
     fontName: 'font',
@@ -116,9 +116,9 @@ const PDF_FIELD_MAPPINGS = {
   addressType: {
     type: 'radio_circle',
     options: [
-      { value: '1', label: '① 自宅', x: 85, y: 640, radius: 5 }, // 円の中心が (85, 640)、半径 5pt
-      { value: '2', label: '② 自宅外', x: 160, y: 640, radius: 5 },
-      { value: '3', label: '③ 大学寮', x: 240, y: 640, radius: 5 },
+      { value: '1', label: '① 自宅', x: 320, y: 521, radius: 5 }, // 円の中心が (85, 640)、半径 5pt
+      { value: '2', label: '② 自宅外', x: 320, y: 441, radius: 5 },
+      { value: '3', label: '③ 大学寮', x: 320, y: 427, radius: 5 },
     ],
     circleColor: { r: 0, g: 0, b: 0 }, // 黒い圏線
     circleWidth: 1.5,
@@ -128,8 +128,8 @@ const PDF_FIELD_MAPPINGS = {
   // 基準点: テキスト左下
   diseaseName: {
     type: 'text',
-    x: 100, // テキスト左下のx座標
-    y: 620, // テキスト左下のy座標
+    x: 380, // テキスト左下のx座標
+    y: 420, // テキスト左下のy座標
     maxWidth: 400,
     fontSize: 11,
     fontName: 'font',
@@ -141,12 +141,12 @@ const PDF_FIELD_MAPPINGS = {
   injuryContext: {
     type: 'checkbox_mark',
     options: [
-      { value: '正課中', label: '正課中', x: 90, y: 595 }, // ✓の左下が (90, 595)
-      { value: '大学行事中', label: '大学行事中', x: 180, y: 595 },
-      { value: '学校施設内', label: '学校施設内', x: 280, y: 595 },
-      { value: '課外活動中', label: '課外活動中', x: 385, y: 595 },
-      { value: '交通事故', label: '交通事故', x: 480, y: 595 },
-      { value: 'その他', label: 'その他', x: 540, y: 595 },
+      { value: '正課中', label: '正課中', x: 86, y: 386 }, // ✓の左下が (90, 595)
+      { value: '大学行事中', label: '大学行事中', x: 86, y: 371 },
+      { value: '学校施設内', label: '学校施設内', x: 280, y: 356 },
+      { value: '課外活動中', label: '課外活動中', x: 385, y: 341 },
+      { value: '交通事故', label: '交通事故', x: 480, y: 326 },
+      { value: 'その他', label: 'その他', x: 540, y: 311 },
     ],
     markType: 'checkmark', // ✓ マーク
     markColor: { r: 0, g: 0, b: 0 },
