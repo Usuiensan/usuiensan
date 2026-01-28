@@ -965,6 +965,64 @@ const formatFixedPhone = (value) => {
 
   const truncated = digits.slice(0, 11);
 
+  // 可能なら JSON の市外局番定義を使って正確に判定（長い方優先）
+  const codes = (typeof window !== 'undefined' && window.PHONE_AREA_CODES) ? window.PHONE_AREA_CODES : null;
+  if (codes) {
+    for (let len = 5; len >= 2; len--) {
+      if (truncated.length >= len) {
+        const code = truncated.substring(0, len);
+        if (codes[code]) {
+          // 发现した市外局番長に基づきフォーマット
+          if (len === 5) {
+            if (truncated.length <= 5) return truncated;
+            if (truncated.length <= 8) return truncated.slice(0, 5) + '-' + truncated.slice(5);
+            return (
+              truncated.slice(0, 5) +
+              '-' +
+              truncated.slice(5, 8) +
+              '-' +
+              truncated.slice(8)
+            );
+          }
+          if (len === 4) {
+            if (truncated.length <= 4) return truncated;
+            if (truncated.length <= 7) return truncated.slice(0, 4) + '-' + truncated.slice(4);
+            return (
+              truncated.slice(0, 4) +
+              '-' +
+              truncated.slice(4, 7) +
+              '-' +
+              truncated.slice(7)
+            );
+          }
+          if (len === 3) {
+            if (truncated.length <= 3) return truncated;
+            if (truncated.length <= 6) return truncated.slice(0, 3) + '-' + truncated.slice(3);
+            return (
+              truncated.slice(0, 3) +
+              '-' +
+              truncated.slice(3, 6) +
+              '-' +
+              truncated.slice(6)
+            );
+          }
+          if (len === 2) {
+            if (truncated.length <= 2) return truncated;
+            if (truncated.length <= 6) return truncated.slice(0, 2) + '-' + truncated.slice(2);
+            return (
+              truncated.slice(0, 2) +
+              '-' +
+              truncated.slice(2, 6) +
+              '-' +
+              truncated.slice(6)
+            );
+          }
+        }
+      }
+    }
+  }
+
+  // JSON が無い/該当無しの場合は従来の判定ロジックにフォールバック
   // 3桁目で市外局番の長さを判定
   const secondChar = truncated[1];
   const thirdChar = truncated[2];
@@ -1033,6 +1091,9 @@ const formatFixedPhone = (value) => {
     truncated.slice(6)
   );
 };
+
+// テストや外部呼び出しのためにフォーマッタを window に公開（必要に応じて）
+if (typeof window !== 'undefined') window.formatFixedPhone = formatFixedPhone;
 
 /**
  * 電話番号入力フィールドをセットアップ
