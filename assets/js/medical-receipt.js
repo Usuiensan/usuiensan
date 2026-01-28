@@ -848,48 +848,88 @@ function writeDateParts(page, font, mapping, dateParts, pageHeight) {
  * ラジオボタン（○で囲む）の書き込み
  */
 function writeRadioCircle(page, mapping, selectedOption, pageHeight) {
-  if (!selectedOption || !selectedOption.x || !selectedOption.y) {
+  // 配列形式（複数選択）に対応
+  if (Array.isArray(selectedOption)) {
+    // 全ての選択肢に○を描画
+    selectedOption.forEach((option) => {
+      if (!option || !option.x || !option.y) return;
+
+      const yInPDF = pageHeight - option.y;
+
+      page.drawCircle({
+        x: option.x,
+        y: yInPDF,
+        size: (option.radius || 5) * 2, // 直径
+        borderColor: rgb(
+          mapping.circleColor?.r || 0,
+          mapping.circleColor?.g || 0,
+          mapping.circleColor?.b || 0,
+        ),
+        borderWidth: mapping.circleWidth || 1.5,
+      });
+    });
+  } else if (selectedOption && selectedOption.x && selectedOption.y) {
+    // 単一選択形式
+    const yInPDF = pageHeight - selectedOption.y;
+
+    page.drawCircle({
+      x: selectedOption.x,
+      y: yInPDF,
+      size: (selectedOption.radius || 5) * 2, // 直径
+      borderColor: rgb(
+        mapping.circleColor?.r || 0,
+        mapping.circleColor?.g || 0,
+        mapping.circleColor?.b || 0,
+      ),
+      borderWidth: mapping.circleWidth || 1.5,
+    });
+  } else {
     console.warn('radio_circle: 選択された座標が見つかりません');
-    return;
   }
-
-  const yInPDF = pageHeight - selectedOption.y;
-
-  page.drawCircle({
-    x: selectedOption.x,
-    y: yInPDF,
-    size: (selectedOption.radius || 5) * 2, // 直径
-    borderColor: rgb(
-      mapping.circleColor?.r || 0,
-      mapping.circleColor?.g || 0,
-      mapping.circleColor?.b || 0,
-    ),
-    borderWidth: mapping.circleWidth || 1.5,
-  });
 }
 
 /**
  * チェックボックス（✓マーク）の書き込み
  */
 function writeCheckboxMark(page, font, mapping, selectedOption, pageHeight) {
-  if (!selectedOption || !selectedOption.x || !selectedOption.y) {
+  // 配列形式（複数選択）に対応
+  if (Array.isArray(selectedOption)) {
+    // 全ての選択肢に✔を描画
+    selectedOption.forEach((option) => {
+      if (!option || !option.x || !option.y) return;
+
+      const yInPDF = pageHeight - option.y;
+
+      page.drawText('✓', {
+        x: option.x,
+        y: yInPDF,
+        size: 14,
+        font: font,
+        color: rgb(
+          mapping.markColor?.r || 0,
+          mapping.markColor?.g || 0,
+          mapping.markColor?.b || 0,
+        ),
+      });
+    });
+  } else if (selectedOption && selectedOption.x && selectedOption.y) {
+    // 単一選択形式
+    const yInPDF = pageHeight - selectedOption.y;
+
+    page.drawText('✓', {
+      x: selectedOption.x,
+      y: yInPDF,
+      size: 14,
+      font: font,
+      color: rgb(
+        mapping.markColor?.r || 0,
+        mapping.markColor?.g || 0,
+        mapping.markColor?.b || 0,
+      ),
+    });
+  } else {
     console.warn('checkbox_mark: 選択された座標が見つかりません');
-    return;
   }
-
-  const yInPDF = pageHeight - selectedOption.y;
-
-  page.drawText('✓', {
-    x: selectedOption.x,
-    y: yInPDF,
-    size: 14,
-    font: font,
-    color: rgb(
-      mapping.markColor?.r || 0,
-      mapping.markColor?.g || 0,
-      mapping.markColor?.b || 0,
-    ),
-  });
 }
 
 /**
@@ -1050,7 +1090,7 @@ function generateTestPDFDataAccident() {
 }
 
 /**
- * テスト用ダミーデータを生成（全フィールド充填版 - 全ての選択肢を✔）
+ * テスト用ダミーデータを生成（全フィールド充填版 - 全ての選択肢を○/✔）
  * 本来なら両立しない組み合わせでも全部入れるテスト
  */
 function generateTestPDFDataAll() {
@@ -1070,54 +1110,55 @@ function generateTestPDFDataAll() {
       exchange: '999',
       subscriber: '9999',
     },
-    addressType: {
-      value: '3', // ③ 大学寮（全ての選択肢でテスト）
-      label: '③ 大学寮',
-      x: 85,
-      y: 640,
-      radius: 5,
-    },
+    
+    // 住所区分：全て選択（本来は1つだけ）
+    addressType: [
+      { value: '1', label: '① 自宅', x: 312, y: 386, radius: 5 },
+      { value: '2', label: '② 自宅外', x: 312, y: 401, radius: 5 },
+      { value: '3', label: '③ 大学寮', x: 312, y: 416, radius: 5 },
+    ],
+    
     receiptNumbers: ['0001', '0002', '0003', '0004'],
     diseaseName: '総合テスト疾患',
-    
-    // 負傷状況：全て選択（本来は1つだけ）
-    injuryContext: {
-      value: '正課中', // この行のみ記入されると想定だが、テストなので全部書く
-      label: '正課中',
-      x: 90,
-      y: 595,
-    },
-    
+
+    // 負傷状況：全て選択
+    injuryContext: [
+      { value: '正課中', x: 86, y: 462 },
+      { value: '大学行事中', x: 86, y: 480 },
+      { value: '学校施設内', x: 86, y: 498 },
+      { value: '課外活動中', x: 86, y: 516 },
+      { value: '交通事故', x: 86, y: 534 },
+      { value: 'その他', x: 86, y: 552 },
+    ],
+
     // 各受傷状況に対応するフィールド（全部記入）
     subjectName: '全科目テスト',
     eventName: 'テスト行事全て',
     clubName: 'テスト部活',
+    
+    // 場所と原因も各受傷状況ごとに全部記入
     injuryLocation: '全てのテスト場所',
     injuryCause: '全てのテスト原因',
-    
+
     injuryDate: {
       year: '2026',
       month: '01',
       day: '28',
     },
+
+    // 交通事故相手：全て選択
+    accidentParty: [
+      { value: '有り', x: 135, y: 610, radius: 6 },
+      { value: '無し', x: 218, y: 610, radius: 6 },
+    ],
+
+    // 金融機関振込先：全て選択
+    bankTransferType: [
+      { value: 'previous', x: 135, y: 610, radius: 6 },
+      { value: 'new', x: 218, y: 610, radius: 6 },
+      { value: 'change', x: 255, y: 610, radius: 6 },
+    ],
     
-    // 交通事故相手（交通事故選択時のみだが全部）
-    accidentParty: {
-      value: '有り',
-      label: '有り',
-      x: 90,
-      y: 510,
-      radius: 5,
-    },
-    
-    // 金融機関情報（前回と同じ以外全部）
-    bankTransferType: {
-      value: 'new', // 新規（他の情報も全部記入）
-      label: '新規',
-      x: 200,
-      y: 480,
-      radius: 5,
-    },
     bankName: 'テスト銀行全て',
     branchName: 'テスト支店全部',
     bankCode: '9999',
