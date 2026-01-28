@@ -680,7 +680,7 @@ function writePDFFieldsFromMappings(page, font, pdfData) {
       switch (mapping.type) {
         case 'text':
           // テキスト単一フィールド
-          writeTextField(page, font, mapping, value, height);
+          writeTextField(page, font, mapping, value, height, pdfData);
           break;
 
         case 'digit_boxes':
@@ -725,16 +725,38 @@ function writePDFFieldsFromMappings(page, font, pdfData) {
 /**
  * テキストフィールドの書き込み
  */
-function writeTextField(page, font, mapping, value, pageHeight) {
-  const yInPDF = pageHeight - mapping.y; // PDF座標系に変換
+function writeTextField(page, font, mapping, value, pageHeight, pdfData = {}) {
+  // options 配列を持つ場合（条件付きフィールド）
+  if (mapping.options && Array.isArray(mapping.options)) {
+    // injuryContext から現在の条件を取得
+    const currentCondition = pdfData.injuryContext;
+    
+    // 現在の条件に対応するオプションを探す
+    const selectedOption = mapping.options.find(
+      (opt) => opt.condition === currentCondition,
+    );
 
-  page.drawText(String(value).substring(0, 50), {
-    x: mapping.x,
-    y: yInPDF,
-    size: mapping.fontSize || 11,
-    font: font,
-    color: rgb(0, 0, 0),
-  });
+    if (selectedOption && value) {
+      const yInPDF = pageHeight - selectedOption.y; // PDF座標系に変換
+      page.drawText(String(value).substring(0, 50), {
+        x: selectedOption.x,
+        y: yInPDF,
+        size: mapping.fontSize || 11,
+        font: font,
+        color: rgb(0, 0, 0),
+      });
+    }
+  } else {
+    // 通常のテキストフィールド
+    const yInPDF = pageHeight - mapping.y; // PDF座標系に変換
+    page.drawText(String(value).substring(0, 50), {
+      x: mapping.x,
+      y: yInPDF,
+      size: mapping.fontSize || 11,
+      font: font,
+      color: rgb(0, 0, 0),
+    });
+  }
 }
 
 /**

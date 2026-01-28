@@ -186,21 +186,35 @@ const PDF_FIELD_MAPPINGS = {
   },
 
   // ===== けがの場所 =====
+  // 各受傷状況の行に対応する場所フィールド
   injuryLocation: {
     type: 'text',
-    x: 100,
-    y: 510.6,
-    maxWidth: 350,
+    options: [
+      { condition: '正課中', x: 210, y: 453.6 },
+      { condition: '大学行事中', x: 210, y: 468.2 },
+      { condition: '学校施設内', x: 210, y: 482.4 },
+      { condition: '課外活動中', x: 210, y: 496.8 },
+      { condition: '交通事故', x: 210, y: 510.6 },
+      { condition: 'その他', x: 210, y: 524.9 },
+    ],
+    maxWidth: 150,
     fontSize: 11,
     fontName: 'font',
   },
 
   // ===== 原因 =====
+  // 各受傷状況の行に対応する原因フィールド
   injuryCause: {
     type: 'text',
-    x: 100,
-    y: 524.9,
-    maxWidth: 350,
+    options: [
+      { condition: '正課中', x: 330, y: 453.6 },
+      { condition: '大学行事中', x: 330, y: 468.2 },
+      { condition: '学校施設内', x: 330, y: 482.4 },
+      { condition: '課外活動中', x: 330, y: 496.8 },
+      { condition: '交通事故', x: 330, y: 510.6 },
+      { condition: 'その他', x: 330, y: 524.9 },
+    ],
+    maxWidth: 150,
     fontSize: 11,
     fontName: 'font',
   },
