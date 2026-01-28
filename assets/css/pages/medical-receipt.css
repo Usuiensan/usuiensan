@@ -147,19 +147,20 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .phone-block {
-  width: 80px;
-  padding: 12px 15px;
+  width: 70px;
+  padding: 10px 8px;
   border: 2px solid var(--border-color);
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-family: inherit;
   transition: all 0.3s ease;
   background-color: #fafafa;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .phone-block:focus {
@@ -173,6 +174,7 @@ body {
   font-weight: bold;
   color: var(--text-color);
   font-size: 1.1rem;
+  flex-shrink: 0;
 }
 
 /* 学生証番号マス入力 */
@@ -547,6 +549,14 @@ body {
   animation: fadeIn 0.5s ease-out;
 }
 
+/* 小さいボタン */
+.btn-small {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  min-width: auto;
+  width: auto;
+  flex-shrink: 0;
+}
 /* フォームグループ */
 .form-group {
   margin-bottom: 20px;

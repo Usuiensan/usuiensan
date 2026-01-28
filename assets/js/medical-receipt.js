@@ -255,10 +255,10 @@ function updateInjuryContextDetails(context) {
 
   // 選択された状況に応じて表示
   const contexts = {
-    '正課中': 'injuryContextSubjectName',
-    '大学行事中': 'injuryContextEventName',
-    '課外活動中': 'injuryContextClubName',
-    '交通事故': 'injuryContextAccident',
+    正課中: 'injuryContextSubjectName',
+    大学行事中: 'injuryContextEventName',
+    課外活動中: 'injuryContextClubName',
+    交通事故: 'injuryContextAccident',
   };
 
   if (contexts[context]) {

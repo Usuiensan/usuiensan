@@ -149,11 +149,7 @@ title: 医療費領収証明書作成ツール
                   class="phone-block"
                 />
               </div>
-              <input
-                type="hidden"
-                id="mobilePhone"
-                name="mobilePhone"
-              />
+              <input type="hidden" id="mobilePhone" name="mobilePhone" />
             </div>
 
             <div class="form-group">
@@ -186,11 +182,7 @@ title: 医療費領収証明書作成ツール
                   class="phone-block"
                 />
               </div>
-              <input
-                type="hidden"
-                id="fixedPhone"
-                name="fixedPhone"
-              />
+              <input type="hidden" id="fixedPhone" name="fixedPhone" />
             </div>
 
             <div class="form-group">
@@ -225,6 +217,21 @@ title: 医療費領収証明書作成ツール
             <h2>🏥 傷病情報</h2>
 
             <div class="form-group">
+              <label for="injuryContext"
+                >負傷状況 <span class="required">*</span></label
+              >
+              <select id="injuryContext" name="injuryContext">
+                <option value="">選択してください</option>
+                <option value="正課中">正課中</option>
+                <option value="大学行事中">大学行事中</option>
+                <option value="学校施設内">学校施設内</option>
+                <option value="課外活動中">課外活動中</option>
+                <option value="交通事故">交通事故</option>
+                <option value="その他">その他</option>
+              </select>
+            </div>
+
+            <div class="form-group">
               <label for="diseaseName"
                 >傷病名 <span class="required">*</span></label
               >
@@ -249,7 +256,9 @@ title: 医療費領収証明書作成ツール
               style="display: none"
             >
               <div class="form-group">
-                <label for="injuryLocation">けがの場所 <span class="required">*</span></label>
+                <label for="injuryLocation"
+                  >けがの場所 <span class="required">*</span></label
+                >
                 <input
                   type="text"
                   id="injuryLocation"
@@ -259,7 +268,9 @@ title: 医療費領収証明書作成ツール
               </div>
 
               <div class="form-group">
-                <label for="injuryCause">原因 <span class="required">*</span></label>
+                <label for="injuryCause"
+                  >原因 <span class="required">*</span></label
+                >
                 <input
                   type="text"
                   id="injuryCause"
@@ -275,21 +286,6 @@ title: 医療費領収証明書作成ツール
                 <input type="date" id="injuryDate" name="injuryDate" />
               </div>
 
-              <div class="form-group">
-                <label for="injuryContext"
-                  >負傷状況 <span class="required">*</span></label
-                >
-                <select id="injuryContext" name="injuryContext">
-                  <option value="">選択してください</option>
-                  <option value="正課中">正課中</option>
-                  <option value="大学行事中">大学行事中</option>
-                  <option value="学校施設内">学校施設内</option>
-                  <option value="課外活動中">課外活動中</option>
-                  <option value="交通事故">交通事故</option>
-                  <option value="その他">その他</option>
-                </select>
-              </div>
-
               <!-- 正課中 -->
               <div
                 id="injuryContextSubjectName"
@@ -297,7 +293,9 @@ title: 医療費領収証明書作成ツール
                 style="display: none"
               >
                 <div class="form-group">
-                  <label for="subjectName">科目名 <span class="required">*</span></label>
+                  <label for="subjectName"
+                    >科目名 <span class="required">*</span></label
+                  >
                   <input
                     type="text"
                     id="subjectName"
@@ -314,7 +312,9 @@ title: 医療費領収証明書作成ツール
                 style="display: none"
               >
                 <div class="form-group">
-                  <label for="eventName">行事名 <span class="required">*</span></label>
+                  <label for="eventName"
+                    >行事名 <span class="required">*</span></label
+                  >
                   <input
                     type="text"
                     id="eventName"
@@ -331,7 +331,9 @@ title: 医療費領収証明書作成ツール
                 style="display: none"
               >
                 <div class="form-group">
-                  <label for="clubName">団体名 <span class="required">*</span></label>
+                  <label for="clubName"
+                    >団体名 <span class="required">*</span></label
+                  >
                   <input
                     type="text"
                     id="clubName"
