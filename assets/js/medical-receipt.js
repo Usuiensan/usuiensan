@@ -1068,7 +1068,7 @@ async function generateTestPDF(pattern = 'normal') {
       y: 0,
       width: 595.28,
       height: 841.89,
-      color: rgb(255, 255, 255),
+      color: rgb(1, 1, 1),
     });
     console.log('✓ Background filled');
 
@@ -1108,8 +1108,8 @@ async function generateTestPDF(pattern = 'normal') {
 function drawCoordinateGuide(page) {
   const { width, height } = page.getSize();
   const gridSize = 100;
-  const guideLightGray = rgb(0.9, 0.9, 0.9);
-  const guideDarkGray = rgb(0.7, 0.7, 0.7);
+  const guideLightGray = rgb(0.95, 0.95, 0.95);
+  const guideDarkGray = rgb(0.8, 0.8, 0.8);
 
   // 縦線（X軸グリッド）
   for (let x = 0; x <= width; x += gridSize) {
@@ -1856,8 +1856,6 @@ loadBtn.addEventListener('click', () => {
   loadFormData();
   showMessage('入力内容を読み込みました', 'success');
 });
-
-previewBtn.addEventListener('click', previewForm);
 
 /**
  * 自動保存の設定
