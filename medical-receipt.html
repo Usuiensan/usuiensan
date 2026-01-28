@@ -129,7 +129,9 @@ title: 医療費領収証明書作成ツール
                 placeholder="09012345678"
                 maxlength="13"
               />
-              <span class="phone-helper-text">※ 数字のみ入力（自動でハイフンが挿入されます）</span>
+              <span class="phone-helper-text"
+                >※ 数字のみ入力（自動でハイフンが挿入されます）</span
+              >
             </div>
 
             <div class="form-group">
@@ -142,7 +144,9 @@ title: 医療費領収証明書作成ツール
                 placeholder="0612345678"
                 maxlength="13"
               />
-              <span class="phone-helper-text">※ 数字のみ入力（自動でハイフンが挿入されます）</span>
+              <span class="phone-helper-text"
+                >※ 数字のみ入力（自動でハイフンが挿入されます）</span
+              >
             </div>
 
             <div class="form-group">
@@ -507,6 +511,9 @@ title: 医療費領収証明書作成ツール
     <!-- PDF-LIB ライブラリ -->
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://unpkg.com/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
+
+    <!-- 電話番号フォーマット用ライブラリ（日本対応） -->
+    <script src="https://cdn.jsdelivr.net/npm/libphonenumber-js@1.10.38/bundle/libphonenumber-js.min.js"></script>
 
     <!-- カスタムスクリプト -->
     <script src="assets/js/medical-receipt.js"></script>

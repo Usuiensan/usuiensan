@@ -174,59 +174,121 @@ function setupEventListeners() {
  * 電話番号入力の設定（A-B-Cフォーマット）
  */
 function setupPhoneNumberInputs() {
-  const phones = [
-    { id: 'mobilePhone', maxDigits: 11 },  // 09012345678
-    { id: 'fixedPhone', maxDigits: 10 },   // 0612345678
-  ];
+  const mobilePhoneInput = document.getElementById('mobilePhone');
+  const fixedPhoneInput = document.getElementById('fixedPhone');
 
-  phones.forEach((phone) => {
-    const input = document.getElementById(phone.id);
-    if (!input) return;
+  /**
+   * 携帯電話のフォーマット
+   * 0[6789]0-XXXX-XXXX（11桁）
+   */
+  const formatMobilePhone = (value) => {
+    const digits = value.replace(/[^0-9]/g, '');
+    
+    // 最初の1文字が0ではない、または桁数不正
+    if (!digits.startsWith('0')) return digits.slice(0, 11);
+    
+    // 2文字目が6,7,8,9ではない場合はフォーマットしない
+    if (digits.length >= 2 && !'6789'.includes(digits[1])) {
+      return digits.slice(0, 11);
+    }
 
-    /**
-     * 電話番号を自動的にハイフン挿入した形式にフォーマット
-     * @param {string} value - 数字のみの文字列
-     * @returns {string} フォーマット済みの文字列
-     */
-    const formatPhoneNumber = (value) => {
-      // 数字のみ抽出
-      const digits = value.replace(/[^0-9]/g, '');
+    const truncated = digits.slice(0, 11);
 
-      // maxDigits を超えないようにカット
-      const truncated = digits.slice(0, phone.maxDigits);
+    if (truncated.length <= 3) return truncated;
+    if (truncated.length <= 7)
+      return truncated.slice(0, 3) + '-' + truncated.slice(3);
+    return (
+      truncated.slice(0, 3) +
+      '-' +
+      truncated.slice(3, 7) +
+      '-' +
+      truncated.slice(7)
+    );
+  };
 
-      // パターンに応じてハイフン挿入
-      if (phone.id === 'mobilePhone') {
-        // 090-1234-5678 形式（11桁）
-        if (truncated.length <= 3) return truncated;
-        if (truncated.length <= 7) return truncated.slice(0, 3) + '-' + truncated.slice(3);
-        return truncated.slice(0, 3) + '-' + truncated.slice(3, 7) + '-' + truncated.slice(7);
-      } else if (phone.id === 'fixedPhone') {
-        // 06-1234-5678 形式（10-11桁）
-        if (truncated.length <= 2) return truncated;
-        if (truncated.length <= 6) return truncated.slice(0, 2) + '-' + truncated.slice(2);
-        return truncated.slice(0, 2) + '-' + truncated.slice(2, 6) + '-' + truncated.slice(6);
+  /**
+   * 固定電話のフォーマット
+   * libphonenumber-js を使用して日本の市外局番に対応
+   */
+  const formatFixedPhone = (value) => {
+    const digits = value.replace(/[^0-9]/g, '');
+    
+    if (!digits.startsWith('0')) {
+      return digits.slice(0, 11);
+    }
+
+    try {
+      // libphonenumber-js で解析
+      if (window.libphonenumber && window.libphonenumber.parsePhoneNumber) {
+        const parsed = window.libphonenumber.parsePhoneNumber(
+          '+81' + digits.slice(1),
+          'JP'
+        );
+        if (parsed && parsed.isValid()) {
+          // フォーマット済みの形式を取得
+          const formatted = parsed.formatInternational();
+          // +81-XX-XXXX-XXXX → 0XX-XXXX-XXXX に変換
+          return formatted.replace(/^\+81/, '0').replace(/\s/g, '-');
+        }
       }
+    } catch (e) {
+      // ライブラリが使用できない場合は手動フォーマット
+    }
 
-      return truncated;
-    };
+    // フォールバック：手動フォーマット
+    // 市外局番の一般的なパターンに対応
+    const truncated = digits.slice(0, 11);
 
-    // 入力イベント：自動フォーマット
-    input.addEventListener('input', (e) => {
-      const formatted = formatPhoneNumber(e.target.value);
+    // 0AB-XXXX-XXXX パターン（一般的な固定電話）
+    if (truncated.length <= 3) return truncated;
+    if (truncated.length <= 7)
+      return truncated.slice(0, 3) + '-' + truncated.slice(3);
+    return (
+      truncated.slice(0, 3) +
+      '-' +
+      truncated.slice(3, 7) +
+      '-' +
+      truncated.slice(7)
+    );
+  };
+
+  // 携帯電話イベント
+  if (mobilePhoneInput) {
+    mobilePhoneInput.addEventListener('input', (e) => {
+      const formatted = formatMobilePhone(e.target.value);
       e.target.value = formatted;
       saveFormData(true);
     });
 
-    // ペースト対応：自動フォーマット
-    input.addEventListener('paste', (e) => {
+    mobilePhoneInput.addEventListener('paste', (e) => {
       e.preventDefault();
-      const pastedText = (e.clipboardData || window.clipboardData).getData('text');
-      const formatted = formatPhoneNumber(pastedText);
+      const pastedText = (e.clipboardData || window.clipboardData).getData(
+        'text',
+      );
+      const formatted = formatMobilePhone(pastedText);
       e.target.value = formatted;
-      input.dispatchEvent(new Event('input'));
+      mobilePhoneInput.dispatchEvent(new Event('input'));
     });
-  });
+  }
+
+  // 固定電話イベント
+  if (fixedPhoneInput) {
+    fixedPhoneInput.addEventListener('input', (e) => {
+      const formatted = formatFixedPhone(e.target.value);
+      e.target.value = formatted;
+      saveFormData(true);
+    });
+
+    fixedPhoneInput.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const pastedText = (e.clipboardData || window.clipboardData).getData(
+        'text',
+      );
+      const formatted = formatFixedPhone(pastedText);
+      e.target.value = formatted;
+      fixedPhoneInput.dispatchEvent(new Event('input'));
+    });
+  }
 }
 
 /**
