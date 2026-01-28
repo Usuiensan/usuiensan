@@ -1,6 +1,6 @@
 /**
- * 電話番号フォーマッター（日本）
- * 携帯電話と固定電話のフォーマッティング機能を提供
+ * 電話番号フォーマッター＆バリデータ（日本）
+ * 携帯電話と固定電話のフォーマッティング・判定機能を提供
  *
  * 【携帯電話】
  * - 形式：0[6789]0-XXXX-XXXX（11桁）
@@ -11,7 +11,224 @@
  * - 2桁市外局番: XX-XXXX-XXXX (03, 06など)
  * - 3桁市外局番: XXX-XXX-XXXX (075, 078など)
  * - 4桁市外局番: XXXX-XXX-XXXX (0120, 0570など)
+ *
+ * 【判定機能】
+ * - 日本の電話番号として妥当性チェック
+ * - 一般人の電話番号の可能性判定
+ * - 電話番号タイプ判別（携帯/固定/特殊番号/不明）
+ * - 地域情報の推定
  */
+
+/**
+ * 電話番号の総合判定を行う
+ * @param {string} value - 入力値（数字のみまたはハイフン含む）
+ * @returns {Object} 判定結果
+ *   - isValid: 日本の電話番号として有効か
+ *   - isGeneral: 一般人の電話番号の可能性が高いか
+ *   - type: 'mobile' | 'fixed' | 'special' | 'unknown'
+ *   - region: 地域情報（固定電話の場合）
+ *   - reason: 判定の理由
+ */
+function validatePhoneNumber(value) {
+  const digits = value.replace(/[^0-9]/g, '');
+
+  // 基本チェック
+  if (!digits.startsWith('0')) {
+    return {
+      isValid: false,
+      isGeneral: false,
+      type: 'unknown',
+      region: null,
+      reason: '0から始まる番号ではありません',
+    };
+  }
+
+  if (digits.length < 10 || digits.length > 11) {
+    return {
+      isValid: false,
+      isGeneral: false,
+      type: 'unknown',
+      region: null,
+      reason: '桁数が不正です（10～11桁）',
+    };
+  }
+
+  // 電話番号タイプの判定
+  const phoneType = classifyPhoneNumberType(digits);
+
+  return {
+    isValid: phoneType.isValid,
+    isGeneral: phoneType.isGeneral,
+    type: phoneType.type,
+    region: phoneType.region,
+    reason: phoneType.reason,
+  };
+}
+
+/**
+ * 電話番号タイプを分類する（内部関数）
+ * @private
+ */
+function classifyPhoneNumberType(digits) {
+  const secondChar = digits[1];
+  const thirdChar = digits[2];
+
+  // パターン1: 携帯電話 (0[6789]0-XXXX-XXXX)
+  // 11桁で 0[6789]0 で始まるパターン
+  if (digits.length === 11 && '6789'.includes(secondChar) && digits[3] === '0') {
+    return {
+      isValid: true,
+      isGeneral: true,
+      type: 'mobile',
+      region: null,
+      reason: `携帯電話（0${secondChar}0系）`,
+    };
+  }
+
+  // パターン2: 固定電話 (市外局番を判別)
+  const fixedPhoneInfo = identifyFixedPhoneRegion(digits);
+  if (fixedPhoneInfo) {
+    return {
+      isValid: true,
+      isGeneral: true,
+      type: 'fixed',
+      region: fixedPhoneInfo.region,
+      reason: `固定電話（${fixedPhoneInfo.region}）`,
+    };
+  }
+
+  // パターン3: フリーダイヤル・ナビダイヤルなど (0120, 0570など)
+  const specialInfo = identifySpecialNumber(digits);
+  if (specialInfo) {
+    return {
+      isValid: true,
+      isGeneral: specialInfo.isGeneral,
+      type: 'special',
+      region: null,
+      reason: specialInfo.reason,
+    };
+  }
+
+  // パターン4: 判定不可
+  return {
+    isValid: false,
+    isGeneral: false,
+    type: 'unknown',
+    region: null,
+    reason: '電話番号として判定できません',
+  };
+}
+
+/**
+ * 固定電話の地域を判定する
+ * @private
+ * @returns {Object|null} {region: '地域名', digits: 桁数} または null
+ */
+function identifyFixedPhoneRegion(digits) {
+  const secondChar = digits[1];
+  const thirdChar = digits[2];
+
+  // 4桁市外局番パターン: 0[1-5][0257-9]
+  // 例: 0120, 0570, 0210, 0250, 0270, etc.
+  if (
+    ['1', '2', '3', '4', '5'].includes(secondChar) &&
+    ['0', '2', '5', '7', '9'].includes(thirdChar)
+  ) {
+    // TODO: 4桁市外局番の詳細マッピング
+    // 例: 0120→フリーダイヤル, 0210→青森, 0250→新潟, など
+    return {
+      region: '4桁市外局番地域',
+      digits: 4,
+    };
+  }
+
+  // 3桁市外局番パターン: 0[6-9][1-9]
+  // 例: 075 (京都), 078 (兵庫), 099 (鹿児島)
+  if (
+    ['6', '7', '8', '9'].includes(secondChar) &&
+    thirdChar &&
+    thirdChar !== '0'
+  ) {
+    // TODO: 3桁市外局番の詳細マッピング
+    // 例: 075→京都, 078→兵庫, など
+    return {
+      region: '3桁市外局番地域',
+      digits: 3,
+    };
+  }
+
+  // 2桁市外局番パターン: 0[1-6]
+  // 例: 03 (東京), 06 (大阪), 092 (福岡)
+  if (['1', '2', '3', '4', '5', '6'].includes(secondChar)) {
+    // TODO: 2桁市外局番の詳細マッピング
+    // 例: 03→東京, 06→大阪, など
+    return {
+      region: '2桁市外局番地域',
+      digits: 2,
+    };
+  }
+
+  return null;
+}
+
+/**
+ * 特殊番号（フリーダイヤル、ナビダイヤルなど）を判定する
+ * @private
+ * @returns {Object|null} {reason: 説明, isGeneral: boolean} または null
+ */
+function identifySpecialNumber(digits) {
+  const areaCode = digits.slice(0, 4);
+
+  // TODO: 特殊番号の判定ロジックを追加
+  // フリーダイヤル: 0120, 0800
+  // ナビダイヤル: 0570
+  // など
+
+  return null;
+}
+
+/**
+ * 携帯電話かどうかを判定する
+ * @param {string} value - 入力値
+ * @returns {boolean}
+ */
+function isMobilePhone(value) {
+  const result = validatePhoneNumber(value);
+  return result.type === 'mobile' && result.isValid;
+}
+
+/**
+ * 固定電話かどうかを判定する
+ * @param {string} value - 入力値
+ * @returns {Object} {isFixed: boolean, region: string|null}
+ */
+function isFixedPhone(value) {
+  const result = validatePhoneNumber(value);
+  return {
+    isFixed: result.type === 'fixed' && result.isValid,
+    region: result.region,
+  };
+}
+
+/**
+ * 一般人の電話番号の可能性が高いかを判定する
+ * @param {string} value - 入力値
+ * @returns {boolean}
+ */
+function isGeneralPhoneNumber(value) {
+  const result = validatePhoneNumber(value);
+  return result.isGeneral && result.isValid;
+}
+
+/**
+ * 日本の電話番号として有効かを判定する
+ * @param {string} value - 入力値
+ * @returns {boolean}
+ */
+function isValidJapanesePhoneNumber(value) {
+  const result = validatePhoneNumber(value);
+  return result.isValid;
+}
 
 /**
  * 携帯電話のフォーマット
