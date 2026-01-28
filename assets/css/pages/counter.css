@@ -36,7 +36,9 @@
   text-align: left;
   word-break: break-word;
   white-space: pre-wrap;
-  font-feature-settings: 'liga' 1, 'kern' 1;
+  font-feature-settings:
+    'liga' 1,
+    'kern' 1;
   line-height: 1.6;
   font-variant-numeric: tabular-nums;
   width: 100%;
@@ -85,11 +87,15 @@
 .rare-chars,
 .ancient-scripts,
 .special-symbols {
-  font-family: 'Noto Sans Symbols 2', 'Noto Sans Symbols', 'Noto Sans Math',
-    'Noto Sans', 'Noto Sans CJK JP', 'Noto Sans JP', 'Noto Color Emoji',
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Symbola',
-    'DejaVu Sans', 'Unifont', 'Code2000', monospace, sans-serif;
-  font-feature-settings: 'liga' 1, 'kern' 1, 'calt' 1;
+  font-family:
+    'Noto Sans Symbols 2', 'Noto Sans Symbols', 'Noto Sans Math', 'Noto Sans',
+    'Noto Sans CJK JP', 'Noto Sans JP', 'Noto Color Emoji', 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Symbola', 'DejaVu Sans', 'Unifont',
+    'Code2000', monospace, sans-serif;
+  font-feature-settings:
+    'liga' 1,
+    'kern' 1,
+    'calt' 1;
   font-variant-ligatures: common-ligatures contextual;
   text-rendering: optimizeQuality;
   -webkit-font-smoothing: antialiased;
@@ -98,8 +104,9 @@
 
 /* Unicode Private Use Area等の特殊範囲をサポート */
 .unicode-pua {
-  font-family: 'LastResort', 'Noto Sans Symbols 2', 'Noto Sans Symbols',
-    '.AppleSymbolsFB', 'Symbola', 'DejaVu Sans', monospace, sans-serif;
+  font-family:
+    'LastResort', 'Noto Sans Symbols 2', 'Noto Sans Symbols', '.AppleSymbolsFB',
+    'Symbola', 'DejaVu Sans', monospace, sans-serif;
 }
 
 /* --------------------------------------------------------------------------

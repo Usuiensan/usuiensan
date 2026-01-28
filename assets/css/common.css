@@ -15,7 +15,7 @@
   --main-contrast: hsl(var(--main-h) var(--main-s) 50%);
   --main-contrast-dark: hsl(var(--main-h) 60% 38%);
 
-  --text-on-light: #000000;
+  --text-on-light: #222222;
   --text-on-dark: #ffffff;
 
   --btn-shadow: rgba(0, 0, 0, 0.08);
@@ -25,20 +25,20 @@
    ベーススタイル
    -------------------------------------------------------------------------- */
 body {
-  font-family: 'Hiragino Sans', 'Noto Sans JP', 'Apple Color Emoji',
-    'Noto Color Emoji', 'Noto Sans Symbols', 'Noto Sans Symbols 2',
-    'Noto Sans Math', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Yu Gothic UI',
-    'Meiryo UI', sans-serif;
+  font-family:
+    'Hiragino Sans', 'Noto Sans JP', 'Apple Color Emoji', 'Noto Color Emoji',
+    'Noto Sans Symbols', 'Noto Sans Symbols 2', 'Noto Sans Math',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Yu Gothic UI', 'Meiryo UI', sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   background-color: #c0ffee;
-  color: #000;
+  color: var(--text-on-light);
 }
 
 .container {
-  background-color: #f4f4f4;
+  background-color: #ffffff;
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
@@ -109,7 +109,9 @@ textarea {
   min-height: 100px;
   width: 100%;
   box-sizing: border-box;
-  font-feature-settings: 'liga' 1, 'kern' 1;
+  font-feature-settings:
+    'liga' 1,
+    'kern' 1;
   line-height: 1.5;
 }
 
@@ -150,7 +152,9 @@ button,
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.18s ease, color 0.18s ease;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
   font-size: 16px;
   margin-top: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
