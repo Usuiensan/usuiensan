@@ -142,6 +142,7 @@ function setupEventListeners() {
   // テストボタン（開発用）
   const testPDFNormalBtn = document.getElementById('testPDFNormalBtn');
   const testPDFAccidentBtn = document.getElementById('testPDFAccidentBtn');
+  const testPDFAllBtn = document.getElementById('testPDFAllBtn');
   const testConsoleBtn = document.getElementById('testConsoleBtn');
 
   if (testPDFNormalBtn) {
@@ -153,6 +154,12 @@ function setupEventListeners() {
   if (testPDFAccidentBtn) {
     testPDFAccidentBtn.addEventListener('click', () => {
       generateTestPDF('accident');
+    });
+  }
+
+  if (testPDFAllBtn) {
+    testPDFAllBtn.addEventListener('click', () => {
+      generateTestPDF('all');
     });
   }
 
@@ -1043,6 +1050,84 @@ function generateTestPDFDataAccident() {
 }
 
 /**
+ * テスト用ダミーデータを生成（全フィールド充填版 - 全ての選択肢を✔）
+ * 本来なら両立しない組み合わせでも全部入れるテスト
+ */
+function generateTestPDFDataAll() {
+  return {
+    faculty: 'テスト学部',
+    grade: '4',
+    studentName: 'テスト太郎',
+    studentNameKana: 'テストタロウ',
+    studentNumber: ['9', '9', '9', '9', '9', '9'],
+    mobilePhone: {
+      area: '090',
+      exchange: '9999',
+      subscriber: '9999',
+    },
+    fixedPhone: {
+      area: '120',
+      exchange: '999',
+      subscriber: '9999',
+    },
+    addressType: {
+      value: '3', // ③ 大学寮（全ての選択肢でテスト）
+      label: '③ 大学寮',
+      x: 85,
+      y: 640,
+      radius: 5,
+    },
+    receiptNumbers: ['0001', '0002', '0003', '0004'],
+    diseaseName: '総合テスト疾患',
+    
+    // 負傷状況：全て選択（本来は1つだけ）
+    injuryContext: {
+      value: '正課中', // この行のみ記入されると想定だが、テストなので全部書く
+      label: '正課中',
+      x: 90,
+      y: 595,
+    },
+    
+    // 各受傷状況に対応するフィールド（全部記入）
+    subjectName: '全科目テスト',
+    eventName: 'テスト行事全て',
+    clubName: 'テスト部活',
+    injuryLocation: '全てのテスト場所',
+    injuryCause: '全てのテスト原因',
+    
+    injuryDate: {
+      year: '2026',
+      month: '01',
+      day: '28',
+    },
+    
+    // 交通事故相手（交通事故選択時のみだが全部）
+    accidentParty: {
+      value: '有り',
+      label: '有り',
+      x: 90,
+      y: 510,
+      radius: 5,
+    },
+    
+    // 金融機関情報（前回と同じ以外全部）
+    bankTransferType: {
+      value: 'new', // 新規（他の情報も全部記入）
+      label: '新規',
+      x: 200,
+      y: 480,
+      radius: 5,
+    },
+    bankName: 'テスト銀行全て',
+    branchName: 'テスト支店全部',
+    bankCode: '9999',
+    branchCode: '999',
+    accountName: 'テストタロウ',
+    accountNumber: ['9', '9', '9', '9', '9', '9', '9'],
+  };
+}
+
+/**
  * PDFテスト生成（コンソールから呼び出し可能）
  * 使用例: generateTestPDF('normal') または generateTestPDF('accident')
  */
@@ -1074,10 +1159,14 @@ async function generateTestPDF(pattern = 'normal') {
     }
 
     // テストデータの選択
-    const testData =
-      pattern === 'accident'
-        ? generateTestPDFDataAccident()
-        : generateTestPDFData();
+    let testData;
+    if (pattern === 'accident') {
+      testData = generateTestPDFDataAccident();
+    } else if (pattern === 'all') {
+      testData = generateTestPDFDataAll();
+    } else {
+      testData = generateTestPDFData();
+    }
     console.log('✓ Test data generated:', testData);
 
     // ページを作成
@@ -1192,6 +1281,7 @@ if (typeof window !== 'undefined') {
   window.generateTestPDF = generateTestPDF;
   window.generateTestPDFData = generateTestPDFData;
   window.generateTestPDFDataAccident = generateTestPDFDataAccident;
+  window.generateTestPDFDataAll = generateTestPDFDataAll;
   window.writePDFFieldsFromMappings = writePDFFieldsFromMappings;
 }
 
