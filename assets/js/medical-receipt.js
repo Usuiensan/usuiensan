@@ -1093,10 +1093,6 @@ async function generateTestPDF(pattern = 'normal') {
     writePDFFieldsFromMappings(page, font, testData);
     console.log('✓ Fields written');
 
-    // PDF座標軸のガイドを描画（デバッグ用）
-    drawCoordinateGuide(page);
-    console.log('✓ Coordinate guide drawn');
-
     // PDF保存
     const pdfBytes = await pdfDoc.save();
     console.log('✓ PDF saved to bytes');
