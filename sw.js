@@ -5,7 +5,7 @@
 //   - package.jsonのversionを埋め込む
 //   - ビルド時に自動でUNIXタイムスタンプを挿入する（推奨: ビルドスクリプトで置換）
 // 更新しないとキャッシュが正しく切り替わらないため、必ず変更時に更新してください。
-const VERSION = 1759885820;
+const VERSION = 1738040400; // CSS構造改善のため更新 (2026-01-28)
 const PRECACHE = `precache-${VERSION}`;
 const RUNTIME = `runtime-${VERSION}`;
 
@@ -18,11 +18,17 @@ const PRECACHE_URLS = [
   '/assets/icons/192.png',
   '/assets/icons/512.png',
   '/count.html',
-  '/assets/css/style.css',
-  '/assets/js/pwgenescript.js',
-  '/assets/js/zxcvbn.js',
   '/index.html',
-  '/sitemap.html'
+  '/sitemap.html',
+  // 新しいCSS構造
+  '/assets/css/common.css',
+  '/assets/css/components/modal.css',
+  '/assets/css/components/toast.css',
+  '/assets/css/pages/password.css',
+  '/assets/css/pages/counter.css',
+  '/assets/css/pages/plate.css',
+  '/assets/js/pwgenescript.js',
+  '/assets/js/zxcvbn.js'
 ];
 
 self.addEventListener('install', event => {
