@@ -1075,7 +1075,7 @@ async function generateTestPDF(pattern = 'normal') {
         width: width,
         height: height,
       });
-      
+
       // テスト用：背景を薄くするために半透明の白レイヤーを追加
       page.drawRectangle({
         x: 0,
