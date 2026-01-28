@@ -150,9 +150,30 @@ const PDF_FIELD_MAPPINGS = {
       { value: 'change', x: 255, y: 665, radius: 6 },
     ],
   },
-  bankName: { x: 130, y: 715 },
-  branchName: { x: 240, y: 715 },
-  accountName: { x: 130, y: 748 },
+  bankName: {
+    type: 'text',
+    x: 130,
+    y: 715,
+    maxWidth: 150,
+    fontSize: 11,
+    fontName: 'font',
+  },
+  branchName: {
+    type: 'text',
+    x: 240,
+    y: 715,
+    maxWidth: 150,
+    fontSize: 11,
+    fontName: 'font',
+  },
+  accountName: {
+    type: 'text',
+    x: 130,
+    y: 748,
+    maxWidth: 150,
+    fontSize: 11,
+    fontName: 'font',
+  },
   accountNumber: {
     // 口座番号 (右詰め7桁)
     type: 'digit_boxes',
