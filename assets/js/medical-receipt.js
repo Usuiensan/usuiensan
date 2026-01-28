@@ -730,7 +730,7 @@ function writeTextField(page, font, mapping, value, pageHeight, pdfData = {}) {
   if (mapping.options && Array.isArray(mapping.options)) {
     // injuryContext から現在の条件を取得
     const currentCondition = pdfData.injuryContext;
-    
+
     // 現在の条件に対応するオプションを探す
     const selectedOption = mapping.options.find(
       (opt) => opt.condition === currentCondition,
