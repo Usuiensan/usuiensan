@@ -142,7 +142,23 @@ body {
   min-height: 80px;
 }
 
-/* 電話番号入力グループ */
+/* 単一の電話番号入力フィールド */
+.phone-input-single {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 2px;
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+.phone-helper-text {
+  display: block;
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 6px;
+  margin-left: 2px;
+}
+
+/* 電話番号入力グループ（互換性用・廃止予定） */
 .phone-input-group {
   display: flex;
   align-items: center;

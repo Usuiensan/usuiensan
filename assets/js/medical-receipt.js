@@ -174,72 +174,57 @@ function setupEventListeners() {
  * 電話番号入力の設定（A-B-Cフォーマット）
  */
 function setupPhoneNumberInputs() {
-  const phoneGroups = [
-    {
-      aId: 'mobilePhoneA',
-      bId: 'mobilePhoneB',
-      cId: 'mobilePhoneC',
-      hiddenId: 'mobilePhone',
-    },
-    {
-      aId: 'fixedPhoneA',
-      bId: 'fixedPhoneB',
-      cId: 'fixedPhoneC',
-      hiddenId: 'fixedPhone',
-    },
+  const phones = [
+    { id: 'mobilePhone', maxDigits: 11 },  // 09012345678
+    { id: 'fixedPhone', maxDigits: 10 },   // 0612345678
   ];
 
-  phoneGroups.forEach((group) => {
-    const inputA = document.getElementById(group.aId);
-    const inputB = document.getElementById(group.bId);
-    const inputC = document.getElementById(group.cId);
-    const hiddenInput = document.getElementById(group.hiddenId);
+  phones.forEach((phone) => {
+    const input = document.getElementById(phone.id);
+    if (!input) return;
 
-    if (!inputA || !inputB || !inputC) return;
+    /**
+     * 電話番号を自動的にハイフン挿入した形式にフォーマット
+     * @param {string} value - 数字のみの文字列
+     * @returns {string} フォーマット済みの文字列
+     */
+    const formatPhoneNumber = (value) => {
+      // 数字のみ抽出
+      const digits = value.replace(/[^0-9]/g, '');
 
-    const updatePhoneInput = () => {
-      const a = inputA.value;
-      const b = inputB.value;
-      const c = inputC.value;
-      hiddenInput.value = `${a}${b ? '-' + b : ''}${c ? '-' + c : ''}`;
-      saveFormData(true);
+      // maxDigits を超えないようにカット
+      const truncated = digits.slice(0, phone.maxDigits);
+
+      // パターンに応じてハイフン挿入
+      if (phone.id === 'mobilePhone') {
+        // 090-1234-5678 形式（11桁）
+        if (truncated.length <= 3) return truncated;
+        if (truncated.length <= 7) return truncated.slice(0, 3) + '-' + truncated.slice(3);
+        return truncated.slice(0, 3) + '-' + truncated.slice(3, 7) + '-' + truncated.slice(7);
+      } else if (phone.id === 'fixedPhone') {
+        // 06-1234-5678 形式（10-11桁）
+        if (truncated.length <= 2) return truncated;
+        if (truncated.length <= 6) return truncated.slice(0, 2) + '-' + truncated.slice(2);
+        return truncated.slice(0, 2) + '-' + truncated.slice(2, 6) + '-' + truncated.slice(6);
+      }
+
+      return truncated;
     };
 
-    // A入力：数字のみ、入力後Bへフォーカス
-    inputA.addEventListener('input', (e) => {
-      e.target.value = e.target.value.replace(/[^0-9]/g, '');
-      if (e.target.value.length >= 2 && inputB) {
-        inputB.focus();
-      }
-      updatePhoneInput();
+    // 入力イベント：自動フォーマット
+    input.addEventListener('input', (e) => {
+      const formatted = formatPhoneNumber(e.target.value);
+      e.target.value = formatted;
+      saveFormData(true);
     });
 
-    // B入力：数字のみ、入力後Cへフォーカス
-    inputB.addEventListener('input', (e) => {
-      e.target.value = e.target.value.replace(/[^0-9]/g, '');
-      if (e.target.value.length >= 4 && inputC) {
-        inputC.focus();
-      }
-      updatePhoneInput();
-    });
-
-    // C入力：数字のみ
-    inputC.addEventListener('input', (e) => {
-      e.target.value = e.target.value.replace(/[^0-9]/g, '');
-      updatePhoneInput();
-    });
-
-    // バックスペースで前のボックスに移動
-    inputB.addEventListener('keydown', (e) => {
-      if (e.key === 'Backspace' && !e.target.value && inputA) {
-        inputA.focus();
-      }
-    });
-
-    inputC.addEventListener('keydown', (e) => {
-      if (e.key === 'Backspace' && !e.target.value && inputB) {
-        inputB.focus();
-      }
+    // ペースト対応：自動フォーマット
+    input.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+      const formatted = formatPhoneNumber(pastedText);
+      e.target.value = formatted;
+      input.dispatchEvent(new Event('input'));
     });
   });
 }
@@ -366,26 +351,10 @@ function getFormData() {
     } else if (key === 'accidentParty') {
       // ラジオボタンも処理（複数の同じ名前）
       data[key] = value;
-    } else if (
-      key === 'mobilePhoneA' ||
-      key === 'mobilePhoneB' ||
-      key === 'mobilePhoneC' ||
-      key === 'fixedPhoneA' ||
-      key === 'fixedPhoneB' ||
-      key === 'fixedPhoneC'
-    ) {
-      // 電話番号の部分は隠し入力で管理
-      // スキップ
     } else {
       data[key] = value;
     }
   }
-
-  // 電話番号の更新
-  const mobilePhoneHidden = document.getElementById('mobilePhone');
-  const fixedPhoneHidden = document.getElementById('fixedPhone');
-  if (mobilePhoneHidden) data.mobilePhone = mobilePhoneHidden.value;
-  if (fixedPhoneHidden) data.fixedPhone = fixedPhoneHidden.value;
 
   return data;
 }
@@ -489,26 +458,12 @@ function applyFormData(data) {
           boxes[startIndex + index].value = digit;
         }
       });
-    } else if (key === 'mobilePhone') {
-      // 携帯電話の処理（A-B-Cフォーマット）
-      const phoneStr = String(data[key]);
-      const phoneParts = phoneStr.split('-');
-      if (phoneParts[0])
-        document.getElementById('mobilePhoneA').value = phoneParts[0];
-      if (phoneParts[1])
-        document.getElementById('mobilePhoneB').value = phoneParts[1];
-      if (phoneParts[2])
-        document.getElementById('mobilePhoneC').value = phoneParts[2];
-    } else if (key === 'fixedPhone') {
-      // 固定電話の処理（A-B-Cフォーマット）
-      const phoneStr = String(data[key]);
-      const phoneParts = phoneStr.split('-');
-      if (phoneParts[0])
-        document.getElementById('fixedPhoneA').value = phoneParts[0];
-      if (phoneParts[1])
-        document.getElementById('fixedPhoneB').value = phoneParts[1];
-      if (phoneParts[2])
-        document.getElementById('fixedPhoneC').value = phoneParts[2];
+    } else if (key === 'mobilePhone' || key === 'fixedPhone') {
+      // 電話番号の処理（既にフォーマット済みの値）
+      const element = document.getElementById(key);
+      if (element) {
+        element.value = data[key];
+      }
     } else if (key === 'injuryContext') {
       // 負傷状況の処理
       const contextSelect = document.getElementById('injuryContext');
