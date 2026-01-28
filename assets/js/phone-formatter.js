@@ -25,7 +25,7 @@
  * @returns {Object} 判定結果
  *   - isValid: 日本の電話番号として有効か
  *   - isGeneral: 一般人の電話番号の可能性が高いか
- *   - type: 'mobile' | 'fixed' | 'special' | 'unknown'
+ *   - type: 'mobile' | 'fixed' | 'special' | 'incomplete' | 'unknown'
  *   - region: 地域情報（固定電話の場合）
  *   - reason: 判定の理由
  */
@@ -43,13 +43,24 @@ function validatePhoneNumber(value) {
     };
   }
 
-  if (digits.length < 10 || digits.length > 11) {
+  // 桁数不足かチェック（入力が0で始まるが11桁未満）
+  if (digits.length < 10) {
+    return {
+      isValid: false,
+      isGeneral: false,
+      type: 'incomplete',
+      region: null,
+      reason: `桁数が不足しています（${digits.length}桁 / 最小10桁）`,
+    };
+  }
+
+  if (digits.length > 11) {
     return {
       isValid: false,
       isGeneral: false,
       type: 'unknown',
       region: null,
-      reason: '桁数が不正です（10～11桁）',
+      reason: '桁数が多すぎます（最大11桁）',
     };
   }
 
