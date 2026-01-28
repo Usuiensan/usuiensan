@@ -75,7 +75,8 @@ function classifyPhoneNumberType(digits) {
 
   // パターン1: 携帯電話 (0[6789]0-XXXX-XXXX)
   // 11桁で 0[6789]0 で始まるパターン
-  if (digits.length === 11 && '6789'.includes(secondChar) && digits[3] === '0') {
+  // digits[0]='0', digits[1]='6/7/8/9', digits[2]='0'
+  if (digits.length === 11 && '6789'.includes(secondChar) && digits[2] === '0') {
     return {
       isValid: true,
       isGeneral: true,
@@ -127,6 +128,12 @@ function classifyPhoneNumberType(digits) {
 function identifyFixedPhoneRegion(digits) {
   const secondChar = digits[1];
   const thirdChar = digits[2];
+
+  // 携帯電話の可能性をまずチェック
+  // 携帯電話は 0[6789]0 で始まり11桁
+  if (digits.length === 11 && '6789'.includes(secondChar) && digits[2] === '0') {
+    return null; // 携帯電話なので固定電話ではない
+  }
 
   // 4桁市外局番パターン: 0[1-5][0257-9]
   // 例: 0120, 0570, 0210, 0250, 0270, etc.
