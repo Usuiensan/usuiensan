@@ -112,10 +112,10 @@ body {
   font-size: 0.95rem;
 }
 
-.form-group input[type="text"],
-.form-group input[type="number"],
-.form-group input[type="date"],
-.form-group input[type="tel"],
+.form-group input[type='text'],
+.form-group input[type='number'],
+.form-group input[type='date'],
+.form-group input[type='tel'],
 .form-group select,
 .form-group textarea {
   width: 100%;
@@ -140,6 +140,39 @@ body {
 .form-group textarea {
   resize: vertical;
   min-height: 80px;
+}
+
+/* 電話番号入力グループ */
+.phone-input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.phone-block {
+  width: 80px;
+  padding: 12px 15px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+  text-align: center;
+}
+
+.phone-block:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(192, 255, 238, 0.2);
+}
+
+.phone-separator {
+  font-weight: bold;
+  color: var(--text-color);
+  font-size: 1.1rem;
 }
 
 /* 学生証番号マス入力 */
@@ -234,8 +267,8 @@ body {
   background-color: var(--primary-light);
 }
 
-.radio-label input[type="radio"],
-.radio-label input[type="checkbox"] {
+.radio-label input[type='radio'],
+.radio-label input[type='checkbox'] {
   margin-right: 8px;
   cursor: pointer;
   width: 18px;
@@ -270,7 +303,7 @@ body {
   background-color: var(--primary-light);
 }
 
-.checkbox-label input[type="checkbox"] {
+.checkbox-label input[type='checkbox'] {
   margin-right: 10px;
   cursor: pointer;
   width: 18px;
@@ -313,7 +346,11 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--primary-dark) 100%
+  );
   color: var(--text-color);
 }
 
@@ -509,7 +546,6 @@ body {
   text-align: center;
   animation: fadeIn 0.5s ease-out;
 }
-
 
 /* フォームグループ */
 .form-group {

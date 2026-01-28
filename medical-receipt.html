@@ -3,20 +3,20 @@ layout: default
 title: 医療費領収証明書作成ツール
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>医療費領収証明書作成ツール - 京都産業大学</title>
+    <title>医療費領収証明書作成ツール</title>
     <link rel="stylesheet" href="assets/css/common.css" />
     <link rel="stylesheet" href="assets/css/pages/medical-receipt.css" />
   </head>
   <body>
     <div class="container">
       <header class="header">
-        <h1>📋 医療費領収証明書作成ツール</h1>
-        <p class="subtitle">京都産業大学 学生保険 申請書</p>
+        <h1>📋 医療費領収証明書(通院)作成ツール</h1>
+        <p class="subtitle">京都産業大学学生健康保険互助会用</p>
       </header>
 
       <main class="main-content">
@@ -41,29 +41,62 @@ title: 医療費領収証明書作成ツール
                 type="text"
                 id="grade"
                 name="grade"
-                maxlength="1"
-                placeholder="1～4 または M1, D1 など"
+                placeholder="3年 または M1, D2 など"
               />
             </div>
 
             <div class="form-group">
-              <label for="studentNumber">学生証番号 <span class="required">*</span></label>
+              <label for="studentNumber"
+                >学生証番号 <span class="required">*</span></label
+              >
               <div class="student-number-input">
                 <span>6桁入力（1マス1桁）:</span>
                 <div class="digit-boxes">
-                  <input type="text" class="digit-box" maxlength="1" data-digit="0" />
-                  <input type="text" class="digit-box" maxlength="1" data-digit="1" />
-                  <input type="text" class="digit-box" maxlength="1" data-digit="2" />
-                  <input type="text" class="digit-box" maxlength="1" data-digit="3" />
-                  <input type="text" class="digit-box" maxlength="1" data-digit="4" />
-                  <input type="text" class="digit-box" maxlength="1" data-digit="5" />
+                  <input
+                    type="text"
+                    class="digit-box"
+                    maxlength="1"
+                    data-digit="0"
+                  />
+                  <input
+                    type="text"
+                    class="digit-box"
+                    maxlength="1"
+                    data-digit="1"
+                  />
+                  <input
+                    type="text"
+                    class="digit-box"
+                    maxlength="1"
+                    data-digit="2"
+                  />
+                  <input
+                    type="text"
+                    class="digit-box"
+                    maxlength="1"
+                    data-digit="3"
+                  />
+                  <input
+                    type="text"
+                    class="digit-box"
+                    maxlength="1"
+                    data-digit="4"
+                  />
+                  <input
+                    type="text"
+                    class="digit-box"
+                    maxlength="1"
+                    data-digit="5"
+                  />
                 </div>
                 <input type="hidden" id="studentNumber" name="studentNumber" />
               </div>
             </div>
 
             <div class="form-group">
-              <label for="studentName">氏名 <span class="required">*</span></label>
+              <label for="studentName"
+                >氏名 <span class="required">*</span></label
+              >
               <input
                 type="text"
                 id="studentName"
@@ -73,7 +106,9 @@ title: 医療費領収証明書作成ツール
             </div>
 
             <div class="form-group">
-              <label for="studentNameKana">振り仮名 <span class="required">*</span></label>
+              <label for="studentNameKana"
+                >フリガナ <span class="required">*</span></label
+              >
               <input
                 type="text"
                 id="studentNameKana"
@@ -83,41 +118,89 @@ title: 医療費領収証明書作成ツール
             </div>
 
             <div class="form-group">
-              <label for="mobilePhone">携帯電話 <span class="required">*</span></label>
+              <label for="mobilePhone"
+                >携帯電話 <span class="required">*</span></label
+              >
+              <div class="phone-input-group">
+                <input
+                  type="text"
+                  id="mobilePhoneA"
+                  name="mobilePhoneA"
+                  maxlength="3"
+                  placeholder="090"
+                  class="phone-block"
+                />
+                <span class="phone-separator">-</span>
+                <input
+                  type="text"
+                  id="mobilePhoneB"
+                  name="mobilePhoneB"
+                  maxlength="4"
+                  placeholder="1234"
+                  class="phone-block"
+                />
+                <span class="phone-separator">-</span>
+                <input
+                  type="text"
+                  id="mobilePhoneC"
+                  name="mobilePhoneC"
+                  maxlength="4"
+                  placeholder="5678"
+                  class="phone-block"
+                />
+              </div>
               <input
-                type="tel"
+                type="hidden"
                 id="mobilePhone"
                 name="mobilePhone"
-                placeholder="090-1234-5678"
               />
             </div>
 
             <div class="form-group">
               <label for="fixedPhone">固定電話</label>
+              <div class="phone-input-group">
+                <input
+                  type="text"
+                  id="fixedPhoneA"
+                  name="fixedPhoneA"
+                  maxlength="3"
+                  placeholder="06"
+                  class="phone-block"
+                />
+                <span class="phone-separator">-</span>
+                <input
+                  type="text"
+                  id="fixedPhoneB"
+                  name="fixedPhoneB"
+                  maxlength="4"
+                  placeholder="1234"
+                  class="phone-block"
+                />
+                <span class="phone-separator">-</span>
+                <input
+                  type="text"
+                  id="fixedPhoneC"
+                  name="fixedPhoneC"
+                  maxlength="4"
+                  placeholder="5678"
+                  class="phone-block"
+                />
+              </div>
               <input
-                type="tel"
+                type="hidden"
                 id="fixedPhone"
                 name="fixedPhone"
-                placeholder="06-1234-5678"
               />
             </div>
 
             <div class="form-group">
               <label>住所区分 <span class="required">*</span></label>
-              <div class="radio-group">
-                <label class="radio-label">
-                  <input type="radio" name="addressType" value="1" />
-                  <span>① 自宅</span>
-                </label>
-                <label class="radio-label">
-                  <input type="radio" name="addressType" value="2" />
-                  <span>② 自宅外</span>
-                </label>
-                <label class="radio-label">
-                  <input type="radio" name="addressType" value="3" />
-                  <span>③ 大学寮</span>
-                </label>
-              </div>
+              <select id="addressType" name="addressType">
+                <option value="">選択してください</option>
+                <option value="1">① 自宅</option>
+                <option value="2">② 自宅外</option>
+                <option value="3">③ 大学寮</option>
+              </select>
             </div>
           </section>
 
@@ -132,11 +215,7 @@ title: 医療費領収証明書作成ツール
               <!-- 動的に追加される -->
             </div>
 
-            <button
-              type="button"
-              id="addReceiptBtn"
-              class="btn btn-secondary"
-            >
+            <button type="button" id="addReceiptBtn" class="btn btn-secondary">
               ➕ 受付番号を追加
             </button>
           </section>
@@ -146,7 +225,9 @@ title: 医療費領収証明書作成ツール
             <h2>🏥 傷病情報</h2>
 
             <div class="form-group">
-              <label for="diseaseName">傷病名 <span class="required">*</span></label>
+              <label for="diseaseName"
+                >傷病名 <span class="required">*</span></label
+              >
               <input
                 type="text"
                 id="diseaseName"
@@ -162,24 +243,123 @@ title: 医療費領収証明書作成ツール
               </label>
             </div>
 
-            <div id="injurySection" class="injury-section" style="display: none">
+            <div
+              id="injurySection"
+              class="injury-section"
+              style="display: none"
+            >
               <div class="form-group">
-                <label for="injuryDate">負傷日 <span class="required">*</span></label>
+                <label for="injuryLocation">けがの場所 <span class="required">*</span></label>
                 <input
-                  type="date"
-                  id="injuryDate"
-                  name="injuryDate"
+                  type="text"
+                  id="injuryLocation"
+                  name="injuryLocation"
+                  placeholder="例: 体育館"
                 />
               </div>
 
               <div class="form-group">
-                <label for="injurySituation">受傷状況</label>
-                <textarea
-                  id="injurySituation"
-                  name="injurySituation"
-                  rows="3"
-                  placeholder="例: 体育の授業中に転倒"
-                ></textarea>
+                <label for="injuryCause">原因 <span class="required">*</span></label>
+                <input
+                  type="text"
+                  id="injuryCause"
+                  name="injuryCause"
+                  placeholder="例: バスケットボール中にねん挫"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="injuryDate"
+                  >負傷日 <span class="required">*</span></label
+                >
+                <input type="date" id="injuryDate" name="injuryDate" />
+              </div>
+
+              <div class="form-group">
+                <label for="injuryContext"
+                  >負傷状況 <span class="required">*</span></label
+                >
+                <select id="injuryContext" name="injuryContext">
+                  <option value="">選択してください</option>
+                  <option value="正課中">正課中</option>
+                  <option value="大学行事中">大学行事中</option>
+                  <option value="学校施設内">学校施設内</option>
+                  <option value="課外活動中">課外活動中</option>
+                  <option value="交通事故">交通事故</option>
+                  <option value="その他">その他</option>
+                </select>
+              </div>
+
+              <!-- 正課中 -->
+              <div
+                id="injuryContextSubjectName"
+                class="injury-context-detail"
+                style="display: none"
+              >
+                <div class="form-group">
+                  <label for="subjectName">科目名 <span class="required">*</span></label>
+                  <input
+                    type="text"
+                    id="subjectName"
+                    name="subjectName"
+                    placeholder="例: 体育実技"
+                  />
+                </div>
+              </div>
+
+              <!-- 大学行事中 -->
+              <div
+                id="injuryContextEventName"
+                class="injury-context-detail"
+                style="display: none"
+              >
+                <div class="form-group">
+                  <label for="eventName">行事名 <span class="required">*</span></label>
+                  <input
+                    type="text"
+                    id="eventName"
+                    name="eventName"
+                    placeholder="例: 学園祭"
+                  />
+                </div>
+              </div>
+
+              <!-- 課外活動中 -->
+              <div
+                id="injuryContextClubName"
+                class="injury-context-detail"
+                style="display: none"
+              >
+                <div class="form-group">
+                  <label for="clubName">団体名 <span class="required">*</span></label>
+                  <input
+                    type="text"
+                    id="clubName"
+                    name="clubName"
+                    placeholder="例: サッカー部"
+                  />
+                </div>
+              </div>
+
+              <!-- 交通事故 -->
+              <div
+                id="injuryContextAccident"
+                class="injury-context-detail"
+                style="display: none"
+              >
+                <div class="form-group">
+                  <label>相手 <span class="required">*</span></label>
+                  <div class="radio-group">
+                    <label class="radio-label">
+                      <input type="radio" name="accidentParty" value="有り" />
+                      <span>有り</span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" name="accidentParty" value="無し" />
+                      <span>無し</span>
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -204,11 +384,7 @@ title: 医療費領収証明書作成ツール
                   <span>新規</span>
                 </label>
                 <label class="radio-label">
-                  <input
-                    type="radio"
-                    name="bankTransferType"
-                    value="change"
-                  />
+                  <input type="radio" name="bankTransferType" value="change" />
                   <span>変更</span>
                 </label>
               </div>
@@ -220,7 +396,9 @@ title: 医療費領収証明書作成ツール
               style="display: none"
             >
               <div class="form-group">
-                <label for="bankName">金融機関名 <span class="required">*</span></label>
+                <label for="bankName"
+                  >金融機関名 <span class="required">*</span></label
+                >
                 <input
                   type="text"
                   id="bankName"
@@ -230,7 +408,9 @@ title: 医療費領収証明書作成ツール
               </div>
 
               <div class="form-group">
-                <label for="branchName">支店名 <span class="required">*</span></label>
+                <label for="branchName"
+                  >支店名 <span class="required">*</span></label
+                >
                 <input
                   type="text"
                   id="branchName"
@@ -241,7 +421,9 @@ title: 医療費領収証明書作成ツール
 
               <div class="form-row">
                 <div class="form-group">
-                  <label for="bankCode">銀行コード <span class="required">*</span></label>
+                  <label for="bankCode"
+                    >銀行コード <span class="required">*</span></label
+                  >
                   <input
                     type="text"
                     id="bankCode"
@@ -252,7 +434,9 @@ title: 医療費領収証明書作成ツール
                 </div>
 
                 <div class="form-group">
-                  <label for="branchCode">支店コード <span class="required">*</span></label>
+                  <label for="branchCode"
+                    >支店コード <span class="required">*</span></label
+                  >
                   <input
                     type="text"
                     id="branchCode"
@@ -276,19 +460,60 @@ title: 医療費領収証明書作成ツール
               </div>
 
               <div class="form-group">
-                <label for="accountNumber">口座番号 <span class="required">*</span></label>
+                <label for="accountNumber"
+                  >口座番号 <span class="required">*</span></label
+                >
                 <div class="account-number-input">
                   <span>最大7桁（右づめ、1マス1桁）:</span>
                   <div class="account-boxes">
-                    <input type="text" class="account-box" maxlength="1" data-digit="0" />
-                    <input type="text" class="account-box" maxlength="1" data-digit="1" />
-                    <input type="text" class="account-box" maxlength="1" data-digit="2" />
-                    <input type="text" class="account-box" maxlength="1" data-digit="3" />
-                    <input type="text" class="account-box" maxlength="1" data-digit="4" />
-                    <input type="text" class="account-box" maxlength="1" data-digit="5" />
-                    <input type="text" class="account-box" maxlength="1" data-digit="6" />
+                    <input
+                      type="text"
+                      class="account-box"
+                      maxlength="1"
+                      data-digit="0"
+                    />
+                    <input
+                      type="text"
+                      class="account-box"
+                      maxlength="1"
+                      data-digit="1"
+                    />
+                    <input
+                      type="text"
+                      class="account-box"
+                      maxlength="1"
+                      data-digit="2"
+                    />
+                    <input
+                      type="text"
+                      class="account-box"
+                      maxlength="1"
+                      data-digit="3"
+                    />
+                    <input
+                      type="text"
+                      class="account-box"
+                      maxlength="1"
+                      data-digit="4"
+                    />
+                    <input
+                      type="text"
+                      class="account-box"
+                      maxlength="1"
+                      data-digit="5"
+                    />
+                    <input
+                      type="text"
+                      class="account-box"
+                      maxlength="1"
+                      data-digit="6"
+                    />
                   </div>
-                  <input type="hidden" id="accountNumber" name="accountNumber" />
+                  <input
+                    type="hidden"
+                    id="accountNumber"
+                    name="accountNumber"
+                  />
                 </div>
               </div>
             </div>
@@ -325,4 +550,3 @@ title: 医療費領収証明書作成ツール
     <script src="assets/js/medical-receipt.js"></script>
   </body>
 </html>
-

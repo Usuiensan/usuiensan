@@ -13,7 +13,9 @@ const saveBtn = document.getElementById('saveBtn');
 const loadBtn = document.getElementById('loadBtn');
 const clearBtn = document.getElementById('clearBtn');
 const addReceiptBtn = document.getElementById('addReceiptBtn');
-const receiptNumbersContainer = document.getElementById('receiptNumbersContainer');
+const receiptNumbersContainer = document.getElementById(
+  'receiptNumbersContainer',
+);
 const isInjuryCheckbox = document.getElementById('isInjury');
 const injurySection = document.getElementById('injurySection');
 const bankTransferRadios = document.querySelectorAll(
@@ -134,11 +136,23 @@ function setupEventListeners() {
     }
   });
 
+  // 電話番号フォーマット
+  setupPhoneNumberInputs();
+
   // 負傷チェックボックス
   isInjuryCheckbox.addEventListener('change', (e) => {
     injurySection.style.display = e.target.checked ? 'block' : 'none';
     saveFormData(true);
   });
+
+  // 負傷状況プルダウン
+  const injuryContextSelect = document.getElementById('injuryContext');
+  if (injuryContextSelect) {
+    injuryContextSelect.addEventListener('change', (e) => {
+      updateInjuryContextDetails(e.target.value);
+      saveFormData(true);
+    });
+  }
 
   // 金融機関振込先ラジオボタン
   bankTransferRadios.forEach((radio) => {
@@ -154,6 +168,103 @@ function setupEventListeners() {
 
   // 口座番号のマス入力（右づめ対応）
   setupAccountNumberBoxes();
+}
+
+/**
+ * 電話番号入力の設定（A-B-Cフォーマット）
+ */
+function setupPhoneNumberInputs() {
+  const phoneGroups = [
+    {
+      aId: 'mobilePhoneA',
+      bId: 'mobilePhoneB',
+      cId: 'mobilePhoneC',
+      hiddenId: 'mobilePhone',
+    },
+    {
+      aId: 'fixedPhoneA',
+      bId: 'fixedPhoneB',
+      cId: 'fixedPhoneC',
+      hiddenId: 'fixedPhone',
+    },
+  ];
+
+  phoneGroups.forEach((group) => {
+    const inputA = document.getElementById(group.aId);
+    const inputB = document.getElementById(group.bId);
+    const inputC = document.getElementById(group.cId);
+    const hiddenInput = document.getElementById(group.hiddenId);
+
+    if (!inputA || !inputB || !inputC) return;
+
+    const updatePhoneInput = () => {
+      const a = inputA.value;
+      const b = inputB.value;
+      const c = inputC.value;
+      hiddenInput.value = `${a}${b ? '-' + b : ''}${c ? '-' + c : ''}`;
+      saveFormData(true);
+    };
+
+    // A入力：数字のみ、入力後Bへフォーカス
+    inputA.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '');
+      if (e.target.value.length >= 2 && inputB) {
+        inputB.focus();
+      }
+      updatePhoneInput();
+    });
+
+    // B入力：数字のみ、入力後Cへフォーカス
+    inputB.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '');
+      if (e.target.value.length >= 4 && inputC) {
+        inputC.focus();
+      }
+      updatePhoneInput();
+    });
+
+    // C入力：数字のみ
+    inputC.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '');
+      updatePhoneInput();
+    });
+
+    // バックスペースで前のボックスに移動
+    inputB.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !e.target.value && inputA) {
+        inputA.focus();
+      }
+    });
+
+    inputC.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !e.target.value && inputB) {
+        inputB.focus();
+      }
+    });
+  });
+}
+
+/**
+ * 負傷状況に応じた詳細情報の表示制御
+ */
+function updateInjuryContextDetails(context) {
+  // すべての詳細セクションを非表示
+  document.querySelectorAll('.injury-context-detail').forEach((el) => {
+    el.style.display = 'none';
+  });
+
+  // 選択された状況に応じて表示
+  const contexts = {
+    '正課中': 'injuryContextSubjectName',
+    '大学行事中': 'injuryContextEventName',
+    '課外活動中': 'injuryContextClubName',
+    '交通事故': 'injuryContextAccident',
+  };
+
+  if (contexts[context]) {
+    const element = document.getElementById(contexts[context]);
+    if (element) element.style.display = 'block';
+  }
 }
 
 /**
@@ -252,14 +363,29 @@ function getFormData() {
       // 受付番号は配列として保存
       if (!data[key]) data[key] = [];
       if (value) data[key].push(value);
-    } else if (key === 'transportation') {
-      // チェックボックスは配列として保存
-      if (!data[key]) data[key] = [];
-      data[key].push(value);
+    } else if (key === 'accidentParty') {
+      // ラジオボタンも処理（複数の同じ名前）
+      data[key] = value;
+    } else if (
+      key === 'mobilePhoneA' ||
+      key === 'mobilePhoneB' ||
+      key === 'mobilePhoneC' ||
+      key === 'fixedPhoneA' ||
+      key === 'fixedPhoneB' ||
+      key === 'fixedPhoneC'
+    ) {
+      // 電話番号の部分は隠し入力で管理
+      // スキップ
     } else {
       data[key] = value;
     }
   }
+
+  // 電話番号の更新
+  const mobilePhoneHidden = document.getElementById('mobilePhone');
+  const fixedPhoneHidden = document.getElementById('fixedPhone');
+  if (mobilePhoneHidden) data.mobilePhone = mobilePhoneHidden.value;
+  if (fixedPhoneHidden) data.fixedPhone = fixedPhoneHidden.value;
 
   return data;
 }
@@ -316,7 +442,9 @@ function loadFormDataWithMessage() {
  */
 function applyFormData(data) {
   // 既存の受付番号を削除（最初の1つを残す）
-  const receipts = receiptNumbersContainer.querySelectorAll('.receipt-number-group');
+  const receipts = receiptNumbersContainer.querySelectorAll(
+    '.receipt-number-group',
+  );
   receipts.forEach((receipt) => {
     if (receipt.id !== `receipt-1`) {
       receipt.remove();
@@ -328,22 +456,18 @@ function applyFormData(data) {
   Object.keys(data).forEach((key) => {
     if (key === 'receiptNumber') {
       // 受付番号の処理
-      const receiptNumbers = Array.isArray(data[key])
-        ? data[key]
-        : [data[key]];
+      const receiptNumbers = Array.isArray(data[key]) ? data[key] : [data[key]];
       receiptNumbers.forEach((num, index) => {
         if (index === 0) {
           // 最初の要素は既存のボックスに設定
-          const firstInput = receiptNumbersContainer.querySelector(
-            '.receipt-number',
-          );
+          const firstInput =
+            receiptNumbersContainer.querySelector('.receipt-number');
           if (firstInput) firstInput.value = num;
         } else {
           // 追加の要素は新しいボックスを作成
           addReceiptNumber();
-          const inputs = receiptNumbersContainer.querySelectorAll(
-            '.receipt-number',
-          );
+          const inputs =
+            receiptNumbersContainer.querySelectorAll('.receipt-number');
           inputs[inputs.length - 1].value = num;
         }
       });
@@ -365,6 +489,33 @@ function applyFormData(data) {
           boxes[startIndex + index].value = digit;
         }
       });
+    } else if (key === 'mobilePhone') {
+      // 携帯電話の処理（A-B-Cフォーマット）
+      const phoneStr = String(data[key]);
+      const phoneParts = phoneStr.split('-');
+      if (phoneParts[0])
+        document.getElementById('mobilePhoneA').value = phoneParts[0];
+      if (phoneParts[1])
+        document.getElementById('mobilePhoneB').value = phoneParts[1];
+      if (phoneParts[2])
+        document.getElementById('mobilePhoneC').value = phoneParts[2];
+    } else if (key === 'fixedPhone') {
+      // 固定電話の処理（A-B-Cフォーマット）
+      const phoneStr = String(data[key]);
+      const phoneParts = phoneStr.split('-');
+      if (phoneParts[0])
+        document.getElementById('fixedPhoneA').value = phoneParts[0];
+      if (phoneParts[1])
+        document.getElementById('fixedPhoneB').value = phoneParts[1];
+      if (phoneParts[2])
+        document.getElementById('fixedPhoneC').value = phoneParts[2];
+    } else if (key === 'injuryContext') {
+      // 負傷状況の処理
+      const contextSelect = document.getElementById('injuryContext');
+      if (contextSelect) {
+        contextSelect.value = data[key];
+        updateInjuryContextDetails(data[key]);
+      }
     } else {
       const element = form.elements[key];
       if (!element) return;
@@ -597,16 +748,13 @@ function drawPDFTemplate(page, font, data, receiptNum) {
 
   yPos -= 20;
 
-  page.drawText(
-    `学部・研究科: ${data.faculty || ''} ${data.grade || ''}年次`,
-    {
-      x: 70,
-      y: yPos,
-      size: 10,
-      font: font,
-      color: rgb(0, 0, 0),
-    },
-  );
+  page.drawText(`学部・研究科: ${data.faculty || ''} ${data.grade || ''}年次`, {
+    x: 70,
+    y: yPos,
+    size: 10,
+    font: font,
+    color: rgb(0, 0, 0),
+  });
 
   yPos -= 20;
 
@@ -642,17 +790,14 @@ function drawPDFTemplate(page, font, data, receiptNum) {
   yPos -= 30;
 
   // 住所区分
-  const addressLabels = { '1': '自宅', '2': '自宅外', '3': '大学寮' };
-  page.drawText(
-    `住所区分: ${addressLabels[data.addressType] || ''}`,
-    {
-      x: 70,
-      y: yPos,
-      size: 10,
-      font: font,
-      color: rgb(0, 0, 0),
-    },
-  );
+  const addressLabels = { 1: '自宅', 2: '自宅外', 3: '大学寮' };
+  page.drawText(`住所区分: ${addressLabels[data.addressType] || ''}`, {
+    x: 70,
+    y: yPos,
+    size: 10,
+    font: font,
+    color: rgb(0, 0, 0),
+  });
 
   yPos -= 35;
 
@@ -721,16 +866,13 @@ function drawPDFTemplate(page, font, data, receiptNum) {
     new: '新規',
     change: '変更',
   };
-  page.drawText(
-    `振込先: ${bankTypeLabel[data.bankTransferType] || ''}`,
-    {
-      x: 70,
-      y: yPos,
-      size: 10,
-      font: font,
-      color: rgb(0, 0, 0),
-    },
-  );
+  page.drawText(`振込先: ${bankTypeLabel[data.bankTransferType] || ''}`, {
+    x: 70,
+    y: yPos,
+    size: 10,
+    font: font,
+    color: rgb(0, 0, 0),
+  });
 
   if (data.bankTransferType !== 'previous') {
     yPos -= 20;
