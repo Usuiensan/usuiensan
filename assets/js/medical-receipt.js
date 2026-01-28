@@ -1075,7 +1075,17 @@ async function generateTestPDF(pattern = 'normal') {
         width: width,
         height: height,
       });
-      console.log('✓ Background image loaded');
+      
+      // テスト用：背景を薄くするために半透明の白レイヤーを追加
+      page.drawRectangle({
+        x: 0,
+        y: 0,
+        width: width,
+        height: height,
+        color: rgb(1, 1, 1),
+        opacity: 0.5, // 50%の透明度で背景を薄くする
+      });
+      console.log('✓ Background image loaded with opacity');
     } catch (error) {
       console.log('背景画像なし。白紙で生成します。');
       // 背景を白で塗りつぶし
