@@ -1487,4 +1487,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 電話番号バリデーション表示を設定
   setupPhoneValidationDisplay('mobilePhone', 'mobilePhoneValidation');
-  setupPhoneValidationDisplay('fixedPhone', 'fixedPhoneValidation');});
+  setupPhoneValidationDisplay('fixedPhone', 'fixedPhoneValidation');
+});
