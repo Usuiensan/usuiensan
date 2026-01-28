@@ -176,16 +176,15 @@ function classifyPhoneNumberType(digits) {
 function identifyFixedPhoneRegion(digits) {
   // 携帯電話の可能性をまずチェック
   // 携帯電話は 0[6789]0 で始まり11桁
-  if (
-    digits.length === 11 &&
-    '6789'.includes(digits[1]) &&
-    digits[2] === '0'
-  ) {
+  if (digits.length === 11 && '6789'.includes(digits[1]) && digits[2] === '0') {
     return null; // 携帯電話なので固定電話ではない
   }
 
   // JSON の市外局番マップを使用（優先度：5桁 → 4桁 → 3桁 → 2桁）
-  const codes = (typeof window !== 'undefined' && window.PHONE_AREA_CODES) ? window.PHONE_AREA_CODES : null;
+  const codes =
+    typeof window !== 'undefined' && window.PHONE_AREA_CODES
+      ? window.PHONE_AREA_CODES
+      : null;
   if (codes) {
     for (let len = 5; len >= 2; len--) {
       if (digits.length >= len) {

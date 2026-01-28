@@ -6,6 +6,9 @@
 // PDF-LIB のインポート
 const { PDFDocument, rgb, StandardFonts } = PDFLib;
 
+// fontkit のグローバル参照（fontkit.umd.min.js が提供）
+const fontkit = window.fontkit;
+
 // フォーム要素の取得
 const form = document.getElementById('medicalForm');
 const generateBtn = document.getElementById('generateBtn');
@@ -135,6 +138,32 @@ function setupEventListeners() {
       location.reload();
     }
   });
+
+  // テストボタン（開発用）
+  const testPDFNormalBtn = document.getElementById('testPDFNormalBtn');
+  const testPDFAccidentBtn = document.getElementById('testPDFAccidentBtn');
+  const testConsoleBtn = document.getElementById('testConsoleBtn');
+
+  if (testPDFNormalBtn) {
+    testPDFNormalBtn.addEventListener('click', () => {
+      generateTestPDF('normal');
+    });
+  }
+
+  if (testPDFAccidentBtn) {
+    testPDFAccidentBtn.addEventListener('click', () => {
+      generateTestPDF('accident');
+    });
+  }
+
+  if (testConsoleBtn) {
+    testConsoleBtn.addEventListener('click', () => {
+      console.log('=== テストデータ（通常パターン） ===');
+      console.log(generateTestPDFData());
+      console.log('=== テストデータ（交通事故パターン） ===');
+      console.log(generateTestPDFDataAccident());
+    });
+  }
 
   // 電話番号フォーマット
   setupPhoneNumberInputs();
@@ -487,6 +516,641 @@ function showMessage(message, type = 'success') {
 }
 
 /**
+ * フォームデータを PDF 書き込み用にマッピング・変換
+ * getFormData() の出力を PDF_FIELD_MAPPINGS の形式に合わせる
+ *
+ * @param {object} formData - getFormData() の戻り値
+ * @returns {object} PDF書き込み用のデータ構造
+ */
+function preparePDFData(formData) {
+  if (!window.PDF_VALUE_FORMATTERS) {
+    console.error('PDF_VALUE_FORMATTERS が読み込まれていません');
+    return null;
+  }
+
+  const pdfData = {};
+
+  // ===== 学部・研究科（テキスト） =====
+  pdfData.faculty = formData.faculty || '';
+
+  // ===== 年次（テキスト） =====
+  pdfData.grade = formData.grade || '';
+
+  // ===== 氏名（テキスト） =====
+  pdfData.studentName = formData.studentName || '';
+
+  // ===== フリガナ（テキスト） =====
+  pdfData.studentNameKana = formData.studentNameKana || '';
+
+  // ===== 学生証番号（6桁を分割） =====
+  if (formData.studentNumber) {
+    pdfData.studentNumber = window.PDF_VALUE_FORMATTERS.formatStudentNumber(
+      formData.studentNumber,
+    );
+  }
+
+  // ===== 携帯電話（ハイフン区切り3部分） =====
+  if (formData.mobilePhone) {
+    // mobilePhone がすでにハイフン付きの場合
+    const mobileRaw = formData.mobilePhone.replace(/-/g, '');
+    pdfData.mobilePhone =
+      window.PDF_VALUE_FORMATTERS.formatMobilePhone(mobileRaw);
+  }
+
+  // ===== 固定電話（ハイフン区切り3部分） =====
+  if (formData.fixedPhone) {
+    // fixedPhone は既に formatFixedPhone() で整形済みの想定
+    pdfData.fixedPhone = window.PDF_VALUE_FORMATTERS.formatFixedPhone(
+      formData.fixedPhone,
+    );
+  }
+
+  // ===== 住所区分（ラジオボタン値） =====
+  if (formData.addressType) {
+    const options = window.PDF_FIELD_MAPPINGS.addressType.options;
+    pdfData.addressType = window.PDF_VALUE_FORMATTERS.getSelectedOption(
+      formData.addressType,
+      options,
+    );
+  }
+
+  // ===== 傷病名（テキスト） =====
+  pdfData.diseaseName = formData.diseaseName || '';
+
+  // ===== 負傷状況（チェックボックス） =====
+  if (formData.injuryContext) {
+    const options = window.PDF_FIELD_MAPPINGS.injuryContext.options;
+    pdfData.injuryContext = window.PDF_VALUE_FORMATTERS.getSelectedOption(
+      formData.injuryContext,
+      options,
+    );
+  }
+
+  // ===== 負傷に関連するフィールド =====
+  if (formData.isInjury === 'on' || formData.isInjury === true) {
+    pdfData.injuryLocation = formData.injuryLocation || '';
+    pdfData.injuryCause = formData.injuryCause || '';
+
+    if (formData.injuryDate) {
+      pdfData.injuryDate = window.PDF_VALUE_FORMATTERS.formatDate(
+        formData.injuryDate,
+      );
+    }
+
+    // 負傷状況に応じた条件付きフィールド
+    if (formData.injuryContext === '正課中') {
+      pdfData.subjectName = formData.subjectName || '';
+    } else if (formData.injuryContext === '大学行事中') {
+      pdfData.eventName = formData.eventName || '';
+    } else if (formData.injuryContext === '課外活動中') {
+      pdfData.clubName = formData.clubName || '';
+    } else if (formData.injuryContext === '交通事故') {
+      // 交通事故の場合、相手有無（○を描画）
+      if (formData.accidentParty) {
+        const options = window.PDF_FIELD_MAPPINGS.accidentParty.options;
+        pdfData.accidentParty = window.PDF_VALUE_FORMATTERS.getSelectedOption(
+          formData.accidentParty,
+          options,
+        );
+      }
+    }
+  }
+
+  // ===== 金融機関振込先 =====
+  if (formData.bankTransferType) {
+    const options = window.PDF_FIELD_MAPPINGS.bankTransferType.options;
+    pdfData.bankTransferType = window.PDF_VALUE_FORMATTERS.getSelectedOption(
+      formData.bankTransferType,
+      options,
+    );
+  }
+
+  // ===== 銀行情報（「新規」「変更」の場合） =====
+  if (formData.bankTransferType !== 'previous') {
+    pdfData.bankName = formData.bankName || '';
+    pdfData.branchName = formData.branchName || '';
+    pdfData.bankCode = formData.bankCode || '';
+    pdfData.branchCode = formData.branchCode || '';
+    pdfData.accountName = formData.accountName || '';
+
+    if (formData.accountNumber) {
+      pdfData.accountNumber = window.PDF_VALUE_FORMATTERS.formatAccountNumber(
+        formData.accountNumber,
+      );
+    }
+  }
+
+  // ===== 受付番号リスト =====
+  if (formData.receiptNumber) {
+    pdfData.receiptNumbers = Array.isArray(formData.receiptNumber)
+      ? formData.receiptNumber
+      : [formData.receiptNumber];
+  }
+
+  return pdfData;
+}
+
+/**
+ * PDF フィールド書き込み関数（マッピングベース）
+ * PDF_FIELD_MAPPINGS と pdfData に基づいて、すべてのフィールドをPDFに書き込む
+ *
+ * @param {PDFPage} page - PDF-LIB の Page オブジェクト
+ * @param {Font} font - 日本語フォント
+ * @param {object} pdfData - preparePDFData() の戻り値
+ */
+function writePDFFieldsFromMappings(page, font, pdfData) {
+  if (!window.PDF_FIELD_MAPPINGS) {
+    console.error('PDF_FIELD_MAPPINGS が定義されていません');
+    return;
+  }
+
+  const mappings = window.PDF_FIELD_MAPPINGS;
+  const { height } = page.getSize();
+
+  // 各フィールドマッピングを処理
+  Object.keys(mappings).forEach((fieldName) => {
+    if (fieldName === 'pageInfo') return; // ページ情報はスキップ
+
+    const mapping = mappings[fieldName];
+    const value = pdfData[fieldName];
+
+    if (!value && fieldName !== 'isInjury') return; // 値がない場合はスキップ
+
+    try {
+      switch (mapping.type) {
+        case 'text':
+          // テキスト単一フィールド
+          writeTextField(page, font, mapping, value, height);
+          break;
+
+        case 'digit_boxes':
+          // マス入力（複数の数字）
+          writeDigitBoxes(page, font, mapping, value, height);
+          break;
+
+        case 'phone_parts':
+          // 電話番号（3部分）
+          writePhoneParts(page, font, mapping, value, height);
+          break;
+
+        case 'date_parts':
+          // 日付（年月日分割）
+          writeDateParts(page, font, mapping, value, height);
+          break;
+
+        case 'radio_circle':
+          // ラジオボタン（○で囲む）
+          writeRadioCircle(page, mapping, value, height);
+          break;
+
+        case 'checkbox_mark':
+          // チェックボックス（✓マーク）
+          writeCheckboxMark(page, font, mapping, value, height);
+          break;
+
+        case 'receipt_list':
+          // 受付番号リスト
+          writeReceiptList(page, font, mapping, value, height);
+          break;
+
+        default:
+          console.warn(`未対応の型: ${mapping.type}`);
+      }
+    } catch (error) {
+      console.warn(`フィールド${fieldName}の書き込みエラー:`, error);
+    }
+  });
+}
+
+/**
+ * テキストフィールドの書き込み
+ */
+function writeTextField(page, font, mapping, value, pageHeight) {
+  const yInPDF = pageHeight - mapping.y; // PDF座標系に変換
+
+  page.drawText(String(value).substring(0, 50), {
+    x: mapping.x,
+    y: yInPDF,
+    size: mapping.fontSize || 11,
+    font: font,
+    color: rgb(0, 0, 0),
+  });
+}
+
+/**
+ * マス入力（6桁学生証、7桁口座番号）の書き込み
+ */
+function writeDigitBoxes(page, font, mapping, digits, pageHeight) {
+  if (!Array.isArray(digits)) {
+    console.warn('digit_boxes: digits は配列である必要があります');
+    return;
+  }
+
+  digits.forEach((digit, index) => {
+    if (index >= mapping.positions.length) return;
+    if (!digit) return; // 空の場合はスキップ
+
+    const pos = mapping.positions[index];
+    const yInPDF = pageHeight - pos.y;
+
+    page.drawText(String(digit), {
+      x: pos.x,
+      y: yInPDF,
+      size: mapping.fontSize || 12,
+      font: font,
+      color: rgb(0, 0, 0),
+    });
+  });
+}
+
+/**
+ * 電話番号3部分の書き込み（090-1234-5678形式）
+ */
+function writePhoneParts(page, font, mapping, phoneParts, pageHeight) {
+  if (!phoneParts || typeof phoneParts !== 'object') {
+    console.warn('phone_parts: 電話番号オブジェクトが必要');
+    return;
+  }
+
+  const parts = ['area', 'exchange', 'subscriber'];
+  parts.forEach((part) => {
+    const mapPart = mapping.parts.find((p) => p.part === part);
+    if (!mapPart || !phoneParts[part]) return;
+
+    const yInPDF = pageHeight - mapPart.y;
+
+    page.drawText(String(phoneParts[part]), {
+      x: mapPart.x,
+      y: yInPDF,
+      size: mapping.fontSize || 11,
+      font: font,
+      color: rgb(0, 0, 0),
+    });
+  });
+}
+
+/**
+ * 日付3部分の書き込み（年月日分割）
+ */
+function writeDateParts(page, font, mapping, dateParts, pageHeight) {
+  if (!dateParts || typeof dateParts !== 'object') {
+    console.warn('date_parts: 日付オブジェクトが必要');
+    return;
+  }
+
+  const parts = ['year', 'month', 'day'];
+  parts.forEach((part) => {
+    const mapPart = mapping.parts.find((p) => p.part === part);
+    if (!mapPart || !dateParts[part]) return;
+
+    const yInPDF = pageHeight - mapPart.y;
+
+    page.drawText(String(dateParts[part]), {
+      x: mapPart.x,
+      y: yInPDF,
+      size: mapping.fontSize || 11,
+      font: font,
+      color: rgb(0, 0, 0),
+    });
+  });
+}
+
+/**
+ * ラジオボタン（○で囲む）の書き込み
+ */
+function writeRadioCircle(page, mapping, selectedOption, pageHeight) {
+  if (!selectedOption || !selectedOption.x || !selectedOption.y) {
+    console.warn('radio_circle: 選択された座標が見つかりません');
+    return;
+  }
+
+  const yInPDF = pageHeight - selectedOption.y;
+
+  page.drawCircle({
+    x: selectedOption.x,
+    y: yInPDF,
+    size: (selectedOption.radius || 5) * 2, // 直径
+    borderColor: rgb(
+      mapping.circleColor?.r || 0,
+      mapping.circleColor?.g || 0,
+      mapping.circleColor?.b || 0,
+    ),
+    borderWidth: mapping.circleWidth || 1.5,
+  });
+}
+
+/**
+ * チェックボックス（✓マーク）の書き込み
+ */
+function writeCheckboxMark(page, font, mapping, selectedOption, pageHeight) {
+  if (!selectedOption || !selectedOption.x || !selectedOption.y) {
+    console.warn('checkbox_mark: 選択された座標が見つかりません');
+    return;
+  }
+
+  const yInPDF = pageHeight - selectedOption.y;
+
+  page.drawText('✓', {
+    x: selectedOption.x,
+    y: yInPDF,
+    size: 14,
+    font: font,
+    color: rgb(
+      mapping.markColor?.r || 0,
+      mapping.markColor?.g || 0,
+      mapping.markColor?.b || 0,
+    ),
+  });
+}
+
+/**
+ * 受付番号リストの書き込み
+ */
+function writeReceiptList(page, font, mapping, receiptNumbers, pageHeight) {
+  if (!Array.isArray(receiptNumbers)) {
+    console.warn('receipt_list: receiptNumbers は配列である必要があります');
+    return;
+  }
+
+  receiptNumbers.forEach((num, index) => {
+    if (index >= mapping.maxItems) return;
+    if (!num) return;
+
+    const x = mapping.baseX + index * mapping.spacing;
+    const yInPDF = pageHeight - mapping.baseY;
+
+    page.drawText(String(num), {
+      x: x,
+      y: yInPDF,
+      size: mapping.fontSize || 11,
+      font: font,
+      color: rgb(0, 0, 0),
+    });
+  });
+}
+
+/**
+ * ===== テスト用関数群 =====
+ * 座標がずれていないか確認するためのダミーデータ生成
+ */
+
+/**
+ * テスト用ダミーデータを生成（すべてのフィールドに値を入れる）
+ */
+function generateTestPDFData() {
+  return {
+    faculty: '経済学部',
+    grade: '3',
+    studentName: '山田太郎',
+    studentNameKana: 'ヤマダタロウ',
+    studentNumber: ['1', '2', '3', '4', '5', '6'],
+    mobilePhone: {
+      area: '090',
+      exchange: '1234',
+      subscriber: '5678',
+    },
+    fixedPhone: {
+      area: '06',
+      exchange: '1234',
+      subscriber: '5678',
+    },
+    addressType: {
+      value: '1',
+      label: '① 自宅',
+      x: 85,
+      y: 640,
+      radius: 5,
+    },
+    receiptNumbers: ['0001', '0002', '0003'],
+    diseaseName: '急性胃腸炎',
+    injuryContext: {
+      value: '正課中',
+      label: '正課中',
+      x: 90,
+      y: 595,
+    },
+    subjectName: '体育実技',
+    injuryLocation: '体育館',
+    injuryCause: 'バスケットボール中にねん挫',
+    injuryDate: {
+      year: '2026',
+      month: '01',
+      day: '28',
+    },
+    accidentParty: null, // 交通事故ではないのでnull
+    bankTransferType: {
+      value: 'new',
+      label: '新規',
+      x: 200,
+      y: 480,
+      radius: 5,
+    },
+    bankName: '三菱UFJ銀行',
+    branchName: '京都支店',
+    bankCode: '0005',
+    branchCode: '055',
+    accountName: 'ヤマダタロウ',
+    accountNumber: ['', '', '', '1', '2', '3', '4'],
+  };
+}
+
+/**
+ * テスト用ダミーデータを生成（交通事故パターン）
+ */
+function generateTestPDFDataAccident() {
+  return {
+    faculty: '理学部',
+    grade: '2',
+    studentName: '鈴木花子',
+    studentNameKana: 'スズキハナコ',
+    studentNumber: ['0', '2', '2', '0', '0', '1'],
+    mobilePhone: {
+      area: '080',
+      exchange: '9876',
+      subscriber: '5432',
+    },
+    fixedPhone: {
+      area: '075',
+      exchange: '123',
+      subscriber: '4567',
+    },
+    addressType: {
+      value: '2',
+      label: '② 自宅外',
+      x: 160,
+      y: 640,
+      radius: 5,
+    },
+    receiptNumbers: ['0004', '0005'],
+    diseaseName: '交通事故によるけが',
+    injuryContext: {
+      value: '交通事故',
+      label: '交通事故',
+      x: 480,
+      y: 595,
+    },
+    subjectName: null,
+    injuryLocation: '横断歩道',
+    injuryCause: '自動車に接触',
+    injuryDate: {
+      year: '2026',
+      month: '01',
+      day: '15',
+    },
+    accidentParty: {
+      value: '有り',
+      label: '有り',
+      x: 90,
+      y: 510,
+      radius: 5,
+    },
+    bankTransferType: {
+      value: 'change',
+      label: '変更',
+      x: 270,
+      y: 480,
+      radius: 5,
+    },
+    bankName: 'みずほ銀行',
+    branchName: '京都中央支店',
+    bankCode: '0001',
+    branchCode: '110',
+    accountName: 'スズキハナコ',
+    accountNumber: ['', '', '', '', '5', '6', '7'],
+  };
+}
+
+/**
+ * PDFテスト生成（コンソールから呼び出し可能）
+ * 使用例: generateTestPDF('normal') または generateTestPDF('accident')
+ */
+async function generateTestPDF(pattern = 'normal') {
+  try {
+    console.log(`🧪 テストPDF生成開始: ${pattern}`);
+    console.log('PDFDocument:', typeof PDFDocument);
+    console.log('fontkit:', typeof fontkit);
+    console.log('rgb:', typeof rgb);
+    
+    const pdfDoc = await PDFDocument.create();
+    console.log('✓ PDFDocument created');
+    
+    if (fontkit) {
+      pdfDoc.registerFontkit(fontkit);
+      console.log('✓ fontkit registered');
+    } else {
+      console.warn('⚠️ fontkit not available, using standard fonts');
+    }
+
+    let font;
+    const fontBytes = await loadJapaneseFont();
+    if (fontBytes) {
+      font = await pdfDoc.embedFont(fontBytes);
+      console.log('✓ Japanese font embedded');
+    } else {
+      font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+      console.log('⚠️ Using Helvetica font');
+    }
+
+    // テストデータの選択
+    const testData =
+      pattern === 'accident'
+        ? generateTestPDFDataAccident()
+        : generateTestPDFData();
+    console.log('✓ Test data generated:', testData);
+
+    // ページを作成
+    const page = pdfDoc.addPage([595.28, 841.89]); // A4サイズ
+    console.log('✓ Page created');
+
+    // 背景を白で塗りつぶし
+    page.drawRectangle({
+      x: 0,
+      y: 0,
+      width: 595.28,
+      height: 841.89,
+      color: rgb(255, 255, 255),
+    });
+    console.log('✓ Background filled');
+
+    // フィールド値を書き込み
+    writePDFFieldsFromMappings(page, font, testData);
+    console.log('✓ Fields written');
+
+    // PDF座標軸のガイドを描画（デバッグ用）
+    drawCoordinateGuide(page);
+    console.log('✓ Coordinate guide drawn');
+
+    // PDF保存
+    const pdfBytes = await pdfDoc.save();
+    console.log('✓ PDF saved to bytes');
+
+    // ダウンロード
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `TEST_医療費領収証_${pattern}_${new Date().getTime()}.pdf`;
+    link.click();
+
+    URL.revokeObjectURL(url);
+    console.log(`✅ テストPDF(${pattern}) を生成しました`);
+    console.log('生成データ:', testData);
+  } catch (error) {
+    console.error('テストPDF生成エラー:', error);
+    console.error('スタックトレース:', error.stack);
+  }
+}
+
+/**
+ * PDF座標ガイド描画（デバッグ用）
+ * グリッドと座標ラベルを描画してずれを確認
+ */
+function drawCoordinateGuide(page) {
+  const { width, height } = page.getSize();
+  const gridSize = 100;
+  const guideLightGray = rgb(0.9, 0.9, 0.9);
+  const guideDarkGray = rgb(0.7, 0.7, 0.7);
+
+  // 縦線（X軸グリッド）
+  for (let x = 0; x <= width; x += gridSize) {
+    const color = x % 500 === 0 ? guideDarkGray : guideLightGray;
+    const width_line = x % 500 === 0 ? 0.5 : 0.2;
+
+    page.drawLine({
+      start: { x: x, y: 0 },
+      end: { x: x, y: height },
+      color: color,
+      width: width_line,
+    });
+  }
+
+  // 横線（Y軸グリッド）
+  for (let y = 0; y <= height; y += gridSize) {
+    const color = y % 500 === 0 ? guideDarkGray : guideLightGray;
+    const width_line = y % 500 === 0 ? 0.5 : 0.2;
+
+    page.drawLine({
+      start: { x: 0, y: y },
+      end: { x: width, y: y },
+      color: color,
+      width: width_line,
+    });
+  }
+
+  console.log('✅ 座標ガイド (グリッド) を描画しました');
+}
+
+/**
+ * グローバルに公開（コンソールから呼び出し可能）
+ */
+if (typeof window !== 'undefined') {
+  window.generateTestPDF = generateTestPDF;
+  window.generateTestPDFData = generateTestPDFData;
+  window.generateTestPDFDataAccident = generateTestPDFDataAccident;
+  window.writePDFFieldsFromMappings = writePDFFieldsFromMappings;
+}
+
+/**
  * 日本語フォントの読み込み
  */
 async function loadJapaneseFont() {
@@ -532,6 +1196,18 @@ async function generatePDF() {
       }
     }
 
+    // ===== フォームデータを PDF 形式に変換 =====
+    const pdfData = preparePDFData(data);
+    console.log('PDF書き込み用データ:', pdfData);
+
+    // PDF書き込み用データの検証
+    if (!pdfData) {
+      showMessage('PDF データの準備に失敗しました', 'error');
+      generateBtn.disabled = false;
+      generateBtn.textContent = '📄 PDF生成';
+      return;
+    }
+
     // PDFドキュメントの作成
     const pdfDoc = await PDFDocument.create();
 
@@ -566,11 +1242,15 @@ async function generatePDF() {
         y: 0,
         width: width,
         height: height,
-        color: rgb(1, 1, 1),
+        color: rgb(255, 255, 255),
       });
 
-      // テンプレート描画
-      drawPDFTemplate(page, font, data, receiptNum);
+      // ===== PDF書き込み =====
+      // フォームデータを PDF 形式に変換
+      const pdfData = preparePDFData(data);
+
+      // PDF_FIELD_MAPPINGS に基づいて全フィールドを書き込み
+      writePDFFieldsFromMappings(page, font, pdfData);
     });
 
     // PDF保存
@@ -593,212 +1273,6 @@ async function generatePDF() {
   } finally {
     generateBtn.disabled = false;
     generateBtn.textContent = '📄 PDF生成';
-  }
-}
-
-/**
- * PDFテンプレートの描画
- */
-function drawPDFTemplate(page, font, data, receiptNum) {
-  const { height } = page.getSize();
-  let yPos = height - 60;
-
-  // ヘッダー
-  page.drawText('医療費領収証明書申請', {
-    x: 200,
-    y: yPos,
-    size: 16,
-    font: font,
-    color: rgb(0, 0, 0),
-  });
-
-  yPos -= 40;
-
-  // 受付番号
-  page.drawText(`受付番号: ${receiptNum}`, {
-    x: 50,
-    y: yPos,
-    size: 11,
-    font: font,
-    color: rgb(0, 0, 0),
-  });
-
-  yPos -= 30;
-
-  // 共通情報
-  page.drawText('【申請者情報】', {
-    x: 50,
-    y: yPos,
-    size: 12,
-    font: font,
-    color: rgb(0, 0, 0),
-  });
-
-  yPos -= 25;
-
-  page.drawText(
-    `氏名: ${data.studentName || ''} (${data.studentNameKana || ''})`,
-    {
-      x: 70,
-      y: yPos,
-      size: 10,
-      font: font,
-      color: rgb(0, 0, 0),
-    },
-  );
-
-  yPos -= 20;
-
-  page.drawText(`学部・研究科: ${data.faculty || ''} ${data.grade || ''}年次`, {
-    x: 70,
-    y: yPos,
-    size: 10,
-    font: font,
-    color: rgb(0, 0, 0),
-  });
-
-  yPos -= 20;
-
-  page.drawText(`学生証番号: ${data.studentNumber || ''}`, {
-    x: 70,
-    y: yPos,
-    size: 10,
-    font: font,
-    color: rgb(0, 0, 0),
-  });
-
-  yPos -= 20;
-
-  page.drawText(`携帯電話: ${data.mobilePhone || ''}`, {
-    x: 70,
-    y: yPos,
-    size: 10,
-    font: font,
-    color: rgb(0, 0, 0),
-  });
-
-  if (data.fixedPhone) {
-    yPos -= 20;
-    page.drawText(`固定電話: ${data.fixedPhone}`, {
-      x: 70,
-      y: yPos,
-      size: 10,
-      font: font,
-      color: rgb(0, 0, 0),
-    });
-  }
-
-  yPos -= 30;
-
-  // 住所区分
-  const addressLabels = { 1: '自宅', 2: '自宅外', 3: '大学寮' };
-  page.drawText(`住所区分: ${addressLabels[data.addressType] || ''}`, {
-    x: 70,
-    y: yPos,
-    size: 10,
-    font: font,
-    color: rgb(0, 0, 0),
-  });
-
-  yPos -= 35;
-
-  // 傷病情報
-  page.drawText('【傷病情報】', {
-    x: 50,
-    y: yPos,
-    size: 12,
-    font: font,
-    color: rgb(0, 0, 0),
-  });
-
-  yPos -= 25;
-
-  page.drawText(`傷病名: ${data.diseaseName || ''}`, {
-    x: 70,
-    y: yPos,
-    size: 10,
-    font: font,
-    color: rgb(0, 0, 0),
-  });
-
-  if (data.isInjury) {
-    yPos -= 20;
-    if (data.injuryDate) {
-      const date = new Date(data.injuryDate);
-      page.drawText(
-        `負傷日: ${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`,
-        {
-          x: 70,
-          y: yPos,
-          size: 10,
-          font: font,
-          color: rgb(0, 0, 0),
-        },
-      );
-    }
-
-    if (data.injurySituation) {
-      yPos -= 20;
-      page.drawText(`受傷状況: ${data.injurySituation}`, {
-        x: 70,
-        y: yPos,
-        size: 9,
-        font: font,
-        color: rgb(0, 0, 0),
-      });
-    }
-  }
-
-  yPos -= 35;
-
-  // 金融機関情報
-  page.drawText('【金融機関情報】', {
-    x: 50,
-    y: yPos,
-    size: 12,
-    font: font,
-    color: rgb(0, 0, 0),
-  });
-
-  yPos -= 25;
-
-  const bankTypeLabel = {
-    previous: '前回と同じ',
-    new: '新規',
-    change: '変更',
-  };
-  page.drawText(`振込先: ${bankTypeLabel[data.bankTransferType] || ''}`, {
-    x: 70,
-    y: yPos,
-    size: 10,
-    font: font,
-    color: rgb(0, 0, 0),
-  });
-
-  if (data.bankTransferType !== 'previous') {
-    yPos -= 20;
-    page.drawText(
-      `金融機関: ${data.bankName || ''} ${data.branchName || ''}支店`,
-      {
-        x: 70,
-        y: yPos,
-        size: 10,
-        font: font,
-        color: rgb(0, 0, 0),
-      },
-    );
-
-    yPos -= 20;
-    page.drawText(
-      `口座名義: ${data.accountName || ''} 口座番号: ${data.accountNumber || ''}`,
-      {
-        x: 70,
-        y: yPos,
-        size: 10,
-        font: font,
-        color: rgb(0, 0, 0),
-      },
-    );
   }
 }
 
