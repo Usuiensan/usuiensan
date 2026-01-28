@@ -37,8 +37,10 @@ function validatePhoneNumber(value) {
   }
 
   // 4桁市外局番
-  if (['1', '2', '3', '4', '5'].includes(secondChar) &&
-      ['0', '2', '5', '7', '9'].includes(thirdChar)) {
+  if (
+    ['1', '2', '3', '4', '5'].includes(secondChar) &&
+    ['0', '2', '5', '7', '9'].includes(thirdChar)
+  ) {
     return {
       isValid: true,
       isGeneral: true,
@@ -49,8 +51,11 @@ function validatePhoneNumber(value) {
   }
 
   // 3桁市外局番
-  if (['6', '7', '8', '9'].includes(secondChar) &&
-      thirdChar && thirdChar !== '0') {
+  if (
+    ['6', '7', '8', '9'].includes(secondChar) &&
+    thirdChar &&
+    thirdChar !== '0'
+  ) {
     return {
       isValid: true,
       isGeneral: true,

@@ -1406,6 +1406,68 @@ function setupAutoSave() {
   console.log('自動保存機能が有効です');
 }
 
+/**
+ * 電話番号の入力に応じてバリデーション結果を表示する
+ * @param {string} inputId - 入力フィールドのID
+ * @param {string} validationElementId - 結果表示要素のID
+ */
+function setupPhoneValidationDisplay(inputId, validationElementId) {
+  const inputElement = document.getElementById(inputId);
+  const validationElement = document.getElementById(validationElementId);
+
+  if (!inputElement || !validationElement) return;
+
+  inputElement.addEventListener('input', (e) => {
+    const value = e.target.value;
+
+    // 空の場合は非表示
+    if (!value) {
+      validationElement.classList.remove('show');
+      return;
+    }
+
+    // バリデーション実行
+    const result = validatePhoneNumber(value);
+
+    // 表示要素のクリア
+    validationElement.classList.remove(
+      'valid-kinki',
+      'valid-non-kinki',
+      'invalid',
+      'incomplete',
+    );
+
+    if (result.type === 'incomplete') {
+      // 入力途中
+      validationElement.textContent = result.reason;
+      validationElement.classList.add('incomplete', 'show');
+    } else if (!result.isValid) {
+      // 無効
+      validationElement.textContent = result.reason;
+      validationElement.classList.add('invalid', 'show');
+    } else if (result.type === 'mobile') {
+      // 携帯電話（近畿圏判定は不要）
+      validationElement.textContent = result.reason;
+      validationElement.classList.add('valid-kinki', 'show');
+    } else if (result.type === 'fixed') {
+      // 固定電話
+      if (result.isKinki) {
+        // 近畿圏
+        validationElement.textContent = `✓ 有効な番号です（${result.region}）`;
+        validationElement.classList.add('valid-kinki', 'show');
+      } else {
+        // 近畿圏外 - 警告メッセージ
+        validationElement.innerHTML = `<strong>${result.region}の番号ですが間違いないですか？</strong><br>入力内容：${value}`;
+        validationElement.classList.add('valid-non-kinki', 'show');
+      }
+    } else {
+      // その他
+      validationElement.textContent = result.reason;
+      validationElement.classList.add('invalid', 'show');
+    }
+  });
+}
+
 // ページ読み込み時の処理
 document.addEventListener('DOMContentLoaded', () => {
   console.log('医療費領収証明書作成ツール 初期化完了');
@@ -1422,4 +1484,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 自動保存機能を有効化
   setupAutoSave();
-});
+
+  // 電話番号バリデーション表示を設定
+  setupPhoneValidationDisplay('mobilePhone', 'mobilePhoneValidation');
+  setupPhoneValidationDisplay('fixedPhone', 'fixedPhoneValidation');});

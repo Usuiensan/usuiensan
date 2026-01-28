@@ -565,6 +565,66 @@ body {
   animation: fadeIn 0.5s ease-out;
 }
 
+/* 電話番号バリデーション表示 */
+.phone-validation {
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  display: none;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.phone-validation.show {
+  display: block;
+}
+
+/* 成功状態：有効な電話番号（近畿圏） */
+.phone-validation.valid-kinki {
+  background-color: #e6f9ff;
+  border-left: 4px solid #4da6ff;
+  color: #0c5a96;
+}
+
+.phone-validation.valid-kinki::before {
+  content: '✓ ';
+  font-weight: bold;
+}
+
+/* 警告状態：有効だが近畿圏外 */
+.phone-validation.valid-non-kinki {
+  background-color: #fffaed;
+  border-left: 4px solid #ffa500;
+  color: #8b6f00;
+}
+
+.phone-validation.valid-non-kinki::before {
+  content: '⚠ ';
+  font-weight: bold;
+}
+
+/* エラー状態：無効な電話番号 */
+.phone-validation.invalid {
+  background-color: #ffe6e6;
+  border-left: 4px solid #ff6b6b;
+  color: #c92a2a;
+}
+
+.phone-validation.invalid::before {
+  content: '✗ ';
+  font-weight: bold;
+}
+
+/* 入力途中状態 */
+.phone-validation.incomplete {
+  background-color: #f0f0f0;
+  border-left: 4px solid #999;
+  color: #555;
+}
+
+.phone-validation.incomplete::before {
+  content: '📝 ';
+}
 /* 小さいボタン */
 .btn-small {
   padding: 8px 12px;

@@ -72,6 +72,7 @@ function validatePhoneNumber(value) {
     isGeneral: phoneType.isGeneral,
     type: phoneType.type,
     region: phoneType.region,
+    isKinki: phoneType.isKinki || false,
     reason: phoneType.reason,
   };
 }
@@ -87,7 +88,11 @@ function classifyPhoneNumberType(digits) {
   // パターン1: 携帯電話 (0[6789]0-XXXX-XXXX)
   // 11桁で 0[6789]0 で始まるパターン
   // digits[0]='0', digits[1]='6/7/8/9', digits[2]='0'
-  if (digits.length === 11 && '6789'.includes(secondChar) && digits[2] === '0') {
+  if (
+    digits.length === 11 &&
+    '6789'.includes(secondChar) &&
+    digits[2] === '0'
+  ) {
     return {
       isValid: true,
       isGeneral: true,
@@ -105,6 +110,7 @@ function classifyPhoneNumberType(digits) {
       isGeneral: true,
       type: 'fixed',
       region: fixedPhoneInfo.region,
+      isKinki: fixedPhoneInfo.isKinki || false,
       reason: `固定電話（${fixedPhoneInfo.region}）`,
     };
   }
@@ -134,7 +140,7 @@ function classifyPhoneNumberType(digits) {
 /**
  * 固定電話の地域を判定する
  * @private
- * @returns {Object|null} {region: '地域名', digits: 桁数} または null
+ * @returns {Object|null} {region: '地域名', digits: 桁数, isKinki: 近畿圏か} または null
  */
 function identifyFixedPhoneRegion(digits) {
   const secondChar = digits[1];
@@ -142,48 +148,84 @@ function identifyFixedPhoneRegion(digits) {
 
   // 携帯電話の可能性をまずチェック
   // 携帯電話は 0[6789]0 で始まり11桁
-  if (digits.length === 11 && '6789'.includes(secondChar) && digits[2] === '0') {
+  if (
+    digits.length === 11 &&
+    '6789'.includes(secondChar) &&
+    digits[2] === '0'
+  ) {
     return null; // 携帯電話なので固定電話ではない
   }
 
   // 4桁市外局番パターン: 0[1-5][0257-9]
-  // 例: 0120, 0570, 0210, 0250, 0270, etc.
   if (
     ['1', '2', '3', '4', '5'].includes(secondChar) &&
     ['0', '2', '5', '7', '9'].includes(thirdChar)
   ) {
-    // TODO: 4桁市外局番の詳細マッピング
-    // 例: 0120→フリーダイヤル, 0210→青森, 0250→新潟, など
-    return {
-      region: '4桁市外局番地域',
-      digits: 4,
+    const areaCode = digits.substring(0, 4);
+    const fourDigitAreaCodes = {
+      '0120': { region: 'フリーダイヤル', isKinki: false },
+      '0570': { region: 'ナビダイヤル', isKinki: false },
+      '0210': { region: '青森県', isKinki: false },
+      '0220': { region: '岩手県', isKinki: false },
+      '0250': { region: '新潟県', isKinki: false },
+      '0270': { region: '群馬県', isKinki: false },
     };
+    
+    if (fourDigitAreaCodes[areaCode]) {
+      const info = fourDigitAreaCodes[areaCode];
+      return { region: info.region, digits: 4, isKinki: info.isKinki };
+    }
+    
+    return { region: '特殊番号', digits: 4, isKinki: false };
   }
 
   // 3桁市外局番パターン: 0[6-9][1-9]
-  // 例: 075 (京都), 078 (兵庫), 099 (鹿児島)
   if (
     ['6', '7', '8', '9'].includes(secondChar) &&
     thirdChar &&
     thirdChar !== '0'
   ) {
-    // TODO: 3桁市外局番の詳細マッピング
-    // 例: 075→京都, 078→兵庫, など
-    return {
-      region: '3桁市外局番地域',
-      digits: 3,
+    const areaCode = digits.substring(0, 3);
+    const threeDigitAreaCodes = {
+      '060': { region: '北海道（釧路）', isKinki: false },
+      '090': { region: '携帯電話', isKinki: false },
+      '099': { region: '鹿児島県', isKinki: false },
+      '072': { region: '大阪府（泉大津）', isKinki: true },
+      '073': { region: '和歌山県', isKinki: true },
+      '074': { region: '福井県', isKinki: false },
+      '075': { region: '京都府', isKinki: true },
+      '076': { region: '石川県', isKinki: false },
+      '077': { region: '滋賀県', isKinki: true },
+      '078': { region: '兵庫県（神戸）', isKinki: true },
+      '079': { region: '兵庫県（姫路）', isKinki: true },
     };
+    
+    if (threeDigitAreaCodes[areaCode]) {
+      const info = threeDigitAreaCodes[areaCode];
+      return { region: info.region, digits: 3, isKinki: info.isKinki };
+    }
+    
+    return { region: '3桁市外局番地域', digits: 3, isKinki: false };
   }
 
   // 2桁市外局番パターン: 0[1-6]
-  // 例: 03 (東京), 06 (大阪), 092 (福岡)
   if (['1', '2', '3', '4', '5', '6'].includes(secondChar)) {
-    // TODO: 2桁市外局番の詳細マッピング
-    // 例: 03→東京, 06→大阪, など
-    return {
-      region: '2桁市外局番地域',
-      digits: 2,
+    const areaCode = digits.substring(0, 2);
+    const twoDigitAreaCodes = {
+      '01': { region: '北海道（札幌）', isKinki: false },
+      '02': { region: '青森県', isKinki: false },
+      '03': { region: '東京都', isKinki: false },
+      '04': { region: '埼玉県', isKinki: false },
+      '05': { region: '神奈川県', isKinki: false },
+      '06': { region: '大阪府', isKinki: true },
     };
+    
+    if (twoDigitAreaCodes[areaCode]) {
+      const info = twoDigitAreaCodes[areaCode];
+      return { region: info.region, digits: 2, isKinki: info.isKinki };
+    }
+    
+    return { region: '2桁市外局番地域', digits: 2, isKinki: false };
   }
 
   return null;
