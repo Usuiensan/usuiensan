@@ -39,6 +39,7 @@ function validatePhoneNumber(value) {
       isGeneral: false,
       type: 'unknown',
       region: null,
+      isKinki: false,
       reason: '0から始まる番号ではありません',
     };
   }
@@ -50,6 +51,7 @@ function validatePhoneNumber(value) {
       isGeneral: false,
       type: 'incomplete',
       region: null,
+      isKinki: false,
       reason: `桁数が不足しています（${digits.length}桁 / 最小10桁）`,
     };
   }
@@ -60,6 +62,7 @@ function validatePhoneNumber(value) {
       isGeneral: false,
       type: 'unknown',
       region: null,
+      isKinki: false,
       reason: '桁数が多すぎます（最大11桁）',
     };
   }
@@ -98,6 +101,7 @@ function classifyPhoneNumberType(digits) {
       isGeneral: true,
       type: 'mobile',
       region: null,
+      isKinki: true,
       reason: `携帯電話（0${secondChar}0系）`,
     };
   }
@@ -155,25 +159,15 @@ function identifyFixedPhoneRegion(digits) {
   ) {
     return null; // 携帯電話なので固定電話ではない
   }
-  // 2桁市外局番パターン: 0[1-6]
-  if (['1', '2', '3', '4', '5', '6'].includes(secondChar)) {
-    const areaCode = digits.substring(0, 2);
-    const twoDigitAreaCodes = {
-      '03': { region: '東京都', isKinki: false },
-      '04': { region: '埼玉県・千葉県 ', isKinki: false },
-      '06': { region: '大阪府・兵庫県尼崎市 ', isKinki: true },
-    };
-    if (twoDigitAreaCodes[areaCode]) {
-      const info = twoDigitAreaCodes[areaCode];
-      return { region: info.region, digits: 2, isKinki: info.isKinki };
-    }
-
-    return { region: '2桁市外局番地域', digits: 2, isKinki: false };
-  }
 
   // 3桁市外局番パターン: 0[67][1-9]
   if (['1', '2', '5', '7', '8', '9'].includes(secondChar)) {
-    const areaCode = digits.substring(0, 2);
+    // Quick check for known 4-digit special numbers (フリーダイヤル/ナビダイヤル)
+    const possibleFour = digits.substring(0, 4);
+    if (possibleFour === '0120') return { region: 'フリーダイヤル', digits: 4, isKinki: false };
+    if (possibleFour === '0570') return { region: 'ナビダイヤル', digits: 4, isKinki: false };
+
+    const areaCode = digits.substring(0, 3);
     const threeDigitAreaCodesDigitAreaCodes = {
       '011': { region: '北海道', isKinki: false },
       '015': { region: '北海道', isKinki: false },
@@ -204,9 +198,9 @@ function identifyFixedPhoneRegion(digits) {
       '059': { region: '三重県', isKinki: false },
       '072': { region: '大阪府・兵庫県', isKinki: true },
       '073': { region: '和歌山県', isKinki: true },
-      '075': { region: '大阪府', isKinki: true },
+      '075': { region: '京都府', isKinki: true },
       '076': { region: '石川県・富山県', isKinki: false },
-      '077': { region: '滋賀県・京都府', isKinki: false },
+      '077': { region: '滋賀県・京都府', isKinki: true },
       '078': { region: '兵庫県', isKinki: true },
       '079': { region: '兵庫県', isKinki: true },
       '082': { region: '広島県', isKinki: false },
@@ -235,7 +229,9 @@ function identifyFixedPhoneRegion(digits) {
   if (['1', '2', '5', '7', '8', '9'].includes(secondChar)) {
     const areaCode = digits.substring(0, 4);
     const fourDigitAreaCodesDigitAreaCodes = {
+      '0120': { region: 'フリーダイヤル', isKinki: false },
       '0123': { region: '北海道', isKinki: false },
+      '0570': { region: 'ナビダイヤル', isKinki: false },
       '0123': { region: '北海道', isKinki: false },
       '0123': { region: '北海道', isKinki: false },
       '0124': { region: '北海道', isKinki: false },
@@ -692,6 +688,22 @@ function identifyFixedPhoneRegion(digits) {
     }
 
     return { region: '4桁市外局番地域', digits: 4, isKinki: false };
+  }
+
+  // 2桁市外局番パターン: 0[1-6]
+  if (['1', '2', '3', '4', '5', '6'].includes(secondChar)) {
+    const areaCode = digits.substring(0, 2);
+    const twoDigitAreaCodes = {
+      '03': { region: '東京都', isKinki: false },
+      '04': { region: '埼玉県・千葉県', isKinki: false },
+      '06': { region: '大阪府', isKinki: true },
+    };
+    if (twoDigitAreaCodes[areaCode]) {
+      const info = twoDigitAreaCodes[areaCode];
+      return { region: info.region, digits: 2, isKinki: info.isKinki };
+    }
+
+    return { region: '2桁市外局番地域', digits: 2, isKinki: false };
   }
 
   //5桁市外局番地域
