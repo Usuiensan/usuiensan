@@ -169,105 +169,67 @@ function classifyPhoneNumberType(digits) {
 }
 
 /**
- * 固定電話の地域を判定する
+ * 固定電話の地域を判定する（JSON ベース）
  * @private
  * @returns {Object|null} {region: '地域名', digits: 桁数, isKinki: 近畿圏か} または null
  */
 function identifyFixedPhoneRegion(digits) {
-  const secondChar = digits[1];
-  const thirdChar = digits[2];
-
   // 携帯電話の可能性をまずチェック
   // 携帯電話は 0[6789]0 で始まり11桁
   if (
     digits.length === 11 &&
-    '6789'.includes(secondChar) &&
+    '6789'.includes(digits[1]) &&
     digits[2] === '0'
   ) {
     return null; // 携帯電話なので固定電話ではない
   }
-  // 2桁市外局番パターン: 0[1-6]
-  if (['1', '2', '3', '4', '5', '6'].includes(secondChar)) {
-    const areaCode = digits.substring(0, 2);
-    const twoDigitAreaCodes = {
-      '03': { region: '東京都', isKinki: false },
-      '04': { region: '埼玉県・千葉県 ', isKinki: false },
-      '06': { region: '大阪府・兵庫県尼崎市 ', isKinki: true },
-    };
-    if (twoDigitAreaCodes[areaCode]) {
-      const info = twoDigitAreaCodes[areaCode];
-      return { region: info.region, digits: 2, isKinki: info.isKinki };
-    }
 
+  // JSON の市外局番マップを使用（優先度：5桁 → 4桁 → 3桁 → 2桁）
+  const codes = (typeof window !== 'undefined' && window.PHONE_AREA_CODES) ? window.PHONE_AREA_CODES : null;
+  if (codes) {
+    for (let len = 5; len >= 2; len--) {
+      if (digits.length >= len) {
+        const code = digits.substring(0, len);
+        if (codes[code]) {
+          const info = codes[code];
+          return { region: info.region, digits: len, isKinki: !!info.isKinki };
+        }
+      }
+    }
+  }
+
+  // フォールバック：JSON が無い場合の簡易判定（最小限）
+  const secondChar = digits[1];
+  if (['1', '2', '3', '4', '5', '6'].includes(secondChar)) {
     return { region: '2桁市外局番地域', digits: 2, isKinki: false };
   }
-
-  // 3桁市外局番パターン: 0[67][1-9]
   if (['1', '2', '5', '7', '8', '9'].includes(secondChar)) {
-    const areaCode = digits.substring(0, 3);
-    const threeDigitAreaCodesDigitAreaCodes = {
-      '011': { region: '北海道', isKinki: false },
-      '015': { region: '北海道', isKinki: false },
-      '017': { region: '青森県', isKinki: false },
-      '018': { region: '秋田県', isKinki: false },
-      '019': { region: '岩手県', isKinki: false },
-      '022': { region: '宮城県', isKinki: false },
-      '023': { region: '山形県', isKinki: false },
-      '024': { region: '福島県', isKinki: false },
-      '025': { region: '新潟県', isKinki: false },
-      '026': { region: '長野県', isKinki: false },
-      '027': { region: '群馬県', isKinki: false },
-      '028': { region: '栃木県', isKinki: false },
-      '029': { region: '茨城県', isKinki: false },
-      '042': { region: '東京都・埼玉県', isKinki: false },
-      '043': { region: '千葉県', isKinki: false },
-      '044': { region: '神奈川県・東京都', isKinki: false },
-      '045': { region: '神奈川県', isKinki: false },
-      '046': { region: '神奈川県', isKinki: false },
-      '047': { region: '千葉県', isKinki: false },
-      '048': { region: '埼玉県', isKinki: false },
-      '049': { region: '埼玉県', isKinki: false },
-      '052': { region: '愛知県', isKinki: false },
-      '053': { region: '静岡県', isKinki: false },
-      '054': { region: '静岡県', isKinki: false },
-      '055': { region: '山梨県・静岡県', isKinki: false },
-      '058': { region: '岐阜県', isKinki: false },
-      '059': { region: '三重県', isKinki: false },
-      '072': { region: '大阪府・兵庫県', isKinki: true },
-      '073': { region: '和歌山県', isKinki: true },
-      '075': { region: '京都府', isKinki: true },
-      '076': { region: '石川県・富山県', isKinki: false },
-      '077': { region: '滋賀県・京都府', isKinki: true },
-      '078': { region: '兵庫県', isKinki: true },
-      '079': { region: '兵庫県', isKinki: true },
-      '082': { region: '広島県', isKinki: false },
-      '083': { region: '山口県', isKinki: false },
-      '084': { region: '広島県', isKinki: false },
-      '086': { region: '岡山県', isKinki: false },
-      '087': { region: '香川県', isKinki: false },
-      '088': { region: '徳島県・高知県', isKinki: false },
-      '089': { region: '愛媛県', isKinki: false },
-      '092': { region: '福岡県', isKinki: false },
-      '093': { region: '福岡県', isKinki: false },
-      '095': { region: '長崎県', isKinki: false },
-      '096': { region: '熊本県', isKinki: false },
-      '097': { region: '大分県', isKinki: false },
-      '098': { region: '沖縄県', isKinki: false },
-      '099': { region: '鹿児島県', isKinki: false },
-    };
-    if (threeDigitAreaCodesDigitAreaCodes[areaCode]) {
-      const info = threeDigitAreaCodesDigitAreaCodes[areaCode];
-      return { region: info.region, digits: 3, isKinki: info.isKinki };
-    }
-
     return { region: '3桁市外局番地域', digits: 3, isKinki: false };
   }
-  // 4桁市外局番パターン:
-  if (['1', '2', '5', '7', '8', '9'].includes(secondChar)) {
-    const areaCode = digits.substring(0, 4);
-    const fourDigitAreaCodesDigitAreaCodes = {
-      '0123': { region: '北海道', isKinki: false },
-      '0123': { region: '北海道', isKinki: false },
+  return null;
+}
+
+function identifyFixedPhoneRegionUsingJson(digits) {
+  // JSON を使った市外局番判定（優先）
+  // 携帯を除外
+  if (digits.length === 11 && '6789'.includes(digits[1]) && digits[2] === '0') {
+    return null;
+  }
+  var codes = window.PHONE_AREA_CODES || {};
+  for (var len = 5; len >= 2; len--) {
+    if (digits.length >= len) {
+      var code = digits.substring(0, len);
+      if (codes[code]) {
+        var info = codes[code];
+        return { region: info.region, digits: len, isKinki: !!info.isKinki };
+      }
+    }
+  }
+  return null;
+}
+
+/**
+ * 特殊番号（フリーダイヤル、ナビダイヤルなど）を判定する
       '0123': { region: '北海道', isKinki: false },
       '0124': { region: '北海道', isKinki: false },
       '0125': { region: '北海道', isKinki: false },
@@ -812,27 +774,6 @@ function identifyFixedPhoneRegion(digits) {
       },
       '08396': { region: '山口県美祢市美東町', isKinki: false },
       '08477': { region: '広島県庄原市東城町', isKinki: false },
-      '08512': { region: '島根県隠岐郡隠岐の島町', isKinki: false },
-      '08514': { region: '島根県隠岐郡（隠岐の島町を除く。）', isKinki: false },
-      '09802': {
-        region: '沖縄県島尻郡（北大東村及び南大東村に限る。）',
-        isKinki: false,
-      },
-      '09912': { region: '鹿児島県鹿児島郡十島村', isKinki: false },
-      '09913': { region: '鹿児島県鹿児島郡三島村', isKinki: false },
-      '09969': {
-        region: '鹿児島県薩摩川内市（鹿島町、上甑町、里町及び下甑町に限る。）',
-        isKinki: false,
-      },
-    };
-    if (fiveDigitAreaCodes[areaCode]) {
-      const info = fiveDigitAreaCodes[areaCode];
-      return { region: info.region, digits: 5, isKinki: info.isKinki };
-    }
-
-    return { region: '5桁市外局番地域', digits: 5, isKinki: false };
-  }
-  return null;
 }
 
 function identifyFixedPhoneRegionUsingJson(digits) {
@@ -966,7 +907,10 @@ const formatFixedPhone = (value) => {
   const truncated = digits.slice(0, 11);
 
   // 可能なら JSON の市外局番定義を使って正確に判定（長い方優先）
-  const codes = (typeof window !== 'undefined' && window.PHONE_AREA_CODES) ? window.PHONE_AREA_CODES : null;
+  const codes =
+    typeof window !== 'undefined' && window.PHONE_AREA_CODES
+      ? window.PHONE_AREA_CODES
+      : null;
   if (codes) {
     for (let len = 5; len >= 2; len--) {
       if (truncated.length >= len) {
@@ -975,7 +919,8 @@ const formatFixedPhone = (value) => {
           // 发现した市外局番長に基づきフォーマット
           if (len === 5) {
             if (truncated.length <= 5) return truncated;
-            if (truncated.length <= 8) return truncated.slice(0, 5) + '-' + truncated.slice(5);
+            if (truncated.length <= 8)
+              return truncated.slice(0, 5) + '-' + truncated.slice(5);
             return (
               truncated.slice(0, 5) +
               '-' +
@@ -986,7 +931,8 @@ const formatFixedPhone = (value) => {
           }
           if (len === 4) {
             if (truncated.length <= 4) return truncated;
-            if (truncated.length <= 7) return truncated.slice(0, 4) + '-' + truncated.slice(4);
+            if (truncated.length <= 7)
+              return truncated.slice(0, 4) + '-' + truncated.slice(4);
             return (
               truncated.slice(0, 4) +
               '-' +
@@ -997,7 +943,8 @@ const formatFixedPhone = (value) => {
           }
           if (len === 3) {
             if (truncated.length <= 3) return truncated;
-            if (truncated.length <= 6) return truncated.slice(0, 3) + '-' + truncated.slice(3);
+            if (truncated.length <= 6)
+              return truncated.slice(0, 3) + '-' + truncated.slice(3);
             return (
               truncated.slice(0, 3) +
               '-' +
@@ -1008,7 +955,8 @@ const formatFixedPhone = (value) => {
           }
           if (len === 2) {
             if (truncated.length <= 2) return truncated;
-            if (truncated.length <= 6) return truncated.slice(0, 2) + '-' + truncated.slice(2);
+            if (truncated.length <= 6)
+              return truncated.slice(0, 2) + '-' + truncated.slice(2);
             return (
               truncated.slice(0, 2) +
               '-' +
