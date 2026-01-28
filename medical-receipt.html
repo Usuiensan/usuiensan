@@ -5,191 +5,324 @@ title: 医療費領収証明書作成ツール
 
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>医療費領収証明書作成ツール - 京都産業大学</title>
-    <link rel="stylesheet" href="assets/css/common.css">
-    <link rel="stylesheet" href="assets/css/pages/medical-receipt.css">
-</head>
-<body>
+    <link rel="stylesheet" href="assets/css/common.css" />
+    <link rel="stylesheet" href="assets/css/pages/medical-receipt.css" />
+  </head>
+  <body>
     <div class="container">
-        <header class="header">
-            <h1>📋 医療費領収証明書作成ツール</h1>
-            <p class="subtitle">京都産業大学 学生保険 申請書</p>
-        </header>
+      <header class="header">
+        <h1>📋 医療費領収証明書作成ツール</h1>
+        <p class="subtitle">京都産業大学 学生保険 申請書</p>
+      </header>
 
-        <main class="main-content">
-            <form id="medicalForm">
-                <!-- 基本情報セクション -->
-                <section class="form-section">
-                    <h2>📝 基本情報</h2>
-                    
-                    <div class="form-group">
-                        <label for="certNumber">認定証番号</label>
-                        <input type="text" id="certNumber" name="certNumber" placeholder="例: 123456">
-                    </div>
+      <main class="main-content">
+        <form id="medicalForm">
+          <!-- 共通情報セクション -->
+          <section class="form-section">
+            <h2>📝 共通情報</h2>
 
-                    <div class="form-group">
-                        <label for="treatmentYear">診療年</label>
-                        <input type="number" id="treatmentYear" name="treatmentYear" value="2026" min="2020" max="2030">
-                    </div>
+            <div class="form-group">
+              <label for="faculty">学部・研究科</label>
+              <input
+                type="text"
+                id="faculty"
+                name="faculty"
+                placeholder="例: 経済学部"
+              />
+            </div>
 
-                    <div class="form-group">
-                        <label for="treatmentMonth">診療月</label>
-                        <select id="treatmentMonth" name="treatmentMonth">
-                            <option value="">選択してください</option>
-                            <option value="1">1月</option>
-                            <option value="2">2月</option>
-                            <option value="3">3月</option>
-                            <option value="4">4月</option>
-                            <option value="5">5月</option>
-                            <option value="6">6月</option>
-                            <option value="7">7月</option>
-                            <option value="8">8月</option>
-                            <option value="9">9月</option>
-                            <option value="10">10月</option>
-                            <option value="11">11月</option>
-                            <option value="12">12月</option>
-                        </select>
-                    </div>
+            <div class="form-group">
+              <label for="grade">年次 <span class="required">*</span></label>
+              <input
+                type="text"
+                id="grade"
+                name="grade"
+                maxlength="1"
+                placeholder="1～4 または M1, D1 など"
+              />
+            </div>
 
-                    <div class="form-group">
-                        <label for="hospitalName">医療機関等名称及び所在地</label>
-                        <textarea id="hospitalName" name="hospitalName" rows="2" placeholder="例: ○○病院&#10;京都市○○区○○町1-1"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="visitCount">当月診療実日数</label>
-                        <input type="number" id="visitCount" name="visitCount" min="1" placeholder="例: 3">
-                    </div>
-                </section>
-
-                <!-- 金額情報セクション -->
-                <section class="form-section">
-                    <h2>💰 金額情報</h2>
-                    
-                    <div class="form-group">
-                        <label for="medicalFee">診療報酬 (円)</label>
-                        <input type="number" id="medicalFee" name="medicalFee" min="0" placeholder="0">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="copayment">一部負担金 (円)</label>
-                        <input type="number" id="copayment" name="copayment" min="0" placeholder="0">
-                    </div>
-                </section>
-
-                <!-- 学生情報セクション -->
-                <section class="form-section">
-                    <h2>🎓 学生情報</h2>
-                    
-                    <div class="form-group">
-                        <label for="studentNumber">学籍番号</label>
-                        <input type="text" id="studentNumber" name="studentNumber" placeholder="例: 2024001234">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="faculty">学部・研究科</label>
-                        <input type="text" id="faculty" name="faculty" placeholder="例: 経済学部">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="grade">学年</label>
-                        <select id="grade" name="grade">
-                            <option value="">選択してください</option>
-                            <option value="1">1年</option>
-                            <option value="2">2年</option>
-                            <option value="3">3年</option>
-                            <option value="4">4年</option>
-                            <option value="M1">M1</option>
-                            <option value="M2">M2</option>
-                            <option value="D1">D1</option>
-                            <option value="D2">D2</option>
-                            <option value="D3">D3</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="studentName">氏名</label>
-                        <input type="text" id="studentName" name="studentName" placeholder="例: 山田 太郎">
-                    </div>
-                </section>
-
-                <!-- 負傷情報セクション -->
-                <section class="form-section">
-                    <h2>🏥 負傷情報</h2>
-                    
-                    <div class="form-group">
-                        <label>負傷の場所</label>
-                        <div class="radio-group">
-                            <label class="radio-label">
-                                <input type="radio" name="injuryPlace" value="正課">
-                                <span>正課</span>
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="injuryPlace" value="課外">
-                                <span>課外</span>
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="injuryPlace" value="通学">
-                                <span>通学</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="injuryDate">負傷日</label>
-                        <input type="date" id="injuryDate" name="injuryDate">
-                    </div>
-
-                    <div class="form-group">
-                        <label>通院方法</label>
-                        <div class="checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="transportation" value="大学行き帰り">
-                                <span>大学行き帰り</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="transportation" value="学校施設内">
-                                <span>学校施設内</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="transportation" value="課外活動中">
-                                <span>課外活動中</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="transportation" value="交通事故">
-                                <span>交通事故</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="transportation" value="その他">
-                                <span>その他</span>
-                            </label>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- アクションボタン -->
-                <div class="action-buttons">
-                    <button type="button" id="previewBtn" class="btn btn-secondary">👁️ プレビュー</button>
-                    <button type="button" id="saveBtn" class="btn btn-secondary">💾 入力保存</button>
-                    <button type="button" id="loadBtn" class="btn btn-secondary">📂 入力読込</button>
-                    <button type="submit" id="generateBtn" class="btn btn-primary">📄 PDF生成</button>
+            <div class="form-group">
+              <label for="studentNumber">学生証番号 <span class="required">*</span></label>
+              <div class="student-number-input">
+                <span>6桁入力（1マス1桁）:</span>
+                <div class="digit-boxes">
+                  <input type="text" class="digit-box" maxlength="1" data-digit="0" />
+                  <input type="text" class="digit-box" maxlength="1" data-digit="1" />
+                  <input type="text" class="digit-box" maxlength="1" data-digit="2" />
+                  <input type="text" class="digit-box" maxlength="1" data-digit="3" />
+                  <input type="text" class="digit-box" maxlength="1" data-digit="4" />
+                  <input type="text" class="digit-box" maxlength="1" data-digit="5" />
                 </div>
-            </form>
-        </main>
+                <input type="hidden" id="studentNumber" name="studentNumber" />
+              </div>
+            </div>
 
-        <footer class="footer">
-            <p>© 2026 Kyoto Sangyo University Medical Receipt Tool</p>
-        </footer>
+            <div class="form-group">
+              <label for="studentName">氏名 <span class="required">*</span></label>
+              <input
+                type="text"
+                id="studentName"
+                name="studentName"
+                placeholder="例: 山田 太郎"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="studentNameKana">振り仮名 <span class="required">*</span></label>
+              <input
+                type="text"
+                id="studentNameKana"
+                name="studentNameKana"
+                placeholder="例: ヤマダ タロウ"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="mobilePhone">携帯電話 <span class="required">*</span></label>
+              <input
+                type="tel"
+                id="mobilePhone"
+                name="mobilePhone"
+                placeholder="090-1234-5678"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="fixedPhone">固定電話</label>
+              <input
+                type="tel"
+                id="fixedPhone"
+                name="fixedPhone"
+                placeholder="06-1234-5678"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>住所区分 <span class="required">*</span></label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" name="addressType" value="1" />
+                  <span>① 自宅</span>
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="addressType" value="2" />
+                  <span>② 自宅外</span>
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="addressType" value="3" />
+                  <span>③ 大学寮</span>
+                </label>
+              </div>
+            </div>
+          </section>
+
+          <!-- 受付番号一覧セクション -->
+          <section class="form-section">
+            <h2>📋 受付番号一覧</h2>
+            <p class="section-description">
+              事前申請で受け取った受付番号を入力してください（複数対応）
+            </p>
+
+            <div id="receiptNumbersContainer">
+              <!-- 動的に追加される -->
+            </div>
+
+            <button
+              type="button"
+              id="addReceiptBtn"
+              class="btn btn-secondary"
+            >
+              ➕ 受付番号を追加
+            </button>
+          </section>
+
+          <!-- 傷病情報セクション -->
+          <section class="form-section">
+            <h2>🏥 傷病情報</h2>
+
+            <div class="form-group">
+              <label for="diseaseName">傷病名 <span class="required">*</span></label>
+              <input
+                type="text"
+                id="diseaseName"
+                name="diseaseName"
+                placeholder="例: 急性胃腸炎"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>
+                <input type="checkbox" id="isInjury" name="isInjury" />
+                <span>負傷の場合（以下を入力）</span>
+              </label>
+            </div>
+
+            <div id="injurySection" class="injury-section" style="display: none">
+              <div class="form-group">
+                <label for="injuryDate">負傷日 <span class="required">*</span></label>
+                <input
+                  type="date"
+                  id="injuryDate"
+                  name="injuryDate"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="injurySituation">受傷状況</label>
+                <textarea
+                  id="injurySituation"
+                  name="injurySituation"
+                  rows="3"
+                  placeholder="例: 体育の授業中に転倒"
+                ></textarea>
+              </div>
+            </div>
+          </section>
+
+          <!-- 金融機関情報セクション -->
+          <section class="form-section">
+            <h2>🏦 金融機関振込先</h2>
+
+            <div class="form-group">
+              <label>振込先選択 <span class="required">*</span></label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input
+                    type="radio"
+                    name="bankTransferType"
+                    value="previous"
+                  />
+                  <span>前回と同じ</span>
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="bankTransferType" value="new" />
+                  <span>新規</span>
+                </label>
+                <label class="radio-label">
+                  <input
+                    type="radio"
+                    name="bankTransferType"
+                    value="change"
+                  />
+                  <span>変更</span>
+                </label>
+              </div>
+            </div>
+
+            <div
+              id="bankDetailsSection"
+              class="bank-details-section"
+              style="display: none"
+            >
+              <div class="form-group">
+                <label for="bankName">金融機関名 <span class="required">*</span></label>
+                <input
+                  type="text"
+                  id="bankName"
+                  name="bankName"
+                  placeholder="例: 三菱UFJ銀行"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="branchName">支店名 <span class="required">*</span></label>
+                <input
+                  type="text"
+                  id="branchName"
+                  name="branchName"
+                  placeholder="例: 京都支店"
+                />
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="bankCode">銀行コード <span class="required">*</span></label>
+                  <input
+                    type="text"
+                    id="bankCode"
+                    name="bankCode"
+                    maxlength="4"
+                    placeholder="例: 0005"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="branchCode">支店コード <span class="required">*</span></label>
+                  <input
+                    type="text"
+                    id="branchCode"
+                    name="branchCode"
+                    maxlength="3"
+                    placeholder="例: 055"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="accountName"
+                  >カタカナ口座名義 <span class="required">*</span></label
+                >
+                <input
+                  type="text"
+                  id="accountName"
+                  name="accountName"
+                  placeholder="例: ヤマダタロウ"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="accountNumber">口座番号 <span class="required">*</span></label>
+                <div class="account-number-input">
+                  <span>最大7桁（右づめ、1マス1桁）:</span>
+                  <div class="account-boxes">
+                    <input type="text" class="account-box" maxlength="1" data-digit="0" />
+                    <input type="text" class="account-box" maxlength="1" data-digit="1" />
+                    <input type="text" class="account-box" maxlength="1" data-digit="2" />
+                    <input type="text" class="account-box" maxlength="1" data-digit="3" />
+                    <input type="text" class="account-box" maxlength="1" data-digit="4" />
+                    <input type="text" class="account-box" maxlength="1" data-digit="5" />
+                    <input type="text" class="account-box" maxlength="1" data-digit="6" />
+                  </div>
+                  <input type="hidden" id="accountNumber" name="accountNumber" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- アクションボタン -->
+          <div class="action-buttons">
+            <button type="button" id="saveBtn" class="btn btn-secondary">
+              💾 入力保存
+            </button>
+            <button type="button" id="loadBtn" class="btn btn-secondary">
+              📂 入力読込
+            </button>
+            <button type="button" id="clearBtn" class="btn btn-secondary">
+              🗑️ クリア
+            </button>
+            <button type="submit" id="generateBtn" class="btn btn-primary">
+              📄 PDF生成
+            </button>
+          </div>
+        </form>
+      </main>
+
+      <footer class="footer">
+        <p>© 2026 Kyoto Sangyo University Medical Receipt Tool</p>
+      </footer>
     </div>
 
     <!-- PDF-LIB ライブラリ -->
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://unpkg.com/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
-    
+
     <!-- カスタムスクリプト -->
     <script src="assets/js/medical-receipt.js"></script>
-</body>
+  </body>
 </html>
+
