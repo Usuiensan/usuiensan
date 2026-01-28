@@ -1,41 +1,62 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <link rel="icon" type="image/x-xicon" href="{{ site.baseurl }}/favicon.ico">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#C0ffee">
-  <title>
-  {% if page.title %}{{ page.title }}{% endif %}
-  {% if site.author %} - {{ site.author }}{% endif %}
-</title>
-  <link rel="stylesheet" href="{{ site.baseurl }}/style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=OCR+B&display=swap" rel="stylesheet">
-  <!-- レアな文字表示のためのNoto Sansファミリー -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+Symbols:wght@400&family=Noto+Sans+Symbols+2:wght@400&family=Noto+Sans+Math:wght@400&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="manifest" href="{{ site.baseurl }}/manifest.json">
-  <link rel="apple-touch-icon" href="/assets/icons/192.png">
-</head>
-<body>
-  <div class="container">
-    {{ content }}
-    <!-- <script src="{{ site.baseurl }}/script.js"></script> -->
-  <div class="mini-nav">
-    <a href="{{ site.baseurl }}/index.html">ランダム文字列生成</a>
-    <span class="mini-sep"></span>
-    <a href="{{ site.baseurl }}/count.html">文字カウンタ</a>
-    <span class="mini-sep"></span>
-    <a href="{{ site.baseurl }}/mywork.html">制作物</a>
-    <span class="mini-sep"></span>
-    <a href="{{ site.baseurl }}/links.html">リンク集</a>
-    <span class="mini-sep"></span>
-    <a href="{{ site.baseurl }}/sitemap.html">サイトマップ</a>
-  </div>
-  </div>
-  <!-- サービスワーカー登録スクリプト -->
-  <script src="{{ site.baseurl }}/assets/js/sw-register.js" defer></script>
-</body>
+  <head>
+    <link
+      rel="icon"
+      type="image/x-xicon"
+      href="{{ site.baseurl }}/favicon.ico"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#C0ffee" />
+    <title>
+      {% if page.title %}{{ page.title }}{% endif %} {% if site.author %} - {{
+      site.author }}{% endif %}
+    </title>
+    <!-- 共通スタイル -->
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/common.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=OCR+B&display=swap"
+      rel="stylesheet"
+    />
+    <!-- レアな文字表示のためのNoto Sansファミリー -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+Symbols:wght@400&family=Noto+Sans+Symbols+2:wght@400&family=Noto+Sans+Math:wght@400&family=Noto+Color+Emoji&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="manifest" href="{{ site.baseurl }}/manifest.json" />
+    <link rel="apple-touch-icon" href="/assets/icons/192.png" />
+    <!-- ページ固有スタイル -->
+    {% if page.custom_css %} {% for stylesheet in page.custom_css %}
+    <link rel="stylesheet" href="{{ site.baseurl }}{{ stylesheet }}" />
+    {% endfor %} {% endif %}
+  </head>
+  <body>
+    <div class="container">
+      {{ content }}
+      <!-- <script src="{{ site.baseurl }}/script.js"></script> -->
+      <div class="mini-nav">
+        <a href="{{ site.baseurl }}/index.html">ランダム文字列生成</a>
+        <span class="mini-sep"></span>
+        <a href="{{ site.baseurl }}/count.html">文字カウンタ</a>
+        <span class="mini-sep"></span>
+        <a href="{{ site.baseurl }}/mywork.html">制作物</a>
+        <span class="mini-sep"></span>
+        <a href="{{ site.baseurl }}/links.html">リンク集</a>
+        <span class="mini-sep"></span>
+        <a href="{{ site.baseurl }}/sitemap.html">サイトマップ</a>
+      </div>
+    </div>
+    <!-- サービスワーカー登録スクリプト -->
+    <script src="{{ site.baseurl }}/assets/js/sw-register.js" defer></script>
+  </body>
 </html>

@@ -1,0 +1,401 @@
+/* ==========================================================================
+   共通スタイル（全ページ）
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   テーマ変数
+   -------------------------------------------------------------------------- */
+:root {
+  --main: #c0ffee; /* メインカラー（薄いミント系、爽やかで軽やかな印象） */
+  --main-h: 164; /* おおよその色相（緑寄りシアン） */
+  --main-s: 100%;
+  --main-l: 88%;
+
+  /* コントラスト用ダークバリエーション */
+  --main-contrast: hsl(var(--main-h) var(--main-s) 50%);
+  --main-contrast-dark: hsl(var(--main-h) 60% 38%);
+
+  --text-on-light: #222222;
+  --text-on-dark: #ffffff;
+
+  --btn-shadow: rgba(0, 0, 0, 0.08);
+}
+
+/* --------------------------------------------------------------------------
+   ベーススタイル
+   -------------------------------------------------------------------------- */
+body {
+  font-family:
+    'Hiragino Sans', 'Noto Sans JP', 'Apple Color Emoji', 'Noto Color Emoji',
+    'Noto Sans Symbols', 'Noto Sans Symbols 2', 'Noto Sans Math',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Yu Gothic UI', 'Meiryo UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #c0ffee;
+  color: var(--text-on-light);
+}
+
+.container {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 80%;
+  max-width: 600px;
+}
+
+.note {
+  background: #fffbe6;
+  border-left: 6px solid #ffd700;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 4px;
+  color: #333;
+  font-size: 1em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  z-index: 1;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* --------------------------------------------------------------------------
+   テキストスタイル
+   -------------------------------------------------------------------------- */
+.container p,
+.container li,
+.container a {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.container ul,
+.container li {
+  text-align: left;
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+h1 {
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* --------------------------------------------------------------------------
+   フォーム要素
+   -------------------------------------------------------------------------- */
+input[type='number'],
+select,
+textarea {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  margin: 5px 0 15px;
+  background-color: #f8f8f8;
+  color: #333;
+  font-size: 16px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+  width: 100%;
+  box-sizing: border-box;
+  font-feature-settings:
+    'liga' 1,
+    'kern' 1;
+  line-height: 1.5;
+}
+
+input[type='number']::placeholder {
+  color: #999;
+}
+
+input[type='radio'] {
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+input[type='checkbox'] {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+label {
+  display: inline-block;
+  width: auto;
+  margin: 10px 0 5px;
+  color: #555;
+  font-size: 16px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+/* --------------------------------------------------------------------------
+   ボタン
+   -------------------------------------------------------------------------- */
+button,
+#copy-url-btn,
+#generate-url-btn,
+.regenerate-btn {
+  padding: 12px 24px;
+  background-color: #339988;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+  font-size: 16px;
+  margin-top: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button:hover,
+#copy-url-btn:hover,
+#generate-url-btn:hover,
+.regenerate-btn:hover {
+  background-color: #2b7a66;
+  color: #fff;
+}
+
+button:focus,
+#copy-url-btn:focus,
+#generate-url-btn:focus,
+.regenerate-btn:focus {
+  outline: 3px solid rgba(51, 153, 136, 0.18);
+  outline-offset: 2px;
+}
+
+.btn {
+  background: var(--main);
+  color: var(--text-on-light);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px var(--btn-shadow);
+  cursor: pointer;
+}
+
+.btn--strong {
+  background: var(--main-contrast);
+  color: var(--text-on-dark);
+  border: none;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+.btn:hover {
+  filter: brightness(0.98);
+}
+
+/* --------------------------------------------------------------------------
+   テーブル
+   -------------------------------------------------------------------------- */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 15px 0;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+table th,
+table td {
+  padding: 16px 20px;
+  text-align: left;
+  border-bottom: 1px solid #e5e5e5;
+  vertical-align: middle;
+}
+
+table th {
+  background: linear-gradient(135deg, #c0ffee 0%, #b5f5e3 100%);
+  font-weight: 600;
+  color: #2d5a2d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+  border-bottom: 2px solid #a8e6d4;
+}
+
+table td {
+  font-weight: 500;
+  color: #333;
+}
+
+table tr:last-child td {
+  border-bottom: none;
+}
+
+table tr:hover {
+  background-color: #f8fffe;
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  color: #333;
+}
+
+td {
+  color: #555;
+}
+
+.description {
+  font-size: 0.8em;
+  color: #444;
+  margin-top: 4px;
+}
+
+/* フォームテーブルスタイル */
+.form-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.form-table td {
+  border: none;
+  padding: 8px 12px;
+  vertical-align: middle;
+}
+
+.form-table td:first-child {
+  text-align: right;
+  width: 30%;
+  font-weight: bold;
+  color: #555;
+}
+
+.form-table td:last-child {
+  text-align: left;
+  width: 70%;
+}
+
+/* 車種・用途情報テーブルの固定レイアウト */
+.vehicle-info-table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+  margin-bottom: 20px;
+}
+
+.vehicle-info-table th,
+.vehicle-info-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.vehicle-info-table th:first-child,
+.vehicle-info-table td:first-child {
+  width: 25%;
+  font-weight: bold;
+  background-color: #f8f9fa;
+}
+
+.vehicle-info-table th:last-child,
+.vehicle-info-table td:last-child {
+  width: 75%;
+}
+
+.vehicle-info-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  color: #333;
+}
+
+.vehicle-info-table td {
+  color: #555;
+}
+
+/* --------------------------------------------------------------------------
+   ナビゲーション
+   -------------------------------------------------------------------------- */
+.mini-nav {
+  margin-top: 18px;
+  font-size: 0.75rem;
+  color: #666;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.mini-nav a {
+  color: #444;
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+.mini-nav a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.mini-sep {
+  color: #444;
+  user-select: none;
+}
+
+/* --------------------------------------------------------------------------
+   ユーティリティ
+   -------------------------------------------------------------------------- */
+.muted {
+  color: #444;
+}
+
+.box {
+  display: inline-block;
+  min-width: 8rem;
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   レスポンシブデザイン
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+    padding: 20px;
+  }
+
+  input[type='number'],
+  select,
+  textarea {
+    width: calc(100% - 24px);
+  }
+
+  table {
+    font-size: 0.9em;
+  }
+
+  th,
+  td {
+    padding: 8px;
+  }
+}

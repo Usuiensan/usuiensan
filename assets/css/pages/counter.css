@@ -1,0 +1,152 @@
+/* ==========================================================================
+   文字カウンタページ固有スタイル (count.html)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   入力エリア
+   -------------------------------------------------------------------------- */
+.input-container {
+  margin: 16px 0;
+}
+
+#textInput,
+#preview {
+  width: 100%;
+  max-width: 600px;
+  box-sizing: border-box;
+  margin: 0 auto 16px auto;
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   プレビューコンテナ
+   -------------------------------------------------------------------------- */
+.preview-container {
+  background: #f8fffe;
+  border: 2px solid #c0ffee;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 0 2px 8px rgba(192, 255, 238, 0.08);
+}
+
+#preview {
+  min-height: 2em;
+  margin-top: 12px;
+  text-align: left;
+  word-break: break-word;
+  white-space: pre-wrap;
+  font-feature-settings:
+    'liga' 1,
+    'kern' 1;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* --------------------------------------------------------------------------
+   ハイライト表示
+   -------------------------------------------------------------------------- */
+.highlight-nonsjis {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 230, 230, 0.9),
+    rgba(255, 200, 200, 0.9)
+  );
+  border-radius: 4px;
+  padding: 1px 3px;
+  margin: 0 1px;
+  display: inline-block;
+}
+
+.highlight-vs {
+  background: linear-gradient(
+    90deg,
+    rgba(230, 245, 255, 0.9),
+    rgba(200, 235, 255, 0.9)
+  );
+  border-radius: 4px;
+  padding: 1px 3px;
+  margin: 0 1px;
+  display: inline-block;
+}
+
+/* 両方ハイライトされるケース */
+.highlight-nonsjis.highlight-vs {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 230, 230, 0.9),
+    rgba(200, 235, 255, 0.9)
+  );
+}
+
+/* --------------------------------------------------------------------------
+   レアな文字・古代文字・特殊記号の表示改善
+   -------------------------------------------------------------------------- */
+.rare-chars,
+.ancient-scripts,
+.special-symbols {
+  font-family:
+    'Noto Sans Symbols 2', 'Noto Sans Symbols', 'Noto Sans Math', 'Noto Sans',
+    'Noto Sans CJK JP', 'Noto Sans JP', 'Noto Color Emoji', 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Symbola', 'DejaVu Sans', 'Unifont',
+    'Code2000', monospace, sans-serif;
+  font-feature-settings:
+    'liga' 1,
+    'kern' 1,
+    'calt' 1;
+  font-variant-ligatures: common-ligatures contextual;
+  text-rendering: optimizeQuality;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Unicode Private Use Area等の特殊範囲をサポート */
+.unicode-pua {
+  font-family:
+    'LastResort', 'Noto Sans Symbols 2', 'Noto Sans Symbols', '.AppleSymbolsFB',
+    'Symbola', 'DejaVu Sans', monospace, sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   Shift-JIS互換性チェック結果のスタイル
+   -------------------------------------------------------------------------- */
+.sjis-compatible {
+  color: #0d7377;
+  background-color: rgba(192, 255, 238, 0.3);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border-left: 3px solid #0d7377;
+}
+
+.sjis-incompatible {
+  color: #d63384;
+  background-color: rgba(255, 228, 230, 0.7);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border-left: 3px solid #d63384;
+}
+
+/* --------------------------------------------------------------------------
+   プレビュー凡例
+   -------------------------------------------------------------------------- */
+.preview-legend {
+  margin: 8px 0 16px 0;
+  font-size: 0.95em;
+  color: #333;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+
+.preview-legend span {
+  display: inline-block;
+  min-width: 1.5em;
+  text-align: center;
+  margin-right: 4px;
+  padding: 2px 6px;
+  font-weight: bold;
+  border-radius: 4px;
+}
