@@ -45,14 +45,12 @@ function init() {
     try {
       loadFormDataWithoutMessage();
     } catch (error) {
-      console.log('前回の入力データはありません');
+      // 前回のデータが無い場合は何もしない
     }
   }
 
   // 自動保存機能を有効化
   setupAutoSave();
-
-  console.log('医療費領収証明書作成ツール 初期化完了');
 }
 
 /**
@@ -915,25 +913,11 @@ function preparePDFData(formData, receiptSet = null) {
   // ===== 受付番号リスト =====
   // 受付番号は複数入力可能（最大4桁×複数）
   if (formData.receiptNumber) {
-    console.log(
-      `[DEBUG] preparePDFData receiptNumber input:`,
-      formData.receiptNumber,
-      typeof formData.receiptNumber,
-      Array.isArray(formData.receiptNumber),
-    );
-
     const receiptNumbers = Array.isArray(formData.receiptNumber)
       ? formData.receiptNumber
       : [formData.receiptNumber];
     // 空値を除外して、クリーンなリストを作成
     pdfData.receiptNumber = receiptNumbers.filter((num) => num && num.trim());
-
-    console.log(
-      `[DEBUG] preparePDFData receiptNumber output:`,
-      pdfData.receiptNumber,
-      typeof pdfData.receiptNumber,
-      Array.isArray(pdfData.receiptNumber),
-    );
   }
 
   return pdfData;
@@ -969,14 +953,6 @@ function writePDFFieldsFromMappings(page, font, pdfData) {
       switch (mapping.type) {
         case 'text':
           // テキスト単一フィールド
-          // 銀行コード・支店コードの場合はデバッグログを出力
-          if (fieldName === 'bankCode' || fieldName === 'branchCode') {
-            console.log(`[DEBUG] ${fieldName}:`, {
-              value: value,
-              type: typeof value,
-              isArray: Array.isArray(value),
-            });
-          }
           writeTextField(page, font, mapping, value, height, pdfData);
           break;
 
@@ -997,13 +973,11 @@ function writePDFFieldsFromMappings(page, font, pdfData) {
 
         case 'radio_circle':
           // ラジオボタン（○で囲む）
-          console.log(`[DEBUG] radio_circle: ${fieldName}`, value);
           writeRadioCircle(page, mapping, value, height);
           break;
 
         case 'checkbox_mark':
           // チェックボックス（✓マーク）
-          console.log(`[DEBUG] checkbox_mark: ${fieldName}`, value);
           writeCheckboxMark(page, font, mapping, value, height);
           break;
 
@@ -1032,15 +1006,6 @@ function writeTextField(page, font, mapping, value, pageHeight, pdfData = {}) {
   }
 
   if (!actualValue) return;
-
-  // デバッグ：銀行コード・支店コード
-  if (mapping.name === 'bankCode' || mapping.name === 'branchCode') {
-    console.log(`[writeTextField] ${mapping.name}:`, {
-      actualValue: actualValue,
-      before: String(actualValue),
-      mapped: window.PDF_FIELD_MAPPINGS?.[mapping.name],
-    });
-  }
 
   // options 配列を持つ場合（条件付きフィールド）
   if (mapping.options && Array.isArray(mapping.options)) {
@@ -1232,24 +1197,15 @@ function writeRadioCircle(page, mapping, selectedOption, pageHeight) {
  * y 座標はテキストベースライン（下側）を基準として動作
  */
 function writeCheckboxMark(page, font, mapping, selectedOption, pageHeight) {
-  console.log('[DEBUG] writeCheckboxMark called', {
-    isArray: Array.isArray(selectedOption),
-    selectedOption,
-  });
-
   // 配列形式（複数選択）に対応
   if (Array.isArray(selectedOption)) {
-    console.log('[DEBUG] Array mode, count:', selectedOption.length);
     // 全ての選択肢に「✓」を描画
     selectedOption.forEach((option, idx) => {
-      console.log(`[DEBUG] Processing option ${idx}:`, option);
       if (!option || !option.x || !option.y) {
-        console.log(`[DEBUG] Skipping option ${idx}: missing x/y`);
         return;
       }
 
       const yInPDF = pageHeight - option.y;
-      console.log(`[DEBUG] Drawing mark at (${option.x}, ${yInPDF})`);
 
       page.drawText('✓', {
         x: option.x,
@@ -1400,8 +1356,6 @@ async function generatePDF() {
 
     // 各受付番号セットごとにPDFページを作成
     for (const receiptSet of data.receiptSets) {
-      console.log(`[DEBUG] Processing receiptSet:`, receiptSet);
-
       const page = pdfDoc.addPage([595.28, 841.89]); // A4サイズ
       const { width, height } = page.getSize();
 
@@ -1487,8 +1441,6 @@ function setupAutoSave() {
       saveFormData(true);
     });
   });
-
-  console.log('自動保存機能が有効です');
 }
 
 // ページ読み込み時に初期化
@@ -1654,7 +1606,7 @@ async function generatePDF_DUPLICATE() {
         height: height,
       });
     } catch (error) {
-      console.log('背景画像なし。白紙で生成します。');
+      // 背景画像なし。白紙で生成
       // 背景を白で塗りつぶし
       page.drawRectangle({
         x: 0,
@@ -2005,7 +1957,6 @@ function drawCheckMark(page, x, y) {
  */
 function previewForm() {
   const data = getFormData();
-  console.log('フォームデータプレビュー:', data);
   showMessage('プレビュー機能は開発中です', 'success');
 }
 
