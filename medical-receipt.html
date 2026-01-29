@@ -17,6 +17,11 @@ title: 医療費領収証明書作成ツール
       <header class="header">
         <h1>📋 医療費領収証明書(通院)作成ツール</h1>
         <p class="subtitle">京都産業大学学生健康保険互助会用</p>
+        <p class="notice">
+          ※ このツールは京都産業大学とは一切関係ありません。自己責任でご利用ください。
+        </p>
+        <a href="https://www.kyoto-su.ac.jp/about/shien/gakuseikenpo.html" ">学生健康保険互助会制度 | 経済支援 | 大学紹介 | 京都産業大学</a>
+        <p>このページに入力する前に、上のリンクから医療費申請入力を行い、受付番号を確認してください。</p>
       </header>
 
       <main class="main-content">
@@ -164,9 +169,10 @@ title: 医療費領収証明書作成ツール
 
           <!-- 受付番号一覧セクション -->
           <section class="form-section">
-            <h2>📋 受付番号一覧</h2>
+            <h2>📋 受付番号・傷病情報一覧</h2>
             <p class="section-description">
-              事前申請で受け取った受付番号を入力してください（複数対応）
+              事前申請で受け取った受付番号と傷病情報を入力してください（複数対応）<br>
+              ※ 同一疾病で複数枚の領収書がある場合は領収書枚数を入力してください
             </p>
 
             <div id="receiptNumbersContainer">
@@ -178,21 +184,8 @@ title: 医療費領収証明書作成ツール
             </button>
           </section>
 
-          <!-- 傷病情報セクション -->
-          <section class="form-section">
-            <h2>🏥 傷病情報</h2>
-
-            <div class="form-group">
-              <label for="diseaseName"
-                >傷病名 <span class="required">*</span></label
-              >
-              <input
-                type="text"
-                id="diseaseName"
-                name="diseaseName"
-                placeholder="例: 急性胃腸炎"
-              />
-            </div>
+          <!-- 傷病情報セクション（削除） -->
+          <!-- 受付番号セクションに統合されました -->
 
             <div class="form-group">
               <label>

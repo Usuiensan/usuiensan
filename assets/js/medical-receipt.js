@@ -71,18 +71,99 @@ function addReceiptNumber() {
   receiptElement.className = 'receipt-number-group';
   receiptElement.id = receiptId;
   receiptElement.innerHTML = `
+    <div class="receipt-group-header">
+      <h3>受付番号・傷病セット ${receiptNumberCount}</h3>
+      ${receiptNumberCount > 1 ? `<button type="button" class="btn btn-danger btn-small" onclick="removeReceiptNumber('${receiptId}')">削除</button>` : ''}
+    </div>
     <div class="form-group">
-      <label for="${receiptId}-number">受付番号 ${receiptNumberCount} <span class="required">*</span></label>
-      <div class="receipt-input-group">
-        <input
-          type="text"
-          id="${receiptId}-number"
-          name="receiptNumber"
-          class="receipt-number"
-          placeholder="例: 1234"
-          maxlength="4"
-        />
-        ${receiptNumberCount > 1 ? `<button type="button" class="btn btn-danger btn-small" onclick="removeReceiptNumber('${receiptId}')">削除</button>` : ''}
+      <label for="${receiptId}-number">受付番号 <span class="required">*</span></label>
+      <input
+        type="text"
+        id="${receiptId}-number"
+        name="receiptNumber-${receiptNumberCount}"
+        class="receipt-number"
+        placeholder="例: 1234"
+        maxlength="4"
+      />
+    </div>
+    <div class="form-group">
+      <label for="${receiptId}-diseaseName">傷病名 <span class="required">*</span></label>
+      <input
+        type="text"
+        id="${receiptId}-diseaseName"
+        name="diseaseName-${receiptNumberCount}"
+        class="disease-name"
+        placeholder="例: 急性胃腸炎"
+      />
+    </div>
+    <div class="form-group">
+      <label for="${receiptId}-receiptCount">領収書枚数（同一疾病で複数枚の場合）</label>
+      <input
+        type="number"
+        id="${receiptId}-receiptCount"
+        name="receiptCount-${receiptNumberCount}"
+        class="receipt-count"
+        placeholder="例: 3"
+        min="1"
+        max="99"
+      />
+      <span class="helper-text">※ 同一疾病で複数枚の領収書がある場合のみ入力（PDF欄外に記載されます）</span>
+    </div>
+    <div class="form-group">
+      <label>
+        <input type="checkbox" id="${receiptId}-isInjury" name="isInjury-${receiptNumberCount}" class="is-injury-check" />
+        <span>負傷の場合（以下を入力）</span>
+      </label>
+    </div>
+    <div class="injury-section" id="${receiptId}-injurySection" style="display: none">
+      <div class="form-group">
+        <label for="${receiptId}-injuryContext">負傷状況 <span class="required">*</span></label>
+        <select id="${receiptId}-injuryContext" name="injuryContext-${receiptNumberCount}" class="injury-context">
+          <option value="">選択してください</option>
+          <option value="正課中">正課中</option>
+          <option value="大学行事中">大学行事中</option>
+          <option value="学校施設内">学校施設内</option>
+          <option value="課外活動中">課外活動中</option>
+          <option value="交通事故">交通事故</option>
+          <option value="その他">その他</option>
+        </select>
+      </div>
+      <div class="form-group injury-context-detail" id="${receiptId}-subjectName-field" style="display: none">
+        <label for="${receiptId}-subjectName">科目名 <span class="required">*</span></label>
+        <input type="text" id="${receiptId}-subjectName" name="subjectName-${receiptNumberCount}" class="subject-name" placeholder="例: 体育実技" />
+      </div>
+      <div class="form-group injury-context-detail" id="${receiptId}-eventName-field" style="display: none">
+        <label for="${receiptId}-eventName">行事名 <span class="required">*</span></label>
+        <input type="text" id="${receiptId}-eventName" name="eventName-${receiptNumberCount}" class="event-name" placeholder="例: 学園祭" />
+      </div>
+      <div class="form-group injury-context-detail" id="${receiptId}-clubName-field" style="display: none">
+        <label for="${receiptId}-clubName">団体名 <span class="required">*</span></label>
+        <input type="text" id="${receiptId}-clubName" name="clubName-${receiptNumberCount}" class="club-name" placeholder="例: サッカー部" />
+      </div>
+      <div class="form-group injury-context-detail" id="${receiptId}-accidentParty-field" style="display: none">
+        <label>相手 <span class="required">*</span></label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" name="accidentParty-${receiptNumberCount}" value="有り" class="accident-party" />
+            <span>有り</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="accidentParty-${receiptNumberCount}" value="無し" class="accident-party" />
+            <span>無し</span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="${receiptId}-injuryLocation">けがの場所 <span class="required">*</span></label>
+        <input type="text" id="${receiptId}-injuryLocation" name="injuryLocation-${receiptNumberCount}" class="injury-location" placeholder="例: 体育館" />
+      </div>
+      <div class="form-group">
+        <label for="${receiptId}-injuryCause">原因 <span class="required">*</span></label>
+        <input type="text" id="${receiptId}-injuryCause" name="injuryCause-${receiptNumberCount}" class="injury-cause" placeholder="例: バスケットボール中にねん挫" />
+      </div>
+      <div class="form-group">
+        <label for="${receiptId}-injuryDate">負傷日 <span class="required">*</span></label>
+        <input type="date" id="${receiptId}-injuryDate" name="injuryDate-${receiptNumberCount}" class="injury-date" />
       </div>
     </div>
   `;
@@ -90,9 +171,60 @@ function addReceiptNumber() {
   receiptNumbersContainer.appendChild(receiptElement);
 
   // 新しい入力要素を自動保存イベントに登録
-  const input = receiptElement.querySelector(`#${receiptId}-number`);
-  input.addEventListener('input', () => saveFormData(true));
-  input.addEventListener('change', () => saveFormData(true));
+  const inputs = receiptElement.querySelectorAll('input, select');
+  inputs.forEach((input) => {
+    input.addEventListener('input', () => saveFormData(true));
+    input.addEventListener('change', () => saveFormData(true));
+  });
+
+  // 負傷チェックボックスのイベント
+  const isInjuryCheck = receiptElement.querySelector(`#${receiptId}-isInjury`);
+  const injurySection = receiptElement.querySelector(
+    `#${receiptId}-injurySection`,
+  );
+  isInjuryCheck.addEventListener('change', (e) => {
+    injurySection.style.display = e.target.checked ? 'block' : 'none';
+    saveFormData(true);
+  });
+
+  // 負傷状況プルダウンのイベント
+  const injuryContextSelect = receiptElement.querySelector(
+    `#${receiptId}-injuryContext`,
+  );
+  injuryContextSelect.addEventListener('change', (e) => {
+    const value = e.target.value;
+    const subjectNameField = receiptElement.querySelector(
+      `#${receiptId}-subjectName-field`,
+    );
+    const eventNameField = receiptElement.querySelector(
+      `#${receiptId}-eventName-field`,
+    );
+    const clubNameField = receiptElement.querySelector(
+      `#${receiptId}-clubName-field`,
+    );
+    const accidentPartyField = receiptElement.querySelector(
+      `#${receiptId}-accidentParty-field`,
+    );
+
+    // すべて非表示
+    subjectNameField.style.display = 'none';
+    eventNameField.style.display = 'none';
+    clubNameField.style.display = 'none';
+    accidentPartyField.style.display = 'none';
+
+    // 選択された状況に応じて表示
+    if (value === '正課中') {
+      subjectNameField.style.display = 'block';
+    } else if (value === '大学行事中') {
+      eventNameField.style.display = 'block';
+    } else if (value === '課外活動中') {
+      clubNameField.style.display = 'block';
+    } else if (value === '交通事故') {
+      accidentPartyField.style.display = 'block';
+    }
+
+    saveFormData(true);
+  });
 }
 
 /**
@@ -333,26 +465,88 @@ function updateAccountNumberInput(boxes, hiddenInput) {
  * フォームデータの収集
  */
 function getFormData() {
+  console.log('[DEBUG] getFormData 開始');
   const data = {};
 
   // 基本フォーム要素の取得
   const formData = new FormData(form);
 
   for (let [key, value] of formData.entries()) {
-    if (key === 'receiptNumber') {
-      // 受付番号は配列として保存
-      console.log(`[DEBUG] receiptNumber entry:`, {key, value, type: typeof value});
-      if (!data[key]) data[key] = [];
-      if (value) data[key].push(value);
+    if (
+      key === 'receiptNumber' ||
+      key === 'diseaseName' ||
+      key === 'receiptCount' ||
+      key === 'isInjury' ||
+      key === 'injuryContext' ||
+      key === 'subjectName' ||
+      key === 'eventName' ||
+      key === 'clubName' ||
+      key === 'injuryLocation' ||
+      key === 'injuryCause' ||
+      key === 'injuryDate' ||
+      key.startsWith('accidentParty-')
+    ) {
+      // 受付番号セット関連はスキップ（後で個別に取得）
+      continue;
     } else if (key === 'accidentParty') {
-      // ラジオボタンも処理（複数の同じ名前）
+      // 旧フォーマットのaccidentPartyも処理
       data[key] = value;
     } else {
       data[key] = value;
     }
   }
 
-  console.log(`[DEBUG] getFormData result receiptNumber:`, data.receiptNumber);
+  // 受付番号セットを個別に取得
+  const receiptSets = [];
+  const receiptGroups = receiptNumbersContainer.querySelectorAll(
+    '.receipt-number-group',
+  );
+
+  receiptGroups.forEach((group) => {
+    const receiptNumberInput = group.querySelector('.receipt-number');
+    const diseaseNameInput = group.querySelector('.disease-name');
+    const receiptCountInput = group.querySelector('.receipt-count');
+    const isInjuryCheck = group.querySelector('.is-injury-check');
+    const injuryContextSelect = group.querySelector('.injury-context');
+    const subjectNameInput = group.querySelector('.subject-name');
+    const eventNameInput = group.querySelector('.event-name');
+    const clubNameInput = group.querySelector('.club-name');
+    const accidentPartyRadios = group.querySelectorAll('.accident-party');
+    const injuryLocationInput = group.querySelector('.injury-location');
+    const injuryCauseInput = group.querySelector('.injury-cause');
+    const injuryDateInput = group.querySelector('.injury-date');
+
+    const set = {
+      receiptNumber: receiptNumberInput?.value || '',
+      diseaseName: diseaseNameInput?.value || '',
+      receiptCount: receiptCountInput?.value || '',
+      isInjury: isInjuryCheck?.checked || false,
+      injuryContext: injuryContextSelect?.value || '',
+      subjectName: subjectNameInput?.value || '',
+      eventName: eventNameInput?.value || '',
+      clubName: clubNameInput?.value || '',
+      accidentParty: '',
+      injuryLocation: injuryLocationInput?.value || '',
+      injuryCause: injuryCauseInput?.value || '',
+      injuryDate: injuryDateInput?.value || '',
+    };
+
+    // ラジオボタンの選択値を取得
+    accidentPartyRadios.forEach((radio) => {
+      if (radio.checked) {
+        set.accidentParty = radio.value;
+      }
+    });
+
+    if (set.receiptNumber) {
+      receiptSets.push(set);
+    }
+  });
+
+  data.receiptSets = receiptSets;
+
+  console.log(`[DEBUG] getFormData receiptSets:`, receiptSets);
+  console.log(`[DEBUG] getFormData 完了:`, data);
   return data;
 }
 
@@ -544,7 +738,7 @@ function showMessage(message, type = 'success') {
  * @param {object} formData - getFormData() の戻り値
  * @returns {object} PDF書き込み用のデータ構造
  */
-function preparePDFData(formData) {
+function preparePDFData(formData, receiptSet = null) {
   if (!window.PDF_VALUE_FORMATTERS) {
     console.error('PDF_VALUE_FORMATTERS が読み込まれていません');
     return null;
@@ -623,59 +817,113 @@ function preparePDFData(formData) {
     }
   }
 
-  // ===== 傷病名（テキスト） =====
-  pdfData.diseaseName = formData.diseaseName || '';
+  // ===== 受付番号セットから情報を取得（優先） =====
+  if (receiptSet) {
+    // 受付番号
+    pdfData.receiptNumber = receiptSet.receiptNumber || '';
 
-  // ===== 負傷状況（チェックボックス） =====
-  if (formData.injuryContext) {
-    const options = window.PDF_FIELD_MAPPINGS.injuryContext.options;
-    if (Array.isArray(formData.injuryContext)) {
-      // テスト全てモード: 複数値を全て処理
-      pdfData.injuryContext = formData.injuryContext.map((val) =>
-        window.PDF_VALUE_FORMATTERS.getSelectedOption(val, options),
-      );
-    } else {
-      // 通常モード: 単一値
-      pdfData.injuryContext = window.PDF_VALUE_FORMATTERS.getSelectedOption(
-        formData.injuryContext,
-        options,
-      );
+    // 傷病名
+    pdfData.diseaseName = receiptSet.diseaseName || '';
+
+    // 領収書枚数
+    pdfData.receiptCount = receiptSet.receiptCount || '';
+
+    // 負傷情報
+    if (receiptSet.isInjury) {
+      pdfData.injuryLocation = receiptSet.injuryLocation || '';
+      pdfData.injuryCause = receiptSet.injuryCause || '';
+
+      if (receiptSet.injuryDate) {
+        pdfData.injuryDate = window.PDF_VALUE_FORMATTERS.formatDate(
+          receiptSet.injuryDate,
+        );
+      }
+
+      // 負傷状況
+      if (receiptSet.injuryContext) {
+        const options = window.PDF_FIELD_MAPPINGS.injuryContext.options;
+        pdfData.injuryContext = window.PDF_VALUE_FORMATTERS.getSelectedOption(
+          receiptSet.injuryContext,
+          options,
+        );
+
+        // 負傷状況に応じた条件付きフィールド
+        if (receiptSet.injuryContext === '正課中') {
+          pdfData.subjectName = receiptSet.subjectName || '';
+        } else if (receiptSet.injuryContext === '大学行事中') {
+          pdfData.eventName = receiptSet.eventName || '';
+        } else if (receiptSet.injuryContext === '課外活動中') {
+          pdfData.clubName = receiptSet.clubName || '';
+        } else if (receiptSet.injuryContext === '交通事故') {
+          // 交通事故の場合、相手有無（○を描画）
+          if (receiptSet.accidentParty) {
+            const options = window.PDF_FIELD_MAPPINGS.accidentParty.options;
+            pdfData.accidentParty =
+              window.PDF_VALUE_FORMATTERS.getSelectedOption(
+                receiptSet.accidentParty,
+                options,
+              );
+          }
+        }
+      }
     }
-  }
+  } else {
+    // 旧形式のフォールバック（後方互換性）
+    // ===== 傷病名（テキスト） =====
+    pdfData.diseaseName = formData.diseaseName || '';
 
-  // ===== 負傷に関連するフィールド =====
-  if (formData.isInjury === 'on' || formData.isInjury === true) {
-    pdfData.injuryLocation = formData.injuryLocation || '';
-    pdfData.injuryCause = formData.injuryCause || '';
-
-    if (formData.injuryDate) {
-      pdfData.injuryDate = window.PDF_VALUE_FORMATTERS.formatDate(
-        formData.injuryDate,
-      );
+    // ===== 負傷状況（チェックボックス） =====
+    if (formData.injuryContext) {
+      const options = window.PDF_FIELD_MAPPINGS.injuryContext.options;
+      if (Array.isArray(formData.injuryContext)) {
+        // テスト全てモード: 複数値を全て処理
+        pdfData.injuryContext = formData.injuryContext.map((val) =>
+          window.PDF_VALUE_FORMATTERS.getSelectedOption(val, options),
+        );
+      } else {
+        // 通常モード: 単一値
+        pdfData.injuryContext = window.PDF_VALUE_FORMATTERS.getSelectedOption(
+          formData.injuryContext,
+          options,
+        );
+      }
     }
 
-    // 負傷状況に応じた条件付きフィールド
-    if (formData.injuryContext === '正課中') {
-      pdfData.subjectName = formData.subjectName || '';
-    } else if (formData.injuryContext === '大学行事中') {
-      pdfData.eventName = formData.eventName || '';
-    } else if (formData.injuryContext === '課外活動中') {
-      pdfData.clubName = formData.clubName || '';
-    } else if (formData.injuryContext === '交通事故') {
-      // 交通事故の場合、相手有無（○を描画）
-      if (formData.accidentParty) {
-        const options = window.PDF_FIELD_MAPPINGS.accidentParty.options;
-        if (Array.isArray(formData.accidentParty)) {
-          // テスト全てモード
-          pdfData.accidentParty = formData.accidentParty.map((val) =>
-            window.PDF_VALUE_FORMATTERS.getSelectedOption(val, options),
-          );
-        } else {
-          // 通常モード
-          pdfData.accidentParty = window.PDF_VALUE_FORMATTERS.getSelectedOption(
-            formData.accidentParty,
-            options,
-          );
+    // ===== 負傷に関連するフィールド =====
+    if (formData.isInjury === 'on' || formData.isInjury === true) {
+      pdfData.injuryLocation = formData.injuryLocation || '';
+      pdfData.injuryCause = formData.injuryCause || '';
+
+      if (formData.injuryDate) {
+        pdfData.injuryDate = window.PDF_VALUE_FORMATTERS.formatDate(
+          formData.injuryDate,
+        );
+      }
+
+      // 負傷状況に応じた条件付きフィールド
+      if (formData.injuryContext === '正課中') {
+        pdfData.subjectName = formData.subjectName || '';
+      } else if (formData.injuryContext === '大学行事中') {
+        pdfData.eventName = formData.eventName || '';
+      } else if (formData.injuryContext === '課外活動中') {
+        pdfData.clubName = formData.clubName || '';
+      } else if (formData.injuryContext === '交通事故') {
+        // 交通事故の場合、相手有無（○を描画）
+        if (formData.accidentParty) {
+          const options = window.PDF_FIELD_MAPPINGS.accidentParty.options;
+          if (Array.isArray(formData.accidentParty)) {
+            // テスト全てモード
+            pdfData.accidentParty = formData.accidentParty.map((val) =>
+              window.PDF_VALUE_FORMATTERS.getSelectedOption(val, options),
+            );
+          } else {
+            // 通常モード
+            pdfData.accidentParty =
+              window.PDF_VALUE_FORMATTERS.getSelectedOption(
+                formData.accidentParty,
+                options,
+              );
+          }
         }
       }
     }
@@ -740,15 +988,25 @@ function preparePDFData(formData) {
   // ===== 受付番号リスト =====
   // 受付番号は複数入力可能（最大4桁×複数）
   if (formData.receiptNumber) {
-    console.log(`[DEBUG] preparePDFData receiptNumber input:`, formData.receiptNumber, typeof formData.receiptNumber, Array.isArray(formData.receiptNumber));
-    
+    console.log(
+      `[DEBUG] preparePDFData receiptNumber input:`,
+      formData.receiptNumber,
+      typeof formData.receiptNumber,
+      Array.isArray(formData.receiptNumber),
+    );
+
     const receiptNumbers = Array.isArray(formData.receiptNumber)
       ? formData.receiptNumber
       : [formData.receiptNumber];
     // 空値を除外して、クリーンなリストを作成
     pdfData.receiptNumber = receiptNumbers.filter((num) => num && num.trim());
-    
-    console.log(`[DEBUG] preparePDFData receiptNumber output:`, pdfData.receiptNumber, typeof pdfData.receiptNumber, Array.isArray(pdfData.receiptNumber));
+
+    console.log(
+      `[DEBUG] preparePDFData receiptNumber output:`,
+      pdfData.receiptNumber,
+      typeof pdfData.receiptNumber,
+      Array.isArray(pdfData.receiptNumber),
+    );
   }
 
   return pdfData;
@@ -1470,11 +1728,13 @@ async function loadJapaneseFont() {
  * PDF生成メイン関数
  */
 async function generatePDF() {
+  console.log('[DEBUG] generatePDF 開始');
   try {
     generateBtn.disabled = true;
     generateBtn.textContent = '生成中...';
 
     const data = getFormData();
+    console.log('[DEBUG] getFormData結果:', data);
 
     // 入力チェック
     const requiredFields = [
@@ -1484,7 +1744,6 @@ async function generatePDF() {
       'studentNameKana',
       'mobilePhone',
       'addressType',
-      'diseaseName',
       'bankTransferType',
     ];
 
@@ -1497,13 +1756,9 @@ async function generatePDF() {
       }
     }
 
-    // ===== フォームデータを PDF 形式に変換 =====
-    const pdfData = preparePDFData(data);
-    console.log('PDF書き込み用データ:', pdfData);
-
-    // PDF書き込み用データの検証
-    if (!pdfData) {
-      showMessage('PDF データの準備に失敗しました', 'error');
+    // 受付番号セットの確認
+    if (!data.receiptSets || data.receiptSets.length === 0) {
+      showMessage('受付番号が入力されていません', 'error');
       generateBtn.disabled = false;
       generateBtn.textContent = '📄 PDF生成';
       return;
@@ -1524,21 +1779,6 @@ async function generatePDF() {
       font = await pdfDoc.embedFont(StandardFonts.Helvetica);
     }
 
-    // 各受付番号ごとにPDFページを作成
-    // data.receiptNumber が文字列の場合は配列に変換
-    let receiptNumbers = data.receiptNumber || [];
-    if (!Array.isArray(receiptNumbers)) {
-      receiptNumbers = [receiptNumbers];
-    }
-    console.log(`[DEBUG] receiptNumbers before PDF generation:`, receiptNumbers);
-    
-    if (receiptNumbers.length === 0) {
-      showMessage('受付番号が入力されていません', 'error');
-      generateBtn.disabled = false;
-      generateBtn.textContent = '📄 PDF生成';
-      return;
-    }
-
     // 背景画像を事前にロード
     let backgroundImage = null;
     try {
@@ -1549,10 +1789,10 @@ async function generatePDF() {
       console.log('背景画像なし。白紙で生成します。');
     }
 
-    // 各受付番号ごとにPDFページを作成
-    for (const receiptNum of receiptNumbers) {
-      console.log(`[DEBUG] Processing receiptNum:`, receiptNum, typeof receiptNum);
-      
+    // 各受付番号セットごとにPDFページを作成
+    for (const receiptSet of data.receiptSets) {
+      console.log(`[DEBUG] Processing receiptSet:`, receiptSet);
+
       const page = pdfDoc.addPage([595.28, 841.89]); // A4サイズ
       const { width, height } = page.getSize();
 
@@ -1586,17 +1826,26 @@ async function generatePDF() {
       }
 
       // ===== PDF書き込み =====
-      // フォームデータを PDF 形式に変換
-      const pdfData = preparePDFData(data);
-
-      // このページの受付番号を追加
-      pdfData.receiptNumber = receiptNum;
+      // フォームデータと受付番号セットを PDF 形式に変換
+      const pdfData = preparePDFData(data, receiptSet);
 
       console.log('[本番PDF] pdfData:', pdfData);
-      console.log('[本番PDF] mappings:', window.PDF_FIELD_MAPPINGS);
+      console.log('[本番PDF] receiptSet:', receiptSet);
 
       // PDF_FIELD_MAPPINGS に基づいて全フィールドを書き込み
       writePDFFieldsFromMappings(page, font, pdfData);
+
+      // 領収書枚数を欄外に記載（ある場合）
+      if (receiptSet.receiptCount && parseInt(receiptSet.receiptCount) > 1) {
+        const countText = `${receiptSet.receiptCount}枚`;
+        page.drawText(countText, {
+          x: 556.8, // 右上に配置
+          y: 467,
+          size: 12,
+          font: font,
+          color: rgb(0, 0, 0),
+        });
+      }
     }
 
     // PDF保存
@@ -1648,27 +1897,6 @@ function setupAutoSave() {
 
 // ページ読み込み時に初期化
 document.addEventListener('DOMContentLoaded', init);
-
-/**
- * フォームデータの収集
- */
-function getFormData() {
-  const formData = new FormData(form);
-  const data = {};
-
-  // 通常の入力フィールド
-  for (let [key, value] of formData.entries()) {
-    if (key === 'transportation') {
-      // チェックボックスは配列として保存
-      if (!data[key]) data[key] = [];
-      data[key].push(value);
-    } else {
-      data[key] = value;
-    }
-  }
-
-  return data;
-}
 
 /**
  * フォームデータの保存（LocalStorage）
