@@ -706,18 +706,24 @@ function preparePDFData(formData) {
 
     // ===== 銀行コード（4桁） =====
     if (formData.bankCode) {
-      // カンマを削除
-      const cleanBankCode = formData.bankCode.replace(/,/g, '');
+      // 文字列の場合のみ処理：カンマ、スペースを削除
+      let bankCodeValue = formData.bankCode;
+      if (typeof bankCodeValue === 'string') {
+        bankCodeValue = bankCodeValue.replace(/[,\s]/g, '').trim();
+      }
       pdfData.bankCode =
-        window.PDF_VALUE_FORMATTERS.formatBankCode(cleanBankCode);
+        window.PDF_VALUE_FORMATTERS.formatBankCode(bankCodeValue);
     }
 
     // ===== 支店コード（3桁） =====
     if (formData.branchCode) {
-      // カンマを削除
-      const cleanBranchCode = formData.branchCode.replace(/,/g, '');
+      // 文字列の場合のみ処理：カンマ、スペースを削除
+      let branchCodeValue = formData.branchCode;
+      if (typeof branchCodeValue === 'string') {
+        branchCodeValue = branchCodeValue.replace(/[,\s]/g, '').trim();
+      }
       pdfData.branchCode =
-        window.PDF_VALUE_FORMATTERS.formatBranchCode(cleanBranchCode);
+        window.PDF_VALUE_FORMATTERS.formatBranchCode(branchCodeValue);
     }
 
     pdfData.accountName = formData.accountName || '';
@@ -730,10 +736,13 @@ function preparePDFData(formData) {
   }
 
   // ===== 受付番号リスト =====
+  // 受付番号は複数入力可能（最大4桁×複数）
   if (formData.receiptNumber) {
-    pdfData.receiptNumber = Array.isArray(formData.receiptNumber)
+    const receiptNumbers = Array.isArray(formData.receiptNumber)
       ? formData.receiptNumber
       : [formData.receiptNumber];
+    // 空値を除外して、クリーンなリストを作成
+    pdfData.receiptNumber = receiptNumbers.filter((num) => num && num.trim());
   }
 
   return pdfData;
@@ -851,7 +860,12 @@ function writeTextField(page, font, mapping, value, pageHeight, pdfData = {}) {
   } else {
     // 通常のテキストフィールド
     const yInPDF = pageHeight - mapping.y; // PDF座標系に変換
-    page.drawText(String(actualValue).substring(0, 50), {
+    // 銀行コード・支店コードのカンマを削除（二重防止）
+    let displayValue = String(actualValue);
+    if (mapping.name === 'bankCode' || mapping.name === 'branchCode') {
+      displayValue = displayValue.replace(/,/g, '').replace(/\s/g, '');
+    }
+    page.drawText(displayValue.substring(0, 50), {
       x: mapping.x,
       y: yInPDF,
       size: mapping.fontSize || 11,
