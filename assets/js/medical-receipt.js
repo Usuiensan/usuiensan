@@ -341,6 +341,7 @@ function getFormData() {
   for (let [key, value] of formData.entries()) {
     if (key === 'receiptNumber') {
       // 受付番号は配列として保存
+      console.log(`[DEBUG] receiptNumber entry:`, {key, value, type: typeof value});
       if (!data[key]) data[key] = [];
       if (value) data[key].push(value);
     } else if (key === 'accidentParty') {
@@ -351,6 +352,7 @@ function getFormData() {
     }
   }
 
+  console.log(`[DEBUG] getFormData result receiptNumber:`, data.receiptNumber);
   return data;
 }
 
@@ -1520,6 +1522,8 @@ async function generatePDF() {
 
     // 各受付番号ごとにPDFページを作成
     const receiptNumbers = data.receiptNumber || [];
+    console.log(`[DEBUG] receiptNumbers before PDF generation:`, receiptNumbers);
+    
     if (receiptNumbers.length === 0) {
       showMessage('受付番号が入力されていません', 'error');
       generateBtn.disabled = false;
@@ -1539,6 +1543,8 @@ async function generatePDF() {
 
     // 各受付番号ごとにPDFページを作成
     for (const receiptNum of receiptNumbers) {
+      console.log(`[DEBUG] Processing receiptNum:`, receiptNum, typeof receiptNum);
+      
       const page = pdfDoc.addPage([595.28, 841.89]); // A4サイズ
       const { width, height } = page.getSize();
 
