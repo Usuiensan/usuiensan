@@ -1548,6 +1548,9 @@ async function generatePDF() {
       // このページの受付番号を追加
       pdfData.receiptNumber = receiptNum;
 
+      console.log('[本番PDF] pdfData:', pdfData);
+      console.log('[本番PDF] mappings:', window.PDF_FIELD_MAPPINGS);
+
       // PDF_FIELD_MAPPINGS に基づいて全フィールドを書き込み
       writePDFFieldsFromMappings(page, font, pdfData);
     }
