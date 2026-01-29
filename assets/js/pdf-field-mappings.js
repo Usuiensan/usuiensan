@@ -328,15 +328,27 @@ const PDF_FIELD_MAPPINGS = {
  */
 const PDF_VALUE_FORMATTERS = {
   formatMobilePhone: (phoneNumber) => {
-    if (!phoneNumber || phoneNumber.length !== 11) return null;
+    if (!phoneNumber) return null;
+    // 既にオブジェクトの場合
+    if (typeof phoneNumber === 'object' && !Array.isArray(phoneNumber)) {
+      return phoneNumber;
+    }
+    // 文字列の場合
+    const rawNumber = phoneNumber.replace(/-/g, '');
+    if (rawNumber.length !== 11) return null;
     return {
-      area: phoneNumber.substring(0, 3),
-      exchange: phoneNumber.substring(3, 7),
-      subscriber: phoneNumber.substring(7, 11),
+      area: rawNumber.substring(0, 3),
+      exchange: rawNumber.substring(3, 7),
+      subscriber: rawNumber.substring(7, 11),
     };
   },
   formatFixedPhone: (phoneNumber) => {
     if (!phoneNumber) return null;
+    // 既にオブジェクトの場合
+    if (typeof phoneNumber === 'object' && !Array.isArray(phoneNumber)) {
+      return phoneNumber;
+    }
+    // 文字列の場合
     const parts = phoneNumber.split('-');
     if (parts.length !== 3) return null;
     return {
@@ -346,7 +358,13 @@ const PDF_VALUE_FORMATTERS = {
     };
   },
   formatDate: (dateString) => {
-    if (!dateString || dateString.length < 10) return null;
+    if (!dateString) return null;
+    // 既にオブジェクトの場合
+    if (typeof dateString === 'object' && !Array.isArray(dateString)) {
+      return dateString;
+    }
+    // 文字列の場合
+    if (dateString.length < 10) return null;
     return {
       year: dateString.substring(0, 4),
       month: dateString.substring(5, 7),
@@ -354,11 +372,23 @@ const PDF_VALUE_FORMATTERS = {
     };
   },
   formatStudentNumber: (studentNumber) => {
-    if (!studentNumber || studentNumber.length !== 6) return null;
+    if (!studentNumber) return null;
+    // 既に配列の場合はそのまま返す
+    if (Array.isArray(studentNumber)) {
+      return studentNumber.length === 6 ? studentNumber : null;
+    }
+    // 文字列の場合は分割
+    if (studentNumber.length !== 6) return null;
     return studentNumber.split('');
   },
   formatBankCode: (bankCode) => {
-    if (!bankCode || bankCode.length > 4) return null;
+    if (!bankCode) return null;
+    // 既に配列の場合
+    if (Array.isArray(bankCode)) {
+      return bankCode.length <= 4 ? bankCode : null;
+    }
+    // 文字列の場合
+    if (bankCode.length > 4) return null;
     const digits = bankCode.split('');
     while (digits.length < 4) {
       digits.unshift('');
@@ -366,7 +396,13 @@ const PDF_VALUE_FORMATTERS = {
     return digits;
   },
   formatBranchCode: (branchCode) => {
-    if (!branchCode || branchCode.length > 3) return null;
+    if (!branchCode) return null;
+    // 既に配列の場合
+    if (Array.isArray(branchCode)) {
+      return branchCode.length <= 3 ? branchCode : null;
+    }
+    // 文字列の場合
+    if (branchCode.length > 3) return null;
     const digits = branchCode.split('');
     while (digits.length < 3) {
       digits.unshift('');
@@ -374,7 +410,13 @@ const PDF_VALUE_FORMATTERS = {
     return digits;
   },
   formatAccountNumber: (accountNumber) => {
-    if (!accountNumber || accountNumber.length > 7) return null;
+    if (!accountNumber) return null;
+    // 既に配列の場合
+    if (Array.isArray(accountNumber)) {
+      return accountNumber.length <= 7 ? accountNumber : null;
+    }
+    // 文字列の場合
+    if (accountNumber.length > 7) return null;
     const digits = accountNumber.split('');
     while (digits.length < 7) {
       digits.unshift('');
