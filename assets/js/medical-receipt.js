@@ -706,15 +706,19 @@ function preparePDFData(formData) {
 
     // ===== 銀行コード（4桁） =====
     if (formData.bankCode) {
+      // カンマを削除
+      const cleanBankCode = formData.bankCode.replace(/,/g, '');
       pdfData.bankCode = window.PDF_VALUE_FORMATTERS.formatBankCode(
-        formData.bankCode,
+        cleanBankCode,
       );
     }
 
     // ===== 支店コード（3桁） =====
     if (formData.branchCode) {
+      // カンマを削除
+      const cleanBranchCode = formData.branchCode.replace(/,/g, '');
       pdfData.branchCode = window.PDF_VALUE_FORMATTERS.formatBranchCode(
-        formData.branchCode,
+        cleanBranchCode,
       );
     }
 
@@ -1024,7 +1028,7 @@ function writeCheckboxMark(page, font, mapping, selectedOption, pageHeight) {
   // 配列形式（複数選択）に対応
   if (Array.isArray(selectedOption)) {
     console.log('[DEBUG] Array mode, count:', selectedOption.length);
-    // 全ての選択肢に「レ」を描画
+    // 全ての選択肢に「✓」を描画
     selectedOption.forEach((option, idx) => {
       console.log(`[DEBUG] Processing option ${idx}:`, option);
       if (!option || !option.x || !option.y) {
@@ -1035,7 +1039,7 @@ function writeCheckboxMark(page, font, mapping, selectedOption, pageHeight) {
       const yInPDF = pageHeight - option.y;
       console.log(`[DEBUG] Drawing mark at (${option.x}, ${yInPDF})`);
 
-      page.drawText('レ', {
+      page.drawText('✓', {
         x: option.x,
         y: yInPDF,
         size: 14,
@@ -1051,7 +1055,7 @@ function writeCheckboxMark(page, font, mapping, selectedOption, pageHeight) {
     // 単一選択形式
     const yInPDF = pageHeight - selectedOption.y;
 
-    page.drawText('レ', {
+    page.drawText('✓', {
       x: selectedOption.x,
       y: yInPDF,
       size: 14,
@@ -1185,7 +1189,7 @@ function generateTestPDFDataAccident() {
 }
 
 /**
- * テスト用ダミーデータを生成（全フィールド充填版 - 全ての選択肢を○/✔）
+ * テスト用ダミーデータを生成（全フィールド充填版 - 全ての選択肢を○/✓）
  * 本来なら両立しない組み合わせでも全部入れるテスト
  */
 function generateTestPDFDataAll() {
@@ -1493,18 +1497,49 @@ async function generatePDF() {
       return;
     }
 
-    receiptNumbers.forEach((receiptNum, pageIndex) => {
+    // 背景画像を事前にロード
+    let backgroundImage = null;
+    try {
+      const imageUrl = 'assets/img/medical-receipt-bg.png';
+      const imageBytes = await fetch(imageUrl).then((res) => res.arrayBuffer());
+      backgroundImage = await pdfDoc.embedPng(imageBytes);
+    } catch (error) {
+      console.log('背景画像なし。白紙で生成します。');
+    }
+
+    // 各受付番号ごとにPDFページを作成
+    for (const receiptNum of receiptNumbers) {
       const page = pdfDoc.addPage([595.28, 841.89]); // A4サイズ
       const { width, height } = page.getSize();
 
-      // 背景を白で塗りつぶし
-      page.drawRectangle({
-        x: 0,
-        y: 0,
-        width: width,
-        height: height,
-        color: rgb(255, 255, 255),
-      });
+      // 背景画像の描画
+      if (backgroundImage) {
+        page.drawImage(backgroundImage, {
+          x: 0,
+          y: 0,
+          width: width,
+          height: height,
+        });
+
+        // 背景を薄くするために半透明の白レイヤーを追加
+        page.drawRectangle({
+          x: 0,
+          y: 0,
+          width: width,
+          height: height,
+          color: rgb(1, 1, 1),
+          opacity: 0.5, // 50%の透明度で背景を薄くする
+        });
+      } else {
+        // 背景がない場合は白で塗りつぶし
+        page.drawRectangle({
+          x: 0,
+          y: 0,
+          width: width,
+          height: height,
+          color: rgb(1, 1, 1),
+        });
+      }
 
       // ===== PDF書き込み =====
       // フォームデータを PDF 形式に変換
@@ -1515,7 +1550,7 @@ async function generatePDF() {
 
       // PDF_FIELD_MAPPINGS に基づいて全フィールドを書き込み
       writePDFFieldsFromMappings(page, font, pdfData);
-    });
+    }
 
     // PDF保存
     const pdfBytes = await pdfDoc.save();
@@ -2189,7 +2224,7 @@ function setupPhoneValidationDisplay(inputId, validationElementId) {
       // 固定電話
       if (result.isKinki) {
         // 近畿圏
-        validationElement.textContent = `✓ 有効な番号です（${result.region}）`;
+        validationElement.textContent = `有効な番号です（${result.region}）`;
         validationElement.classList.add('valid-kinki', 'show');
       } else {
         // 近畿圏外 - 警告メッセージ

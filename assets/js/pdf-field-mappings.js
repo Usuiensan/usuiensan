@@ -28,7 +28,7 @@ const PDF_FIELD_MAPPINGS = {
     x: 510,
     y: 374,
     maxWidth: 50,
-    fontSize: 13,
+    fontSize: 14,
     fontName: 'font',
     // 最初の受付番号のみ表示（複数の場合は最初の1つ）
     useFirstOnly: true,
@@ -41,7 +41,7 @@ const PDF_FIELD_MAPPINGS = {
     x: 64,
     y: 374,
     maxWidth: 100,
-    fontSize: 13,
+    fontSize: 14,
     fontName: 'font',
   },
   grade: {
@@ -49,7 +49,7 @@ const PDF_FIELD_MAPPINGS = {
     x: 176,
     y: 374,
     maxWidth: 24.5,
-    fontSize: 13,
+    fontSize: 25,
     fontName: 'font',
   },
   studentNumber: {
@@ -63,7 +63,7 @@ const PDF_FIELD_MAPPINGS = {
       { digit: 5, x: 294, y: 374 },
       { digit: 6, x: 317, y: 374 },
     ],
-    fontSize: 14,
+    fontSize: 25,
     fontName: 'font',
   },
   studentNameKana: {
@@ -87,29 +87,29 @@ const PDF_FIELD_MAPPINGS = {
   mobilePhone: {
     type: 'phone_parts',
     parts: [
-      { part: 'area', x: 110, y: 420 },
-      { part: 'exchange', x: 160, y: 420 },
-      { part: 'subscriber', x: 210, y: 420 },
+      { part: 'area', x: 115.4, y: 394 },
+      { part: 'exchange', x: 171.6, y: 394 },
+      { part: 'subscriber', x: 220.6, y: 394 },
     ],
-    fontSize: 13,
+    fontSize: 14,
     fontName: 'font',
   },
   fixedPhone: {
     type: 'phone_parts',
     parts: [
-      { part: 'area', x: 290, y: 420 },
-      { part: 'exchange', x: 340, y: 420 },
-      { part: 'subscriber', x: 390, y: 420 },
+      { part: 'area', x: 115.4, y: 414.5 },
+      { part: 'exchange', x: 171.6, y: 414.5 },
+      { part: 'subscriber', x: 220.6, y: 414.5 },
     ],
-    fontSize: 13,
+    fontSize: 14,
     fontName: 'font',
   },
   addressType: {
     type: 'radio_circle',
     options: [
-      { value: '1', label: '自宅', x: 350, y: 384, radius: 1 },
-      { value: '2', label: '自宅外', x: 350, y: 399, radius: 1 },
-      { value: '3', label: '大学寮', x: 350, y: 414, radius: 1 },
+      { value: '1', label: '自宅', x: 321.4, y: 385.9, radius: 3 },
+      { value: '2', label: '自宅外', x: 321.4, y: 400, radius: 3 },
+      { value: '3', label: '大学寮', x: 321.4, y: 414.5, radius: 3 },
     ],
   },
   diseaseName: {
@@ -130,18 +130,18 @@ const PDF_FIELD_MAPPINGS = {
       { part: 'month', x: 428, y: 438 }, // 475 -> 482
       { part: 'day', x: 465, y: 438 }, // 508 -> 512
     ],
-    fontSize: 13,
+    fontSize: 14,
     fontName: 'font', // 12->13pt サイズアップ
   },
   injuryContext: {
     type: 'checkbox_mark',
     options: [
-      { value: '正課中', x: 86, y: 447 },
-      { value: '大学行事中', x: 86, y: 462 },
-      { value: '学校施設内', x: 86, y: 476 },
-      { value: '課外活動中', x: 86, y: 491 },
-      { value: '交通事故', x: 86, y: 505 },
-      { value: 'その他', x: 86, y: 519 },
+      { value: '正課中', x: 85.4, y: 453.8 },
+      { value: '大学行事中', x: 85.4, y: 468.0 },
+      { value: '学校施設内', x: 85.4, y: 481.7 },
+      { value: '課外活動中', x: 85.4, y: 496.3 },
+      { value: '交通事故', x: 85.4, y: 510.5 },
+      { value: 'その他', x: 85.4, y: 524.6 },
     ],
   },
 
@@ -149,7 +149,7 @@ const PDF_FIELD_MAPPINGS = {
   subjectName: {
     type: 'text',
     x: 215,
-    y: 454,
+    y: 453.8,
     maxWidth: 200,
     fontSize: 12,
     fontName: 'font',
@@ -159,7 +159,7 @@ const PDF_FIELD_MAPPINGS = {
   eventName: {
     type: 'text',
     x: 215,
-    y: 468.2,
+    y: 468,
     maxWidth: 200,
     fontSize: 12,
     fontName: 'font',
@@ -169,7 +169,7 @@ const PDF_FIELD_MAPPINGS = {
   clubName: {
     type: 'text',
     x: 215,
-    y: 496.6,
+    y: 496.3,
     maxWidth: 200,
     fontSize: 12,
     fontName: 'font',
@@ -179,8 +179,8 @@ const PDF_FIELD_MAPPINGS = {
   accidentParty: {
     type: 'radio_circle',
     options: [
-      { value: '有り', x: 229, y: 507, radius: 2 },
-      { value: '無し', x: 268, y: 507, radius: 2 },
+      { value: '有り', x: 229, y: 510.5, radius: 2 },
+      { value: '無し', x: 268, y: 510.5, radius: 2 },
     ],
   },
 
@@ -188,30 +188,36 @@ const PDF_FIELD_MAPPINGS = {
   injuryLocation: {
     type: 'text',
     options: [
-      { condition: '正課中', x: 215, y: 454, maxWidth: 280, fontSize: 12 },
+      { condition: '正課中', x: 340.1, y: 453.8, maxWidth: 280, fontSize: 12 },
       {
         condition: '大学行事中',
-        x: 215,
-        y: 468.2,
+        x: 340.1,
+        y: 468,
         maxWidth: 280,
         fontSize: 12,
       },
       {
         condition: '学校施設内',
-        x: 215,
-        y: 482.4,
+        x: 340.1,
+        y: 481.7,
         maxWidth: 280,
         fontSize: 12,
       },
       {
         condition: '課外活動中',
-        x: 215,
-        y: 496.6,
+        x: 340.1,
+        y: 496.3,
         maxWidth: 280,
         fontSize: 12,
       },
-      { condition: '交通事故', x: 215, y: 510.7, maxWidth: 280, fontSize: 12 },
-      { condition: 'その他', x: 215, y: 524.9, maxWidth: 280, fontSize: 12 },
+      {
+        condition: '交通事故',
+        x: 340.1,
+        y: 510.5,
+        maxWidth: 280,
+        fontSize: 12,
+      },
+      { condition: 'その他', x: 340.1, y: 524.6, maxWidth: 280, fontSize: 12 },
     ],
     fontName: 'font',
   },
@@ -220,30 +226,37 @@ const PDF_FIELD_MAPPINGS = {
   injuryCause: {
     type: 'text',
     options: [
-      { condition: '正課中', x: 345, y: 454, maxWidth: 280, fontSize: 12 },
+      { condition: '正課中', x: 475, y: 453.84, maxWidth: 280, fontSize: 12 },
       {
         condition: '大学行事中',
-        x: 345,
-        y: 468.2,
+        x: 475,
+        y: 468.04,
         maxWidth: 280,
         fontSize: 12,
       },
       {
         condition: '学校施設内',
-        x: 345,
-        y: 482.4,
+        x: 475,
+        y: 481.74,
         maxWidth: 280,
         fontSize: 12,
       },
       {
         condition: '課外活動中',
-        x: 345,
-        y: 496.6,
+        x: 475,
+        y: 496.3,
         maxWidth: 280,
         fontSize: 12,
       },
-      { condition: '交通事故', x: 345, y: 510.7, maxWidth: 280, fontSize: 12 },
-      { condition: 'その他', x: 345, y: 524.9, maxWidth: 280, fontSize: 12 },
+      {
+        condition: '課外活動中',
+        x: 475,
+        y: 496.3,
+        maxWidth: 280,
+        fontSize: 12,
+      },
+      { condition: '交通事故', x: 475, y: 510.5, maxWidth: 280, fontSize: 12 },
+      { condition: 'その他', x: 475, y: 524.6, maxWidth: 280, fontSize: 12 },
     ],
     fontName: 'font',
   },
@@ -255,9 +268,9 @@ const PDF_FIELD_MAPPINGS = {
   bankTransferType: {
     type: 'radio_circle',
     options: [
-      { value: 'previous', x: 110, y: 470, radius: 7 },
-      { value: 'new', x: 140, y: 470, radius: 7 },
-      { value: 'change', x: 200, y: 470, radius: 7 },
+      { value: 'previous', x: 117, y: 541.9, radius: 7 },
+      { value: 'new', x: 178, y: 541.9, radius: 7 },
+      { value: 'change', x: 221, y: 541.9, radius: 7 },
     ],
   },
   // フォントサイズを12->13ptへアップ
