@@ -778,6 +778,14 @@ function writePDFFieldsFromMappings(page, font, pdfData) {
       switch (mapping.type) {
         case 'text':
           // テキスト単一フィールド
+          // 銀行コード・支店コードの場合はデバッグログを出力
+          if (fieldName === 'bankCode' || fieldName === 'branchCode') {
+            console.log(`[DEBUG] ${fieldName}:`, {
+              value: value,
+              type: typeof value,
+              isArray: Array.isArray(value),
+            });
+          }
           writeTextField(page, font, mapping, value, height, pdfData);
           break;
 
@@ -833,6 +841,15 @@ function writeTextField(page, font, mapping, value, pageHeight, pdfData = {}) {
   }
 
   if (!actualValue) return;
+
+  // デバッグ：銀行コード・支店コード
+  if (mapping.name === 'bankCode' || mapping.name === 'branchCode') {
+    console.log(`[writeTextField] ${mapping.name}:`, {
+      actualValue: actualValue,
+      before: String(actualValue),
+      mapped: window.PDF_FIELD_MAPPINGS?.[mapping.name],
+    });
+  }
 
   // options 配列を持つ場合（条件付きフィールド）
   if (mapping.options && Array.isArray(mapping.options)) {
