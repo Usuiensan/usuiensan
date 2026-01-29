@@ -94,6 +94,16 @@ const PDF_FIELD_MAPPINGS = {
     fontSize: 13,
     fontName: 'font',
   },
+  fixedPhone: {
+    type: 'phone_parts',
+    parts: [
+      { part: 'area', x: 290, y: 420 },
+      { part: 'exchange', x: 340, y: 420 },
+      { part: 'subscriber', x: 390, y: 420 },
+    ],
+    fontSize: 13,
+    fontName: 'font',
+  },
   addressType: {
     type: 'radio_circle',
     options: [

@@ -166,9 +166,22 @@ function setupEventListeners() {
   if (testConsoleBtn) {
     testConsoleBtn.addEventListener('click', () => {
       console.log('=== テストデータ（通常パターン） ===');
-      console.log(generateTestPDFData());
-      console.log('=== テストデータ（交通事故パターン） ===');
-      console.log(generateTestPDFDataAccident());
+      const testDataNormal = generateTestPDFData();
+      console.log(testDataNormal);
+      console.log('=== preparePDFData後 ===');
+      console.log(preparePDFData(testDataNormal));
+      
+      console.log('\n=== テストデータ（交通事故パターン） ===');
+      const testDataAccident = generateTestPDFDataAccident();
+      console.log(testDataAccident);
+      console.log('=== preparePDFData後 ===');
+      console.log(preparePDFData(testDataAccident));
+      
+      console.log('\n=== テストデータ（全フィールド） ===');
+      const testDataAll = generateTestPDFDataAll();
+      console.log(testDataAll);
+      console.log('=== preparePDFData後 ===');
+      console.log(preparePDFData(testDataAll));
     });
   }
 
@@ -755,11 +768,13 @@ function writePDFFieldsFromMappings(page, font, pdfData) {
 
         case 'radio_circle':
           // ラジオボタン（○で囲む）
+          console.log(`[DEBUG] radio_circle: ${fieldName}`, value);
           writeRadioCircle(page, mapping, value, height);
           break;
 
         case 'checkbox_mark':
           // チェックボックス（✓マーク）
+          console.log(`[DEBUG] checkbox_mark: ${fieldName}`, value);
           writeCheckboxMark(page, font, mapping, value, height);
           break;
 
@@ -892,7 +907,7 @@ function writeDateParts(page, font, mapping, dateParts, pageHeight) {
     if (!mapPart || !dateParts[part]) return;
 
     const yInPDF = pageHeight - mapPart.y;
-    
+
     // 月日の0埋めを削除（「01」→「1」）
     let displayValue = String(dateParts[part]);
     if ((part === 'month' || part === 'day') && displayValue.startsWith('0')) {
@@ -918,13 +933,24 @@ function writeDateParts(page, font, mapping, dateParts, pageHeight) {
  * 変換式: yPDF = pageHeight - option.y
  */
 function writeRadioCircle(page, mapping, selectedOption, pageHeight) {
+  console.log('[DEBUG] writeRadioCircle called', {
+    isArray: Array.isArray(selectedOption),
+    selectedOption,
+  });
+
   // 配列形式（複数選択）に対応
   if (Array.isArray(selectedOption)) {
+    console.log('[DEBUG] Array mode, count:', selectedOption.length);
     // 全ての選択肢に○を描画
-    selectedOption.forEach((option) => {
-      if (!option || !option.x || !option.y) return;
+    selectedOption.forEach((option, idx) => {
+      console.log(`[DEBUG] Processing option ${idx}:`, option);
+      if (!option || !option.x || !option.y) {
+        console.log(`[DEBUG] Skipping option ${idx}: missing x/y`);
+        return;
+      }
 
       const yInPDF = pageHeight - option.y;
+      console.log(`[DEBUG] Drawing circle at (${option.x}, ${yInPDF})`);
 
       page.drawCircle({
         x: option.x,
@@ -939,6 +965,7 @@ function writeRadioCircle(page, mapping, selectedOption, pageHeight) {
       });
     });
   } else if (selectedOption && selectedOption.x && selectedOption.y) {
+    console.log('[DEBUG] Single mode');
     // 単一選択形式
     const yInPDF = pageHeight - selectedOption.y;
 
@@ -970,13 +997,24 @@ function writeRadioCircle(page, mapping, selectedOption, pageHeight) {
  * y 座標はテキストベースライン（下側）を基準として動作
  */
 function writeCheckboxMark(page, font, mapping, selectedOption, pageHeight) {
+  console.log('[DEBUG] writeCheckboxMark called', {
+    isArray: Array.isArray(selectedOption),
+    selectedOption,
+  });
+
   // 配列形式（複数選択）に対応
   if (Array.isArray(selectedOption)) {
+    console.log('[DEBUG] Array mode, count:', selectedOption.length);
     // 全ての選択肢に「レ」を描画
-    selectedOption.forEach((option) => {
-      if (!option || !option.x || !option.y) return;
+    selectedOption.forEach((option, idx) => {
+      console.log(`[DEBUG] Processing option ${idx}:`, option);
+      if (!option || !option.x || !option.y) {
+        console.log(`[DEBUG] Skipping option ${idx}: missing x/y`);
+        return;
+      }
 
       const yInPDF = pageHeight - option.y;
+      console.log(`[DEBUG] Drawing mark at (${option.x}, ${yInPDF})`);
 
       page.drawText('レ', {
         x: option.x,
@@ -1156,7 +1194,14 @@ function generateTestPDFDataAll() {
     diseaseName: '総合テスト疾患',
 
     // 負傷状況：全て選択
-    injuryContext: ['正課中', '大学行事中', '学校施設内', '課外活動中', '交通事故', 'その他'],
+    injuryContext: [
+      '正課中',
+      '大学行事中',
+      '学校施設内',
+      '課外活動中',
+      '交通事故',
+      'その他',
+    ],
 
     // 各受傷状況に対応するフィールド（全部記入）
     subjectName: '全科目テスト',
