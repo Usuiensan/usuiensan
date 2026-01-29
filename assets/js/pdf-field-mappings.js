@@ -154,23 +154,31 @@ const PDF_FIELD_MAPPINGS = {
     ],
   },
 
-  // ===== 2.5 けがの場所 =====
+  // ===== 2.5 けがの場所（受傷状況ごとに異なる座標） =====
   injuryLocation: {
     type: 'text',
-    x: 215,
-    y: 580,
-    maxWidth: 280,
-    fontSize: 12,
+    options: [
+      { condition: '正課中', x: 215, y: 454, maxWidth: 280, fontSize: 12 },
+      { condition: '大学行事中', x: 215, y: 468.2, maxWidth: 280, fontSize: 12 },
+      { condition: '学校施設内', x: 215, y: 482.4, maxWidth: 280, fontSize: 12 },
+      { condition: '課外活動中', x: 215, y: 496.6, maxWidth: 280, fontSize: 12 },
+      { condition: '交通事故', x: 215, y: 510.7, maxWidth: 280, fontSize: 12 },
+      { condition: 'その他', x: 215, y: 524.9, maxWidth: 280, fontSize: 12 },
+    ],
     fontName: 'font',
   },
 
-  // ===== 2.6 原因 =====
+  // ===== 2.6 原因（受傷状況ごとに異なる座標） =====
   injuryCause: {
     type: 'text',
-    x: 215,
-    y: 600,
-    maxWidth: 280,
-    fontSize: 12,
+    options: [
+      { condition: '正課中', x: 215, y: 470, maxWidth: 280, fontSize: 12 },
+      { condition: '大学行事中', x: 215, y: 484.2, maxWidth: 280, fontSize: 12 },
+      { condition: '学校施設内', x: 215, y: 498.4, maxWidth: 280, fontSize: 12 },
+      { condition: '課外活動中', x: 215, y: 512.6, maxWidth: 280, fontSize: 12 },
+      { condition: '交通事故', x: 215, y: 526.7, maxWidth: 280, fontSize: 12 },
+      { condition: 'その他', x: 215, y: 540.9, maxWidth: 280, fontSize: 12 },
+    ],
     fontName: 'font',
   },
 

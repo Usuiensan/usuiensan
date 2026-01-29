@@ -749,7 +749,9 @@ function writeTextField(page, font, mapping, value, pageHeight, pdfData = {}) {
   // options 配列を持つ場合（条件付きフィールド）
   if (mapping.options && Array.isArray(mapping.options)) {
     // injuryContext から現在の条件を取得
-    const currentCondition = pdfData.injuryContext;
+    // pdfData.injuryContext は {value, label, x, y} オブジェクトなので、.value を取得
+    const injuryContextValue = pdfData.injuryContext?.value || pdfData.injuryContext;
+    const currentCondition = injuryContextValue;
 
     // 現在の条件に対応するオプションを探す
     const selectedOption = mapping.options.find(
