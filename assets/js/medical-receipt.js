@@ -740,11 +740,15 @@ function preparePDFData(formData) {
   // ===== 受付番号リスト =====
   // 受付番号は複数入力可能（最大4桁×複数）
   if (formData.receiptNumber) {
+    console.log(`[DEBUG] preparePDFData receiptNumber input:`, formData.receiptNumber, typeof formData.receiptNumber, Array.isArray(formData.receiptNumber));
+    
     const receiptNumbers = Array.isArray(formData.receiptNumber)
       ? formData.receiptNumber
       : [formData.receiptNumber];
     // 空値を除外して、クリーンなリストを作成
     pdfData.receiptNumber = receiptNumbers.filter((num) => num && num.trim());
+    
+    console.log(`[DEBUG] preparePDFData receiptNumber output:`, pdfData.receiptNumber, typeof pdfData.receiptNumber, Array.isArray(pdfData.receiptNumber));
   }
 
   return pdfData;
@@ -1521,7 +1525,11 @@ async function generatePDF() {
     }
 
     // 各受付番号ごとにPDFページを作成
-    const receiptNumbers = data.receiptNumber || [];
+    // data.receiptNumber が文字列の場合は配列に変換
+    let receiptNumbers = data.receiptNumber || [];
+    if (!Array.isArray(receiptNumbers)) {
+      receiptNumbers = [receiptNumbers];
+    }
     console.log(`[DEBUG] receiptNumbers before PDF generation:`, receiptNumbers);
     
     if (receiptNumbers.length === 0) {
