@@ -1,23 +1,23 @@
 /**
  * 医療費領収証明書 - PDF フィールドマッピング
- * 
+ *
  * ===== 座標系の定義 =====
  * マッピングで指定する座標は「デザイン座標系」（左上が原点）で記述
  * 内部的には PDF ネイティブ座標系（左下が原点）に変換される
- * 
+ *
  * デザイン座標系: 原点は左上 (0,0)、Y軸は上から下へ
  * PDF座標系:      原点は左下 (0,0)、Y軸は下から上へ
- * 
+ *
  * 変換式: yPDF = pageHeight - yDesign
- * 
+ *
  * 例）A4ページ高さ 841.89pt の場合：
  *   デザインY=100 → PDFY = 841.89 - 100 = 741.89
  *   デザインY=800 → PDFY = 841.89 - 800 = 41.89
- * 
+ *
  * ===== チェックマーク・丸印の座標 =====
  * radio_circle (丸印)  : options[].x, options[].y で指定 → drawCircle()
  * checkbox_mark (✓)    : options[].x, options[].y で指定 → drawText('✓')
- * 
+ *
  * 単位: ポイント (pt)
  */
 
@@ -95,9 +95,9 @@ const PDF_FIELD_MAPPINGS = {
   addressType: {
     type: 'radio_circle',
     options: [
-      { value: '1', label: '自宅', x: 330, y: 384, radius: 2 },
-      { value: '2', label: '自宅外', x: 330, y: 399, radius: 2 },
-      { value: '3', label: '大学寮', x: 330, y: 414, radius: 2 },
+      { value: '1', label: '自宅', x: 350, y: 384, radius: 1 },
+      { value: '2', label: '自宅外', x: 350, y: 399, radius: 1 },
+      { value: '3', label: '大学寮', x: 350, y: 414, radius: 1 },
     ],
   },
   diseaseName: {
@@ -167,8 +167,8 @@ const PDF_FIELD_MAPPINGS = {
   accidentParty: {
     type: 'radio_circle',
     options: [
-      { value: '有り', x: 229, y: 507, radius: 4 },
-      { value: '無し', x: 268, y: 507, radius: 4 },
+      { value: '有り', x: 229, y: 507, radius: 2 },
+      { value: '無し', x: 268, y: 507, radius: 2 },
     ],
   },
 
@@ -243,9 +243,9 @@ const PDF_FIELD_MAPPINGS = {
   bankTransferType: {
     type: 'radio_circle',
     options: [
-      { value: 'previous', x: 116, y: 540, radius: 7 },
-      { value: 'new', x: 179, y: 540, radius: 7 },
-      { value: 'change', x: 222, y: 540, radius: 7 },
+      { value: 'previous', x: 110, y: 470, radius: 7 },
+      { value: 'new', x: 140, y: 470, radius: 7 },
+      { value: 'change', x: 200, y: 470, radius: 7 },
     ],
   },
   // フォントサイズを12->13ptへアップ

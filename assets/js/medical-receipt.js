@@ -862,7 +862,7 @@ function writeDateParts(page, font, mapping, dateParts, pageHeight) {
 
 /**
  * ラジオボタン（○で囲む）の書き込み
- * 
+ *
  * ===== 座標系について =====
  * マッピングの y 値: デザイン座標系（左上が原点）
  * PDF描画時: ページ高さから引き算して PDF座標系（左下が原点）に変換
@@ -911,12 +911,12 @@ function writeRadioCircle(page, mapping, selectedOption, pageHeight) {
 
 /**
  * チェックボックス（✓マーク）の書き込み
- * 
+ *
  * ===== 座標系について =====
  * マッピングの y 値: デザイン座標系（左上が原点）
  * PDF描画時: ページ高さから引き算して PDF座標系（左下が原点）に変換
  * 変換式: yPDF = pageHeight - option.y
- * 
+ *
  * ✓マークは drawText() で描画するため、
  * y 座標はテキストベースライン（下側）を基準として動作
  */
@@ -1012,21 +1012,10 @@ function generateTestPDFData() {
       exchange: '1234',
       subscriber: '5678',
     },
-    addressType: {
-      value: '1',
-      label: '① 自宅',
-      x: 85,
-      y: 640,
-      radius: 5,
-    },
+    addressType: '1',
     receiptNumbers: ['0001', '0002', '0003'],
     diseaseName: '急性胃腸炎',
-    injuryContext: {
-      value: '正課中',
-      label: '正課中',
-      x: 90,
-      y: 595,
-    },
+    injuryContext: '正課中',
     subjectName: '体育実技',
     injuryLocation: '体育館',
     injuryCause: 'バスケットボール中にねん挫',
@@ -1036,13 +1025,7 @@ function generateTestPDFData() {
       day: '28',
     },
     accidentParty: null, // 交通事故ではないのでnull
-    bankTransferType: {
-      value: 'new',
-      label: '新規',
-      x: 200,
-      y: 480,
-      radius: 5,
-    },
+    bankTransferType: 'new',
     bankName: '三菱UFJ銀行',
     branchName: '京都支店',
     bankCode: '0005',
@@ -1072,21 +1055,10 @@ function generateTestPDFDataAccident() {
       exchange: '123',
       subscriber: '4567',
     },
-    addressType: {
-      value: '2',
-      label: '② 自宅外',
-      x: 160,
-      y: 640,
-      radius: 5,
-    },
+    addressType: '2',
     receiptNumbers: ['0004', '0005'],
     diseaseName: '交通事故によるけが',
-    injuryContext: {
-      value: '交通事故',
-      label: '交通事故',
-      x: 480,
-      y: 595,
-    },
+    injuryContext: '交通事故',
     subjectName: null,
     injuryLocation: '横断歩道',
     injuryCause: '自動車に接触',
@@ -1095,20 +1067,8 @@ function generateTestPDFDataAccident() {
       month: '01',
       day: '15',
     },
-    accidentParty: {
-      value: '有り',
-      label: '有り',
-      x: 90,
-      y: 510,
-      radius: 5,
-    },
-    bankTransferType: {
-      value: 'change',
-      label: '変更',
-      x: 270,
-      y: 480,
-      radius: 5,
-    },
+    accidentParty: '有り',
+    bankTransferType: 'change',
     bankName: 'みずほ銀行',
     branchName: '京都中央支店',
     bankCode: '0001',
@@ -1141,24 +1101,13 @@ function generateTestPDFDataAll() {
     },
 
     // 住所区分：全て選択（本来は1つだけ）
-    addressType: [
-      { value: '1', label: '① 自宅', x: 312, y: 386, radius: 5 },
-      { value: '2', label: '② 自宅外', x: 312, y: 401, radius: 5 },
-      { value: '3', label: '③ 大学寮', x: 312, y: 416, radius: 5 },
-    ],
+    addressType: ['1', '2', '3'],
 
     receiptNumbers: ['0001', '0002', '0003', '0004'],
     diseaseName: '総合テスト疾患',
 
     // 負傷状況：全て選択
-    injuryContext: [
-      { value: '正課中', x: 86, y: 462 },
-      { value: '大学行事中', x: 86, y: 480 },
-      { value: '学校施設内', x: 86, y: 498 },
-      { value: '課外活動中', x: 86, y: 516 },
-      { value: '交通事故', x: 86, y: 534 },
-      { value: 'その他', x: 86, y: 552 },
-    ],
+    injuryContext: ['正課中', '大学行事中', '学校施設内', '課外活動中', '交通事故', 'その他'],
 
     // 各受傷状況に対応するフィールド（全部記入）
     subjectName: '全科目テスト',
@@ -1176,17 +1125,10 @@ function generateTestPDFDataAll() {
     },
 
     // 交通事故相手：全て選択
-    accidentParty: [
-      { value: '有り', x: 135, y: 610, radius: 6 },
-      { value: '無し', x: 218, y: 610, radius: 6 },
-    ],
+    accidentParty: ['有り', '無し'],
 
     // 金融機関振込先：全て選択
-    bankTransferType: [
-      { value: 'previous', x: 135, y: 610, radius: 6 },
-      { value: 'new', x: 218, y: 610, radius: 6 },
-      { value: 'change', x: 255, y: 610, radius: 6 },
-    ],
+    bankTransferType: ['previous', 'new', 'change'],
 
     bankName: 'テスト銀行全て',
     branchName: 'テスト支店全部',
