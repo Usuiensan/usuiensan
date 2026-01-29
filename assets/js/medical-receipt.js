@@ -750,7 +750,8 @@ function writeTextField(page, font, mapping, value, pageHeight, pdfData = {}) {
   if (mapping.options && Array.isArray(mapping.options)) {
     // injuryContext から現在の条件を取得
     // pdfData.injuryContext は {value, label, x, y} オブジェクトなので、.value を取得
-    const injuryContextValue = pdfData.injuryContext?.value || pdfData.injuryContext;
+    const injuryContextValue =
+      pdfData.injuryContext?.value || pdfData.injuryContext;
     const currentCondition = injuryContextValue;
 
     // 現在の条件に対応するオプションを探す
@@ -861,6 +862,11 @@ function writeDateParts(page, font, mapping, dateParts, pageHeight) {
 
 /**
  * ラジオボタン（○で囲む）の書き込み
+ * 
+ * ===== 座標系について =====
+ * マッピングの y 値: デザイン座標系（左上が原点）
+ * PDF描画時: ページ高さから引き算して PDF座標系（左下が原点）に変換
+ * 変換式: yPDF = pageHeight - option.y
  */
 function writeRadioCircle(page, mapping, selectedOption, pageHeight) {
   // 配列形式（複数選択）に対応
@@ -874,7 +880,7 @@ function writeRadioCircle(page, mapping, selectedOption, pageHeight) {
       page.drawCircle({
         x: option.x,
         y: yInPDF,
-        size: (option.radius || 5) * 2, // 直径
+        size: (option.radius || 5) * 2, // 直径 = radius * 2
         borderColor: rgb(
           mapping.circleColor?.r || 0,
           mapping.circleColor?.g || 0,
@@ -905,6 +911,14 @@ function writeRadioCircle(page, mapping, selectedOption, pageHeight) {
 
 /**
  * チェックボックス（✓マーク）の書き込み
+ * 
+ * ===== 座標系について =====
+ * マッピングの y 値: デザイン座標系（左上が原点）
+ * PDF描画時: ページ高さから引き算して PDF座標系（左下が原点）に変換
+ * 変換式: yPDF = pageHeight - option.y
+ * 
+ * ✓マークは drawText() で描画するため、
+ * y 座標はテキストベースライン（下側）を基準として動作
  */
 function writeCheckboxMark(page, font, mapping, selectedOption, pageHeight) {
   // 配列形式（複数選択）に対応

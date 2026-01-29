@@ -1,6 +1,24 @@
 /**
- * 修正版：医療費領収証明書 - PDF フィールドマッピング
- * 単位: ポイント (pt) / 原点: 左上 (0,0)
+ * 医療費領収証明書 - PDF フィールドマッピング
+ * 
+ * ===== 座標系の定義 =====
+ * マッピングで指定する座標は「デザイン座標系」（左上が原点）で記述
+ * 内部的には PDF ネイティブ座標系（左下が原点）に変換される
+ * 
+ * デザイン座標系: 原点は左上 (0,0)、Y軸は上から下へ
+ * PDF座標系:      原点は左下 (0,0)、Y軸は下から上へ
+ * 
+ * 変換式: yPDF = pageHeight - yDesign
+ * 
+ * 例）A4ページ高さ 841.89pt の場合：
+ *   デザインY=100 → PDFY = 841.89 - 100 = 741.89
+ *   デザインY=800 → PDFY = 841.89 - 800 = 41.89
+ * 
+ * ===== チェックマーク・丸印の座標 =====
+ * radio_circle (丸印)  : options[].x, options[].y で指定 → drawCircle()
+ * checkbox_mark (✓)    : options[].x, options[].y で指定 → drawText('✓')
+ * 
+ * 単位: ポイント (pt)
  */
 
 const PDF_FIELD_MAPPINGS = {
@@ -57,7 +75,7 @@ const PDF_FIELD_MAPPINGS = {
   studentName: {
     type: 'text',
     x: 383,
-    y: 378,
+    y: 374,
     maxWidth: 125,
     fontSize: 15,
     fontName: 'font', // 14->15pt さらに大きく
@@ -77,15 +95,15 @@ const PDF_FIELD_MAPPINGS = {
   addressType: {
     type: 'radio_circle',
     options: [
-      { value: '1', label: '自宅', x: 320, y: 384, radius: 4 },
-      { value: '2', label: '自宅外', x: 320, y: 399, radius: 4 },
-      { value: '3', label: '大学寮', x: 320, y: 414, radius: 4 },
+      { value: '1', label: '自宅', x: 330, y: 384, radius: 2 },
+      { value: '2', label: '自宅外', x: 330, y: 399, radius: 2 },
+      { value: '3', label: '大学寮', x: 330, y: 414, radius: 2 },
     ],
   },
   diseaseName: {
     type: 'text',
     x: 383,
-    y: 420,
+    y: 418,
     maxWidth: 160,
     fontSize: 13,
     fontName: 'font',
@@ -106,12 +124,12 @@ const PDF_FIELD_MAPPINGS = {
   injuryContext: {
     type: 'checkbox_mark',
     options: [
-      { value: '正課中', x: 86, y: 454 },
-      { value: '大学行事中', x: 86, y: 468.2 },
-      { value: '学校施設内', x: 86, y: 482.4 },
-      { value: '課外活動中', x: 86, y: 496.6 },
-      { value: '交通事故', x: 86, y: 510.7 },
-      { value: 'その他', x: 86, y: 524.9 },
+      { value: '正課中', x: 86, y: 447 },
+      { value: '大学行事中', x: 86, y: 462 },
+      { value: '学校施設内', x: 86, y: 476 },
+      { value: '課外活動中', x: 86, y: 491 },
+      { value: '交通事故', x: 86, y: 505 },
+      { value: 'その他', x: 86, y: 519 },
     ],
   },
 
@@ -159,9 +177,27 @@ const PDF_FIELD_MAPPINGS = {
     type: 'text',
     options: [
       { condition: '正課中', x: 215, y: 454, maxWidth: 280, fontSize: 12 },
-      { condition: '大学行事中', x: 215, y: 468.2, maxWidth: 280, fontSize: 12 },
-      { condition: '学校施設内', x: 215, y: 482.4, maxWidth: 280, fontSize: 12 },
-      { condition: '課外活動中', x: 215, y: 496.6, maxWidth: 280, fontSize: 12 },
+      {
+        condition: '大学行事中',
+        x: 215,
+        y: 468.2,
+        maxWidth: 280,
+        fontSize: 12,
+      },
+      {
+        condition: '学校施設内',
+        x: 215,
+        y: 482.4,
+        maxWidth: 280,
+        fontSize: 12,
+      },
+      {
+        condition: '課外活動中',
+        x: 215,
+        y: 496.6,
+        maxWidth: 280,
+        fontSize: 12,
+      },
       { condition: '交通事故', x: 215, y: 510.7, maxWidth: 280, fontSize: 12 },
       { condition: 'その他', x: 215, y: 524.9, maxWidth: 280, fontSize: 12 },
     ],
@@ -172,41 +208,59 @@ const PDF_FIELD_MAPPINGS = {
   injuryCause: {
     type: 'text',
     options: [
-      { condition: '正課中', x: 215, y: 470, maxWidth: 280, fontSize: 12 },
-      { condition: '大学行事中', x: 215, y: 484.2, maxWidth: 280, fontSize: 12 },
-      { condition: '学校施設内', x: 215, y: 498.4, maxWidth: 280, fontSize: 12 },
-      { condition: '課外活動中', x: 215, y: 512.6, maxWidth: 280, fontSize: 12 },
-      { condition: '交通事故', x: 215, y: 526.7, maxWidth: 280, fontSize: 12 },
-      { condition: 'その他', x: 215, y: 540.9, maxWidth: 280, fontSize: 12 },
+      { condition: '正課中', x: 345, y: 454, maxWidth: 280, fontSize: 12 },
+      {
+        condition: '大学行事中',
+        x: 345,
+        y: 468.2,
+        maxWidth: 280,
+        fontSize: 12,
+      },
+      {
+        condition: '学校施設内',
+        x: 345,
+        y: 482.4,
+        maxWidth: 280,
+        fontSize: 12,
+      },
+      {
+        condition: '課外活動中',
+        x: 345,
+        y: 496.6,
+        maxWidth: 280,
+        fontSize: 12,
+      },
+      { condition: '交通事故', x: 345, y: 510.7, maxWidth: 280, fontSize: 12 },
+      { condition: 'その他', x: 345, y: 524.9, maxWidth: 280, fontSize: 12 },
     ],
     fontName: 'font',
   },
 
-  injuryLocationX: 215,
-  injuryCauseX: 330,
+  injuryLocationX: 345,
+  injuryCauseX: 345,
 
   // ===== 3. 金融機関振込先セクション =====
   bankTransferType: {
     type: 'radio_circle',
     options: [
-      { value: 'previous', x: 135, y: 668, radius: 7 },
-      { value: 'new', x: 218, y: 668, radius: 7 },
-      { value: 'change', x: 255, y: 668, radius: 7 },
+      { value: 'previous', x: 116, y: 540, radius: 7 },
+      { value: 'new', x: 179, y: 540, radius: 7 },
+      { value: 'change', x: 222, y: 540, radius: 7 },
     ],
   },
   // フォントサイズを12->13ptへアップ
   bankName: {
     type: 'text',
-    x: 130,
-    y: 718,
+    x: 93,
+    y: 585,
     maxWidth: 100,
     fontSize: 13,
     fontName: 'font',
   },
   branchName: {
     type: 'text',
-    x: 245,
-    y: 718,
+    x: 277,
+    y: 585,
     maxWidth: 80,
     fontSize: 13,
     fontName: 'font',
@@ -214,36 +268,29 @@ const PDF_FIELD_MAPPINGS = {
 
   // ===== 3.1 銀行コード（4桁） =====
   bankCode: {
-    type: 'digit_boxes',
-    digits: 4,
-    positions: [
-      { digit: 1, x: 340, y: 718 },
-      { digit: 2, x: 360, y: 718 },
-      { digit: 3, x: 380, y: 718 },
-      { digit: 4, x: 400, y: 718 },
-    ],
+    type: 'text',
+    x: 421,
+    y: 585,
+    maxWidth: 60,
     fontSize: 13,
     fontName: 'font',
   },
 
   // ===== 3.2 支店コード（3桁） =====
   branchCode: {
-    type: 'digit_boxes',
-    digits: 3,
-    positions: [
-      { digit: 1, x: 430, y: 718 },
-      { digit: 2, x: 450, y: 718 },
-      { digit: 3, x: 470, y: 718 },
-    ],
+    type: 'text',
+    x: 487,
+    y: 585,
+    maxWidth: 60,
     fontSize: 13,
     fontName: 'font',
   },
 
   accountName: {
     type: 'text',
-    x: 130,
-    y: 751,
-    maxWidth: 200,
+    x: 171,
+    y: 610,
+    maxWidth: 144,
     fontSize: 13,
     fontName: 'font',
   },
@@ -251,13 +298,13 @@ const PDF_FIELD_MAPPINGS = {
     type: 'digit_boxes',
     digits: 7,
     positions: [
-      { digit: 1, x: 364, y: 751 },
-      { digit: 2, x: 386, y: 751 },
-      { digit: 3, x: 408, y: 751 },
-      { digit: 4, x: 430, y: 751 },
-      { digit: 5, x: 452, y: 751 },
-      { digit: 6, x: 474, y: 751 },
-      { digit: 7, x: 496, y: 751 },
+      { digit: 1, x: 400, y: 609 },
+      { digit: 2, x: 421.8, y: 609 },
+      { digit: 3, x: 443.6, y: 609 },
+      { digit: 4, x: 465.4, y: 609 },
+      { digit: 5, x: 487.2, y: 609 },
+      { digit: 6, x: 509, y: 609 },
+      { digit: 7, x: 530.8, y: 609 },
     ],
     fontSize: 14,
     fontName: 'font',
