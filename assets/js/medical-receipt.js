@@ -1741,9 +1741,11 @@ async function imageToBase64(file) {
 }
 
 /**
- * PDF生成メイン関数
+ * 削除されました: 2番目の generatePDF() 関数は本番 PDF生成と重複していたため削除
+ * 本番 PDF生成は最初の generatePDF() 関数で処理されます
  */
-async function generatePDF() {
+/*
+async function generatePDF_DUPLICATE() {
   try {
     // ボタンを無効化
     generateBtn.disabled = true;
@@ -2070,6 +2072,7 @@ async function generatePDF() {
     generateBtn.textContent = '📄 PDF生成';
   }
 }
+*/
 
 /**
  * 丸印を描画
