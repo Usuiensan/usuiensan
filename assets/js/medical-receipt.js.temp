@@ -1,0 +1,75 @@
+/**
+ * 医療費領収証明書作成ツール - PDF生成スクリプト
+ * PDF-LIB を使用して背景画像に文字・○・✓を描画
+ */
+
+// PDF-LIB のインポート
+const { PDFDocument, rgb, StandardFonts } = PDFLib;
+
+// fontkit のグローバル参照（fontkit.umd.min.js が提供）
+const fontkit = window.fontkit;
+
+// フォーム要素の取得
+const form = document.getElementById('medicalForm');
+const generateBtn = document.getElementById('generateBtn');
+const saveBtn = document.getElementById('saveBtn');
+const loadBtn = document.getElementById('loadBtn');
+const clearBtn = document.getElementById('clearBtn');
+const addReceiptBtn = document.getElementById('addReceiptBtn');
+const receiptNumbersContainer = document.getElementById(
+  'receiptNumbersContainer',
+);
+const isInjuryCheckbox = document.getElementById('isInjury');
+const injurySection = document.getElementById('injurySection');
+const bankTransferRadios = document.querySelectorAll(
+  'input[name="bankTransferType"]',
+);
+const bankDetailsSection = document.getElementById('bankDetailsSection');
+
+// LocalStorage キー
+const STORAGE_KEY = 'medicalReceiptData';
+
+// 受付番号のカウンター
+let receiptNumberCount = 0;
+
+/**
+ * 初期化処理
+ */
+function init() {
+  console.log('医療費領収証明書作成ツール 初期化開始');
+
+  // 受付番号を1つ追加
+  addReceiptNumber();
+
+  // イベントリスナーの設定
+  setupEventListeners();
+
+  // 保存されたデータがあれば読み込み
+  const savedData = localStorage.getItem(STORAGE_KEY);
+  if (savedData) {
+    try {
+      loadFormDataWithoutMessage();
+    } catch (error) {
+      console.log('前回の入力データはありません');
+    }
+  }
+
+  // 自動保存機能を有効化
+  setupAutoSave();
+
+  console.log('医療費領収証明書作成ツール 初期化完了');
+}
+
+/**
+ * 受付番号を追加
+ */
+function addReceiptNumber() {
+  receiptNumberCount++;
+  const receiptId = `receipt-${receiptNumberCount}`;
+
+  const receiptElement = document.createElement('div');
+  receiptElement.className = 'receipt-number-group';
+  receiptElement.id = receiptId;
+  receiptElement.innerHTML = `
+    <div class="form-group">
+      <label for="${receiptId}-number">受付番号 ${receiptNumberCount} <span class="required">*</span></

@@ -2141,12 +2141,6 @@ function previewForm() {
   showMessage('プレビュー機能は開発中です', 'success');
 }
 
-// イベントリスナーの設定
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  generatePDF();
-});
-
 saveBtn.addEventListener('click', () => {
   saveFormData(false); // 手動保存（メッセージ表示）
   showMessage('入力内容を保存しました', 'success');
