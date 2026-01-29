@@ -636,21 +636,21 @@ function preparePDFData(formData) {
   if (formData.bankTransferType !== 'previous') {
     pdfData.bankName = formData.bankName || '';
     pdfData.branchName = formData.branchName || '';
-    
+
     // ===== 銀行コード（4桁） =====
     if (formData.bankCode) {
       pdfData.bankCode = window.PDF_VALUE_FORMATTERS.formatBankCode(
         formData.bankCode,
       );
     }
-    
+
     // ===== 支店コード（3桁） =====
     if (formData.branchCode) {
       pdfData.branchCode = window.PDF_VALUE_FORMATTERS.formatBranchCode(
         formData.branchCode,
       );
     }
-    
+
     pdfData.accountName = formData.accountName || '';
 
     if (formData.accountNumber) {
@@ -1123,14 +1123,14 @@ function generateTestPDFDataAll() {
       exchange: '999',
       subscriber: '9999',
     },
-    
+
     // 住所区分：全て選択（本来は1つだけ）
     addressType: [
       { value: '1', label: '① 自宅', x: 312, y: 386, radius: 5 },
       { value: '2', label: '② 自宅外', x: 312, y: 401, radius: 5 },
       { value: '3', label: '③ 大学寮', x: 312, y: 416, radius: 5 },
     ],
-    
+
     receiptNumbers: ['0001', '0002', '0003', '0004'],
     diseaseName: '総合テスト疾患',
 
@@ -1148,7 +1148,7 @@ function generateTestPDFDataAll() {
     subjectName: '全科目テスト',
     eventName: 'テスト行事全て',
     clubName: 'テスト部活',
-    
+
     // 場所と原因も各受傷状況ごとに全部記入
     injuryLocation: '全てのテスト場所',
     injuryCause: '全てのテスト原因',
@@ -1171,7 +1171,7 @@ function generateTestPDFDataAll() {
       { value: 'new', x: 218, y: 610, radius: 6 },
       { value: 'change', x: 255, y: 610, radius: 6 },
     ],
-    
+
     bankName: 'テスト銀行全て',
     branchName: 'テスト支店全部',
     bankCode: '9999',
@@ -1437,7 +1437,7 @@ async function generatePDF() {
       // ===== PDF書き込み =====
       // フォームデータを PDF 形式に変換
       const pdfData = preparePDFData(data);
-      
+
       // このページの受付番号を追加
       pdfData.receiptNumber = receiptNum;
 
