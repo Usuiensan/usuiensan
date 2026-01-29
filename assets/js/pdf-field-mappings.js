@@ -1,95 +1,97 @@
 /**
- * 医療費領収証明書 - PDF フィールドマッピング定義
- * テンプレート上の各フィールドの座標とフォーマット情報を定義
+ * 修正版：医療費領収証明書 - PDF フィールドマッピング
+ * 単位: ポイント (pt) / 原点: 左上 (0,0)
  */
 
 const PDF_FIELD_MAPPINGS = {
-  // ===== 1. 本人情報セクション (1段目) =====
+  // ===== 1. 本人情報セクション =====
+
   faculty: {
     type: 'text',
-    x: 48,
-    y: 367,
-    maxWidth: 80,
-    fontSize: 11,
+    x: 64,
+    y: 374,
+    maxWidth: 100,
+    fontSize: 13,
     fontName: 'font',
   },
   grade: {
     type: 'text',
-    x: 140,
-    y: 367,
-    maxWidth: 20,
-    fontSize: 11,
+    x: 170,
+    y: 374,
+    maxWidth: 24.5,
+    fontSize: 13,
     fontName: 'font',
   },
   studentNumber: {
     type: 'digit_boxes',
     digits: 6,
     positions: [
-      { digit: 1, x: 180, y: 367 },
-      { digit: 2, x: 207, y: 367 },
-      { digit: 3, x: 234, y: 367 },
-      { digit: 4, x: 261, y: 367 },
-      { digit: 5, x: 288, y: 367 },
-      { digit: 6, x: 315, y: 367 },
+      { digit: 1, x: 200, y: 374 },
+      { digit: 2, x: 223, y: 374 },
+      { digit: 3, x: 246, y: 374 },
+      { digit: 4, x: 269, y: 374 },
+      { digit: 5, x: 292, y: 374 },
+      { digit: 6, x: 315, y: 374 },
     ],
-    fontSize: 12,
+    fontSize: 14,
     fontName: 'font',
   },
   studentNameKana: {
     type: 'text',
-    x: 375,
-    y: 347,
+    x: 383,
+    y: 340,
     maxWidth: 125,
-    fontSize: 9,
+    fontSize: 10,
     fontName: 'font',
   },
   studentName: {
     type: 'text',
-    x: 375,
-    y: 367,
+    x: 360,
+    y: 378,
     maxWidth: 125,
-    fontSize: 12,
-    fontName: 'font',
+    fontSize: 15,
+    fontName: 'font', // 14->15pt さらに大きく
   },
 
   // ===== 1. 本人情報セクション (2段目) =====
   mobilePhone: {
     type: 'phone_parts',
     parts: [
-      { part: 'area', x: 105, y: 413 },
-      { part: 'exchange', x: 155, y: 413 },
-      { part: 'subscriber', x: 205, y: 413 },
+      { part: 'area', x: 110, y: 420 },
+      { part: 'exchange', x: 160, y: 420 },
+      { part: 'subscriber', x: 210, y: 420 },
     ],
-    fontSize: 11,
+    fontSize: 13,
     fontName: 'font',
   },
   addressType: {
     type: 'radio_circle',
     options: [
-      { value: '1', label: '自宅', x: 312, y: 386, radius: 5 },
-      { value: '2', label: '自宅外', x: 312, y: 401, radius: 5 },
-      { value: '3', label: '大学寮', x: 312, y: 416, radius: 5 },
+      { value: '1', label: '自宅', x: 312, y: 388, radius: 6 },
+      { value: '2', label: '自宅外', x: 312, y: 403, radius: 6 },
+      { value: '3', label: '大学寮', x: 312, y: 418, radius: 6 },
     ],
   },
   diseaseName: {
     type: 'text',
     x: 375,
-    y: 413,
+    y: 420,
     maxWidth: 160,
-    fontSize: 11,
+    fontSize: 13,
     fontName: 'font',
   },
 
   // ===== 2. 受傷状況セクション =====
+  // 【重要修正】「年」「月」の文字と重ならないよう、全体的に右へずらす
   injuryDate: {
     type: 'date_parts',
     parts: [
-      { part: 'year', x: 400, y: 442 },
-      { part: 'month', x: 462, y: 442 },
-      { part: 'day', x: 495, y: 442 },
+      { part: 'year', x: 428, y: 445 }, // 415 -> 428 (「年」の右側へ)
+      { part: 'month', x: 482, y: 445 }, // 475 -> 482
+      { part: 'day', x: 512, y: 445 }, // 508 -> 512
     ],
-    fontSize: 10,
-    fontName: 'font',
+    fontSize: 13,
+    fontName: 'font', // 12->13pt サイズアップ
   },
   injuryContext: {
     type: 'checkbox_mark',
@@ -109,26 +111,50 @@ const PDF_FIELD_MAPPINGS = {
   bankTransferType: {
     type: 'radio_circle',
     options: [
-      { value: 'previous', x: 135, y: 610, radius: 6 },
-      { value: 'new', x: 218, y: 610, radius: 6 },
-      { value: 'change', x: 255, y: 610, radius: 6 },
+      { value: 'previous', x: 135, y: 668, radius: 7 },
+      { value: 'new', x: 218, y: 668, radius: 7 },
+      { value: 'change', x: 255, y: 668, radius: 7 },
     ],
   },
-  bankName: { x: 130, y: 655, type: 'text', maxWidth: 100 },
-  branchName: { x: 250, y: 655, type: 'text', maxWidth: 80 },
-  accountName: { x: 130, y: 745, type: 'text', maxWidth: 200 },
+  // フォントサイズを12->13ptへアップ
+  bankName: {
+    type: 'text',
+    x: 130,
+    y: 718,
+    maxWidth: 100,
+    fontSize: 13,
+    fontName: 'font',
+  },
+  branchName: {
+    type: 'text',
+    x: 245,
+    y: 718,
+    maxWidth: 80,
+    fontSize: 13,
+    fontName: 'font',
+  },
+  accountName: {
+    type: 'text',
+    x: 130,
+    y: 751,
+    maxWidth: 200,
+    fontSize: 13,
+    fontName: 'font',
+  },
   accountNumber: {
     type: 'digit_boxes',
     digits: 7,
     positions: [
-      { digit: 1, x: 353, y: 745 },
-      { digit: 2, x: 380, y: 745 },
-      { digit: 3, x: 407, y: 745 },
-      { digit: 4, x: 434, y: 745 },
-      { digit: 5, x: 461, y: 745 },
-      { digit: 6, x: 488, y: 745 },
-      { digit: 7, x: 515, y: 745 },
+      { digit: 1, x: 364, y: 751 },
+      { digit: 2, x: 386, y: 751 },
+      { digit: 3, x: 408, y: 751 },
+      { digit: 4, x: 430, y: 751 },
+      { digit: 5, x: 452, y: 751 },
+      { digit: 6, x: 474, y: 751 },
+      { digit: 7, x: 496, y: 751 },
     ],
+    fontSize: 14,
+    fontName: 'font',
   },
 };
 
