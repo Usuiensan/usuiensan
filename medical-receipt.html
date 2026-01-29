@@ -20,6 +20,10 @@ title: 医療費領収証明書作成ツール
         <p class="notice">
           ※ このツールは京都産業大学とは一切関係ありません。自己責任でご利用ください。
         </p>
+        <div class="security-notice">
+          <p>🔒 <strong>プライバシー保護</strong>: このツールは完全にブラウザ内で動作し、入力データは外部サーバーに送信されません。</p>
+          <p>詳細は <a href="SECURITY.html" target="_blank">セキュリティとプライバシー</a> をご確認ください。</p>
+        </div>
         <a href="https://www.kyoto-su.ac.jp/about/shien/gakuseikenpo.html" ">学生健康保険互助会制度 | 経済支援 | 大学紹介 | 京都産業大学</a>
         <p>このページに入力する前に、上のリンクから医療費申請入力を行い、受付番号を確認してください。</p>
       </header>
@@ -483,7 +487,13 @@ title: 医療費領収証明書作成ツール
             <button type="submit" id="generateBtn" class="btn btn-primary">
               📄 PDF生成
             </button>
+            <button type="button" id="clearDataBtn" class="btn btn-secondary">
+              🗑️ 保存データを削除
+            </button>
           </div>
+          <p class="data-notice">
+            ※ 入力データはブラウザに自動保存されます。公共のコンピューターをご使用の場合は、使用後に「保存データを削除」ボタンを押してください。
+          </p>
         </form>
       </main>
 

@@ -12,6 +12,7 @@ const fontkit = window.fontkit;
 // フォーム要素の取得
 const form = document.getElementById('medicalForm');
 const generateBtn = document.getElementById('generateBtn');
+const clearDataBtn = document.getElementById('clearDataBtn');
 const addReceiptBtn = document.getElementById('addReceiptBtn');
 const receiptNumbersContainer = document.getElementById(
   'receiptNumbersContainer',
@@ -243,6 +244,11 @@ function setupEventListeners() {
 
   // ボタンイベント
   addReceiptBtn.addEventListener('click', addReceiptNumber);
+  
+  // データクリアボタン
+  if (clearDataBtn) {
+    clearDataBtn.addEventListener('click', clearAllData);
+  }
 
   // 電話番号フォーマット
   setupPhoneNumberInputs();
@@ -500,6 +506,38 @@ function loadFormDataWithoutMessage() {
     applyFormData(data);
   } catch (error) {
     console.error('データ読み込みエラー:', error);
+  }
+}
+
+/**
+ * すべての保存データをクリア（セキュリティ対策）
+ */
+function clearAllData() {
+  if (confirm('保存されている入力データをすべて削除します。よろしいですか？\n\n※ この操作は取り消せません。')) {
+    try {
+      // LocalStorageからデータ削除
+      localStorage.removeItem(STORAGE_KEY);
+      
+      // フォームをリセット
+      form.reset();
+      
+      // 受付番号欄を初期化
+      receiptNumbersContainer.innerHTML = '';
+      receiptNumberCount = 0;
+      addReceiptNumber(); // 最初の1つを追加
+      
+      // 動的セクションを非表示
+      if (injurySection) {
+        injurySection.style.display = 'none';
+      }
+      if (bankDetailsSection) {
+        bankDetailsSection.style.display = 'none';
+      }
+      
+      showMessage('保存データを完全に削除しました', 'success');
+    } catch (error) {
+      showMessage('データの削除中にエラーが発生しました', 'error');
+    }
   }
 }
 
