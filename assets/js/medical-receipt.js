@@ -170,13 +170,13 @@ function setupEventListeners() {
       console.log(testDataNormal);
       console.log('=== preparePDFData後 ===');
       console.log(preparePDFData(testDataNormal));
-      
+
       console.log('\n=== テストデータ（交通事故パターン） ===');
       const testDataAccident = generateTestPDFDataAccident();
       console.log(testDataAccident);
       console.log('=== preparePDFData後 ===');
       console.log(preparePDFData(testDataAccident));
-      
+
       console.log('\n=== テストデータ（全フィールド） ===');
       const testDataAll = generateTestPDFDataAll();
       console.log(testDataAll);
@@ -1317,7 +1317,8 @@ async function generateTestPDF(pattern = 'normal') {
     }
 
     // フィールド値を書き込み
-    writePDFFieldsFromMappings(page, font, testData);
+    const pdfData = preparePDFData(testData);
+    writePDFFieldsFromMappings(page, font, pdfData);
     console.log('✓ Fields written');
 
     // PDF保存
