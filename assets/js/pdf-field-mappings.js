@@ -395,32 +395,22 @@ const PDF_VALUE_FORMATTERS = {
     return studentNumber.split('');
   },
   formatBankCode: (bankCode) => {
-    if (!bankCode) return null;
-    // 既に配列の場合
+    if (!bankCode) return '';
+    // 配列の場合は結合
     if (Array.isArray(bankCode)) {
-      return bankCode.length <= 4 ? bankCode : null;
+      return bankCode.join('');
     }
-    // 文字列の場合
-    if (bankCode.length > 4) return null;
-    const digits = bankCode.split('');
-    while (digits.length < 4) {
-      digits.unshift('');
-    }
-    return digits;
+    // 文字列の場合はそのまま返す（カンマとスペースは削除済み）
+    return String(bankCode).trim();
   },
   formatBranchCode: (branchCode) => {
-    if (!branchCode) return null;
-    // 既に配列の場合
+    if (!branchCode) return '';
+    // 配列の場合は結合
     if (Array.isArray(branchCode)) {
-      return branchCode.length <= 3 ? branchCode : null;
+      return branchCode.join('');
     }
-    // 文字列の場合
-    if (branchCode.length > 3) return null;
-    const digits = branchCode.split('');
-    while (digits.length < 3) {
-      digits.unshift('');
-    }
-    return digits;
+    // 文字列の場合はそのまま返す（カンマとスペースは削除済み）
+    return String(branchCode).trim();
   },
   formatAccountNumber: (accountNumber) => {
     if (!accountNumber) return null;
