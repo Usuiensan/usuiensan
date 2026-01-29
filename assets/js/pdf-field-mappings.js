@@ -179,8 +179,8 @@ const PDF_FIELD_MAPPINGS = {
   accidentParty: {
     type: 'radio_circle',
     options: [
-      { value: '有り', x: 229, y: 510.5, radius: 2 },
-      { value: '無し', x: 268, y: 510.5, radius: 2 },
+      { value: '有り', x: 229, y: 507.6, radius: 4 },
+      { value: '無し', x: 268, y: 507.6, radius: 4 },
     ],
   },
 

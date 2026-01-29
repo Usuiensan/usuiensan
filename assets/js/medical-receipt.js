@@ -708,18 +708,16 @@ function preparePDFData(formData) {
     if (formData.bankCode) {
       // カンマを削除
       const cleanBankCode = formData.bankCode.replace(/,/g, '');
-      pdfData.bankCode = window.PDF_VALUE_FORMATTERS.formatBankCode(
-        cleanBankCode,
-      );
+      pdfData.bankCode =
+        window.PDF_VALUE_FORMATTERS.formatBankCode(cleanBankCode);
     }
 
     // ===== 支店コード（3桁） =====
     if (formData.branchCode) {
       // カンマを削除
       const cleanBranchCode = formData.branchCode.replace(/,/g, '');
-      pdfData.branchCode = window.PDF_VALUE_FORMATTERS.formatBranchCode(
-        cleanBranchCode,
-      );
+      pdfData.branchCode =
+        window.PDF_VALUE_FORMATTERS.formatBranchCode(cleanBranchCode);
     }
 
     pdfData.accountName = formData.accountName || '';
@@ -1416,12 +1414,13 @@ if (typeof window !== 'undefined') {
 }
 
 /**
- * 日本語フォントの読み込み
+ * 日本語フォントの読み込み（太い版 - Weight 700）
  */
 async function loadJapaneseFont() {
   try {
+    // Noto Sans JP Bold (Weight 700) - より太い線の太いフォント
     const fontUrl =
-      'https://fonts.gstatic.com/s/notosansjp/v52/-F6jfjtqLzI2JPCgQBnw7HFyzSD-AsregP8VFBEi75vY0rw-oME.ttf';
+      'https://fonts.gstatic.com/s/notosansjp/v52/-F6jfjtqLzI2JPCgQBnw7HFyzSD-Asregz82VFBEi75vY0rw-oME.ttf';
     const fontBytes = await fetch(fontUrl).then((res) => res.arrayBuffer());
     return fontBytes;
   } catch (error) {
