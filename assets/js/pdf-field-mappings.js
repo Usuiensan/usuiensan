@@ -30,6 +30,8 @@ const PDF_FIELD_MAPPINGS = {
     maxWidth: 50,
     fontSize: 13,
     fontName: 'font',
+    // 最初の受付番号のみ表示（複数の場合は最初の1つ）
+    useFirstOnly: true,
   },
 
   // ===== 1. 本人情報セクション =====

@@ -575,10 +575,18 @@ function preparePDFData(formData) {
   // ===== 住所区分（ラジオボタン値） =====
   if (formData.addressType) {
     const options = window.PDF_FIELD_MAPPINGS.addressType.options;
-    pdfData.addressType = window.PDF_VALUE_FORMATTERS.getSelectedOption(
-      formData.addressType,
-      options,
-    );
+    if (Array.isArray(formData.addressType)) {
+      // テスト全てモード: 複数値を全て処理
+      pdfData.addressType = formData.addressType.map((val) =>
+        window.PDF_VALUE_FORMATTERS.getSelectedOption(val, options),
+      );
+    } else {
+      // 通常モード: 単一値
+      pdfData.addressType = window.PDF_VALUE_FORMATTERS.getSelectedOption(
+        formData.addressType,
+        options,
+      );
+    }
   }
 
   // ===== 傷病名（テキスト） =====
@@ -587,10 +595,18 @@ function preparePDFData(formData) {
   // ===== 負傷状況（チェックボックス） =====
   if (formData.injuryContext) {
     const options = window.PDF_FIELD_MAPPINGS.injuryContext.options;
-    pdfData.injuryContext = window.PDF_VALUE_FORMATTERS.getSelectedOption(
-      formData.injuryContext,
-      options,
-    );
+    if (Array.isArray(formData.injuryContext)) {
+      // テスト全てモード: 複数値を全て処理
+      pdfData.injuryContext = formData.injuryContext.map((val) =>
+        window.PDF_VALUE_FORMATTERS.getSelectedOption(val, options),
+      );
+    } else {
+      // 通常モード: 単一値
+      pdfData.injuryContext = window.PDF_VALUE_FORMATTERS.getSelectedOption(
+        formData.injuryContext,
+        options,
+      );
+    }
   }
 
   // ===== 負傷に関連するフィールド =====
@@ -615,10 +631,18 @@ function preparePDFData(formData) {
       // 交通事故の場合、相手有無（○を描画）
       if (formData.accidentParty) {
         const options = window.PDF_FIELD_MAPPINGS.accidentParty.options;
-        pdfData.accidentParty = window.PDF_VALUE_FORMATTERS.getSelectedOption(
-          formData.accidentParty,
-          options,
-        );
+        if (Array.isArray(formData.accidentParty)) {
+          // テスト全てモード
+          pdfData.accidentParty = formData.accidentParty.map((val) =>
+            window.PDF_VALUE_FORMATTERS.getSelectedOption(val, options),
+          );
+        } else {
+          // 通常モード
+          pdfData.accidentParty = window.PDF_VALUE_FORMATTERS.getSelectedOption(
+            formData.accidentParty,
+            options,
+          );
+        }
       }
     }
   }
@@ -626,14 +650,25 @@ function preparePDFData(formData) {
   // ===== 金融機関振込先 =====
   if (formData.bankTransferType) {
     const options = window.PDF_FIELD_MAPPINGS.bankTransferType.options;
-    pdfData.bankTransferType = window.PDF_VALUE_FORMATTERS.getSelectedOption(
-      formData.bankTransferType,
-      options,
-    );
+    if (Array.isArray(formData.bankTransferType)) {
+      // テスト全てモード: 複数値を全て処理
+      pdfData.bankTransferType = formData.bankTransferType.map((val) =>
+        window.PDF_VALUE_FORMATTERS.getSelectedOption(val, options),
+      );
+    } else {
+      // 通常モード: 単一値
+      pdfData.bankTransferType = window.PDF_VALUE_FORMATTERS.getSelectedOption(
+        formData.bankTransferType,
+        options,
+      );
+    }
   }
 
   // ===== 銀行情報（「新規」「変更」の場合） =====
-  if (formData.bankTransferType !== 'previous') {
+  if (
+    formData.bankTransferType !== 'previous' &&
+    !Array.isArray(formData.bankTransferType)
+  ) {
     pdfData.bankName = formData.bankName || '';
     pdfData.branchName = formData.branchName || '';
 
@@ -662,7 +697,7 @@ function preparePDFData(formData) {
 
   // ===== 受付番号リスト =====
   if (formData.receiptNumber) {
-    pdfData.receiptNumbers = Array.isArray(formData.receiptNumber)
+    pdfData.receiptNumber = Array.isArray(formData.receiptNumber)
       ? formData.receiptNumber
       : [formData.receiptNumber];
   }
@@ -746,6 +781,14 @@ function writePDFFieldsFromMappings(page, font, pdfData) {
  * テキストフィールドの書き込み
  */
 function writeTextField(page, font, mapping, value, pageHeight, pdfData = {}) {
+  // 配列の場合で useFirstOnly が true なら最初の要素のみ使用
+  let actualValue = value;
+  if (Array.isArray(value) && mapping.useFirstOnly) {
+    actualValue = value[0];
+  }
+
+  if (!actualValue) return;
+
   // options 配列を持つ場合（条件付きフィールド）
   if (mapping.options && Array.isArray(mapping.options)) {
     // injuryContext から現在の条件を取得
@@ -759,9 +802,9 @@ function writeTextField(page, font, mapping, value, pageHeight, pdfData = {}) {
       (opt) => opt.condition === currentCondition,
     );
 
-    if (selectedOption && value) {
+    if (selectedOption) {
       const yInPDF = pageHeight - selectedOption.y; // PDF座標系に変換
-      page.drawText(String(value).substring(0, 50), {
+      page.drawText(String(actualValue).substring(0, 50), {
         x: selectedOption.x,
         y: yInPDF,
         size: mapping.fontSize || 11,
@@ -772,7 +815,7 @@ function writeTextField(page, font, mapping, value, pageHeight, pdfData = {}) {
   } else {
     // 通常のテキストフィールド
     const yInPDF = pageHeight - mapping.y; // PDF座標系に変換
-    page.drawText(String(value).substring(0, 50), {
+    page.drawText(String(actualValue).substring(0, 50), {
       x: mapping.x,
       y: yInPDF,
       size: mapping.fontSize || 11,
@@ -849,8 +892,14 @@ function writeDateParts(page, font, mapping, dateParts, pageHeight) {
     if (!mapPart || !dateParts[part]) return;
 
     const yInPDF = pageHeight - mapPart.y;
+    
+    // 月日の0埋めを削除（「01」→「1」）
+    let displayValue = String(dateParts[part]);
+    if ((part === 'month' || part === 'day') && displayValue.startsWith('0')) {
+      displayValue = displayValue.substring(1);
+    }
 
-    page.drawText(String(dateParts[part]), {
+    page.drawText(displayValue, {
       x: mapPart.x,
       y: yInPDF,
       size: mapping.fontSize || 11,
@@ -923,13 +972,13 @@ function writeRadioCircle(page, mapping, selectedOption, pageHeight) {
 function writeCheckboxMark(page, font, mapping, selectedOption, pageHeight) {
   // 配列形式（複数選択）に対応
   if (Array.isArray(selectedOption)) {
-    // 全ての選択肢に✔を描画
+    // 全ての選択肢に「レ」を描画
     selectedOption.forEach((option) => {
       if (!option || !option.x || !option.y) return;
 
       const yInPDF = pageHeight - option.y;
 
-      page.drawText('✓', {
+      page.drawText('レ', {
         x: option.x,
         y: yInPDF,
         size: 14,
@@ -945,7 +994,7 @@ function writeCheckboxMark(page, font, mapping, selectedOption, pageHeight) {
     // 単一選択形式
     const yInPDF = pageHeight - selectedOption.y;
 
-    page.drawText('✓', {
+    page.drawText('レ', {
       x: selectedOption.x,
       y: yInPDF,
       size: 14,
