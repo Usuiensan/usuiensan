@@ -12,9 +12,6 @@ const fontkit = window.fontkit;
 // フォーム要素の取得
 const form = document.getElementById('medicalForm');
 const generateBtn = document.getElementById('generateBtn');
-const saveBtn = document.getElementById('saveBtn');
-const loadBtn = document.getElementById('loadBtn');
-const clearBtn = document.getElementById('clearBtn');
 const addReceiptBtn = document.getElementById('addReceiptBtn');
 const receiptNumbersContainer = document.getElementById(
   'receiptNumbersContainer',
@@ -36,8 +33,6 @@ let receiptNumberCount = 0;
  * 初期化処理
  */
 function init() {
-  console.log('医療費領収証明書作成ツール 初期化開始');
-
   // 受付番号を1つ追加
   addReceiptNumber();
 
@@ -250,72 +245,6 @@ function setupEventListeners() {
 
   // ボタンイベント
   addReceiptBtn.addEventListener('click', addReceiptNumber);
-  saveBtn.addEventListener('click', () => {
-    saveFormData(false);
-    showMessage('入力内容を保存しました', 'success');
-  });
-  loadBtn.addEventListener('click', () => {
-    const savedData = localStorage.getItem(STORAGE_KEY);
-    if (!savedData) {
-      showMessage('保存されたデータがありません', 'error');
-      return;
-    }
-    loadFormDataWithMessage();
-    showMessage('入力内容を読み込みました', 'success');
-  });
-  clearBtn.addEventListener('click', () => {
-    if (confirm('本当にクリアしますか？')) {
-      form.reset();
-      localStorage.removeItem(STORAGE_KEY);
-      location.reload();
-    }
-  });
-
-  // テストボタン（開発用）
-  const testPDFNormalBtn = document.getElementById('testPDFNormalBtn');
-  const testPDFAccidentBtn = document.getElementById('testPDFAccidentBtn');
-  const testPDFAllBtn = document.getElementById('testPDFAllBtn');
-  const testConsoleBtn = document.getElementById('testConsoleBtn');
-
-  if (testPDFNormalBtn) {
-    testPDFNormalBtn.addEventListener('click', () => {
-      generateTestPDF('normal');
-    });
-  }
-
-  if (testPDFAccidentBtn) {
-    testPDFAccidentBtn.addEventListener('click', () => {
-      generateTestPDF('accident');
-    });
-  }
-
-  if (testPDFAllBtn) {
-    testPDFAllBtn.addEventListener('click', () => {
-      generateTestPDF('all');
-    });
-  }
-
-  if (testConsoleBtn) {
-    testConsoleBtn.addEventListener('click', () => {
-      console.log('=== テストデータ（通常パターン） ===');
-      const testDataNormal = generateTestPDFData();
-      console.log(testDataNormal);
-      console.log('=== preparePDFData後 ===');
-      console.log(preparePDFData(testDataNormal));
-
-      console.log('\n=== テストデータ（交通事故パターン） ===');
-      const testDataAccident = generateTestPDFDataAccident();
-      console.log(testDataAccident);
-      console.log('=== preparePDFData後 ===');
-      console.log(preparePDFData(testDataAccident));
-
-      console.log('\n=== テストデータ（全フィールド） ===');
-      const testDataAll = generateTestPDFDataAll();
-      console.log(testDataAll);
-      console.log('=== preparePDFData後 ===');
-      console.log(preparePDFData(testDataAll));
-    });
-  }
 
   // 電話番号フォーマット
   setupPhoneNumberInputs();
@@ -465,7 +394,6 @@ function updateAccountNumberInput(boxes, hiddenInput) {
  * フォームデータの収集
  */
 function getFormData() {
-  console.log('[DEBUG] getFormData 開始');
   const data = {};
 
   // 基本フォーム要素の取得
@@ -544,9 +472,6 @@ function getFormData() {
   });
 
   data.receiptSets = receiptSets;
-
-  console.log(`[DEBUG] getFormData receiptSets:`, receiptSets);
-  console.log(`[DEBUG] getFormData 完了:`, data);
   return data;
 }
 
@@ -1249,29 +1174,21 @@ function writeDateParts(page, font, mapping, dateParts, pageHeight) {
  * 変換式: yPDF = pageHeight - option.y
  */
 function writeRadioCircle(page, mapping, selectedOption, pageHeight) {
-  console.log('[DEBUG] writeRadioCircle called', {
-    isArray: Array.isArray(selectedOption),
-    selectedOption,
-  });
-
   // 配列形式（複数選択）に対応
   if (Array.isArray(selectedOption)) {
-    console.log('[DEBUG] Array mode, count:', selectedOption.length);
-    // 全ての選択肢に○を描画
-    selectedOption.forEach((option, idx) => {
-      console.log(`[DEBUG] Processing option ${idx}:`, option);
+    // 全ての選択肢に楕円を描画
+    selectedOption.forEach((option) => {
       if (!option || !option.x || !option.y) {
-        console.log(`[DEBUG] Skipping option ${idx}: missing x/y`);
         return;
       }
 
       const yInPDF = pageHeight - option.y;
-      console.log(`[DEBUG] Drawing circle at (${option.x}, ${yInPDF})`);
 
-      page.drawCircle({
+      page.drawEllipse({
         x: option.x,
         y: yInPDF,
-        size: (option.radius || 5) * 2, // 直径 = radius * 2
+        xScale: (option.radius || 5) * (option.xScale || 1.8), // optionのxScaleを優先
+        yScale: (option.radius || 5) * (option.yScale || 1.2), // optionのyScaleを優先
         borderColor: rgb(
           mapping.circleColor?.r || 0,
           mapping.circleColor?.g || 0,
@@ -1281,14 +1198,14 @@ function writeRadioCircle(page, mapping, selectedOption, pageHeight) {
       });
     });
   } else if (selectedOption && selectedOption.x && selectedOption.y) {
-    console.log('[DEBUG] Single mode');
     // 単一選択形式
     const yInPDF = pageHeight - selectedOption.y;
 
-    page.drawCircle({
+    page.drawEllipse({
       x: selectedOption.x,
       y: yInPDF,
-      size: (selectedOption.radius || 5) * 2, // 直径
+      xScale: (selectedOption.radius || 5) * (selectedOption.xScale || 1.8), // optionのxScaleを優先
+      yScale: (selectedOption.radius || 5) * (selectedOption.yScale || 1.2), // optionのyScaleを優先
       borderColor: rgb(
         mapping.circleColor?.r || 0,
         mapping.circleColor?.g || 0,
@@ -1396,319 +1313,6 @@ function writeReceiptList(page, font, mapping, receiptNumbers, pageHeight) {
  */
 
 /**
- * テスト用ダミーデータを生成（すべてのフィールドに値を入れる）
- */
-function generateTestPDFData() {
-  return {
-    faculty: '経済学部',
-    grade: '3',
-    studentName: '山田太郎',
-    studentNameKana: 'ヤマダタロウ',
-    studentNumber: ['1', '2', '3', '4', '5', '6'],
-    mobilePhone: {
-      area: '090',
-      exchange: '1234',
-      subscriber: '5678',
-    },
-    fixedPhone: {
-      area: '06',
-      exchange: '1234',
-      subscriber: '5678',
-    },
-    addressType: '1',
-    receiptNumbers: ['0001', '0002', '0003'],
-    diseaseName: '急性胃腸炎',
-    injuryContext: '正課中',
-    subjectName: '体育実技',
-    injuryLocation: '体育館',
-    injuryCause: 'バスケットボール中にねん挫',
-    injuryDate: {
-      year: '2026',
-      month: '01',
-      day: '28',
-    },
-    accidentParty: null, // 交通事故ではないのでnull
-    bankTransferType: 'new',
-    bankName: '三菱UFJ銀行',
-    branchName: '京都支店',
-    bankCode: '0005',
-    branchCode: '055',
-    accountName: 'ヤマダタロウ',
-    accountNumber: ['', '', '', '1', '2', '3', '4'],
-  };
-}
-
-/**
- * テスト用ダミーデータを生成（交通事故パターン）
- */
-function generateTestPDFDataAccident() {
-  return {
-    faculty: '理学部',
-    grade: '2',
-    studentName: '鈴木花子',
-    studentNameKana: 'スズキハナコ',
-    studentNumber: ['0', '2', '2', '0', '0', '1'],
-    mobilePhone: {
-      area: '080',
-      exchange: '9876',
-      subscriber: '5432',
-    },
-    fixedPhone: {
-      area: '075',
-      exchange: '123',
-      subscriber: '4567',
-    },
-    addressType: '2',
-    receiptNumbers: ['0004', '0005'],
-    diseaseName: '交通事故によるけが',
-    injuryContext: '交通事故',
-    subjectName: null,
-    injuryLocation: '横断歩道',
-    injuryCause: '自動車に接触',
-    injuryDate: {
-      year: '2026',
-      month: '01',
-      day: '15',
-    },
-    accidentParty: '有り',
-    bankTransferType: 'change',
-    bankName: 'みずほ銀行',
-    branchName: '京都中央支店',
-    bankCode: '0001',
-    branchCode: '110',
-    accountName: 'スズキハナコ',
-    accountNumber: ['', '', '', '', '5', '6', '7'],
-  };
-}
-
-/**
- * テスト用ダミーデータを生成（全フィールド充填版 - 全ての選択肢を○/✓）
- * 本来なら両立しない組み合わせでも全部入れるテスト
- */
-function generateTestPDFDataAll() {
-  return {
-    faculty: 'テスト学部',
-    grade: '4',
-    studentName: 'テスト太郎',
-    studentNameKana: 'テストタロウ',
-    studentNumber: ['9', '9', '9', '9', '9', '9'],
-    mobilePhone: {
-      area: '090',
-      exchange: '9999',
-      subscriber: '9999',
-    },
-    fixedPhone: {
-      area: '120',
-      exchange: '999',
-      subscriber: '9999',
-    },
-
-    // 住所区分：全て選択（本来は1つだけ）
-    addressType: ['1', '2', '3'],
-
-    receiptNumbers: ['0001', '0002', '0003', '0004'],
-    diseaseName: '総合テスト疾患',
-
-    // 負傷状況：全て選択
-    injuryContext: [
-      '正課中',
-      '大学行事中',
-      '学校施設内',
-      '課外活動中',
-      '交通事故',
-      'その他',
-    ],
-
-    // 各受傷状況に対応するフィールド（全部記入）
-    subjectName: '全科目テスト',
-    eventName: 'テスト行事全て',
-    clubName: 'テスト部活',
-
-    // 場所と原因も各受傷状況ごとに全部記入
-    injuryLocation: '全てのテスト場所',
-    injuryCause: '全てのテスト原因',
-
-    injuryDate: {
-      year: '2026',
-      month: '01',
-      day: '28',
-    },
-
-    // 交通事故相手：全て選択
-    accidentParty: ['有り', '無し'],
-
-    // 金融機関振込先：全て選択
-    bankTransferType: ['previous', 'new', 'change'],
-
-    bankName: 'テスト銀行全て',
-    branchName: 'テスト支店全部',
-    bankCode: '9999',
-    branchCode: '999',
-    accountName: 'テストタロウ',
-    accountNumber: ['9', '9', '9', '9', '9', '9', '9'],
-  };
-}
-
-/**
- * PDFテスト生成（コンソールから呼び出し可能）
- * 使用例: generateTestPDF('normal') または generateTestPDF('accident')
- */
-async function generateTestPDF(pattern = 'normal') {
-  try {
-    console.log(`🧪 テストPDF生成開始: ${pattern}`);
-    console.log('PDFDocument:', typeof PDFDocument);
-    console.log('fontkit:', typeof fontkit);
-    console.log('rgb:', typeof rgb);
-
-    const pdfDoc = await PDFDocument.create();
-    console.log('✓ PDFDocument created');
-
-    if (fontkit) {
-      pdfDoc.registerFontkit(fontkit);
-      console.log('✓ fontkit registered');
-    } else {
-      console.warn('⚠️ fontkit not available, using standard fonts');
-    }
-
-    let font;
-    const fontBytes = await loadJapaneseFont();
-    if (fontBytes) {
-      font = await pdfDoc.embedFont(fontBytes);
-      console.log('✓ Japanese font embedded');
-    } else {
-      font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-      console.log('⚠️ Using Helvetica font');
-    }
-
-    // テストデータの選択
-    let testData;
-    if (pattern === 'accident') {
-      testData = generateTestPDFDataAccident();
-    } else if (pattern === 'all') {
-      testData = generateTestPDFDataAll();
-    } else {
-      testData = generateTestPDFData();
-    }
-    console.log('✓ Test data generated:', testData);
-
-    // ページを作成
-    const page = pdfDoc.addPage([595.28, 841.89]); // A4サイズ
-    const { width, height } = page.getSize();
-    console.log('✓ Page created');
-
-    // 背景画像の埋め込み（あれば）
-    try {
-      const imageUrl = 'assets/img/medical-receipt-bg.png';
-      const imageBytes = await fetch(imageUrl).then((res) => res.arrayBuffer());
-      const backgroundImage = await pdfDoc.embedPng(imageBytes);
-
-      page.drawImage(backgroundImage, {
-        x: 0,
-        y: 0,
-        width: width,
-        height: height,
-      });
-
-      // テスト用：背景を薄くするために半透明の白レイヤーを追加
-      page.drawRectangle({
-        x: 0,
-        y: 0,
-        width: width,
-        height: height,
-        color: rgb(1, 1, 1),
-        opacity: 0.5, // 50%の透明度で背景を薄くする
-      });
-      console.log('✓ Background image loaded with opacity');
-    } catch (error) {
-      console.log('背景画像なし。白紙で生成します。');
-      // 背景を白で塗りつぶし
-      page.drawRectangle({
-        x: 0,
-        y: 0,
-        width: width,
-        height: height,
-        color: rgb(1, 1, 1),
-      });
-      console.log('✓ Background filled');
-    }
-
-    // フィールド値を書き込み
-    const pdfData = preparePDFData(testData);
-    writePDFFieldsFromMappings(page, font, pdfData);
-    console.log('✓ Fields written');
-
-    // PDF保存
-    const pdfBytes = await pdfDoc.save();
-    console.log('✓ PDF saved to bytes');
-
-    // ダウンロード
-    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `TEST_医療費領収証_${pattern}_${new Date().getTime()}.pdf`;
-    link.click();
-
-    URL.revokeObjectURL(url);
-    console.log(`✅ テストPDF(${pattern}) を生成しました`);
-    console.log('生成データ:', testData);
-  } catch (error) {
-    console.error('テストPDF生成エラー:', error);
-    console.error('スタックトレース:', error.stack);
-  }
-}
-
-/**
- * PDF座標ガイド描画（デバッグ用）
- * グリッドと座標ラベルを描画してずれを確認
- */
-function drawCoordinateGuide(page) {
-  const { width, height } = page.getSize();
-  const gridSize = 100;
-  const guideLightGray = rgb(0.95, 0.95, 0.95);
-  const guideDarkGray = rgb(0.8, 0.8, 0.8);
-
-  // 縦線（X軸グリッド）
-  for (let x = 0; x <= width; x += gridSize) {
-    const color = x % 500 === 0 ? guideDarkGray : guideLightGray;
-    const width_line = x % 500 === 0 ? 0.5 : 0.2;
-
-    page.drawLine({
-      start: { x: x, y: 0 },
-      end: { x: x, y: height },
-      color: color,
-      width: width_line,
-    });
-  }
-
-  // 横線（Y軸グリッド）
-  for (let y = 0; y <= height; y += gridSize) {
-    const color = y % 500 === 0 ? guideDarkGray : guideLightGray;
-    const width_line = y % 500 === 0 ? 0.5 : 0.2;
-
-    page.drawLine({
-      start: { x: 0, y: y },
-      end: { x: width, y: y },
-      color: color,
-      width: width_line,
-    });
-  }
-
-  console.log('✅ 座標ガイド (グリッド) を描画しました');
-}
-
-/**
- * グローバルに公開（コンソールから呼び出し可能）
- */
-if (typeof window !== 'undefined') {
-  window.generateTestPDF = generateTestPDF;
-  window.generateTestPDFData = generateTestPDFData;
-  window.generateTestPDFDataAccident = generateTestPDFDataAccident;
-  window.generateTestPDFDataAll = generateTestPDFDataAll;
-  window.writePDFFieldsFromMappings = writePDFFieldsFromMappings;
-}
-
-/**
  * 日本語フォントの読み込み（太い版 - Weight 700）
  */
 async function loadJapaneseFont() {
@@ -1719,7 +1323,6 @@ async function loadJapaneseFont() {
     const fontBytes = await fetch(fontUrl).then((res) => res.arrayBuffer());
     return fontBytes;
   } catch (error) {
-    console.error('フォント読み込みエラー:', error);
     return null;
   }
 }
@@ -1728,13 +1331,11 @@ async function loadJapaneseFont() {
  * PDF生成メイン関数
  */
 async function generatePDF() {
-  console.log('[DEBUG] generatePDF 開始');
   try {
     generateBtn.disabled = true;
     generateBtn.textContent = '生成中...';
 
     const data = getFormData();
-    console.log('[DEBUG] getFormData結果:', data);
 
     // 入力チェック
     const requiredFields = [
@@ -1779,14 +1380,20 @@ async function generatePDF() {
       font = await pdfDoc.embedFont(StandardFonts.Helvetica);
     }
 
-    // 背景画像を事前にロード
+    // 背景画像を事前にロード（印刷モードの場合はスキップ）
     let backgroundImage = null;
-    try {
-      const imageUrl = 'assets/img/medical-receipt-bg.png';
-      const imageBytes = await fetch(imageUrl).then((res) => res.arrayBuffer());
-      backgroundImage = await pdfDoc.embedPng(imageBytes);
-    } catch (error) {
-      console.log('背景画像なし。白紙で生成します。');
+    const printMode = document.getElementById('printMode')?.checked || false;
+
+    if (!printMode) {
+      try {
+        const imageUrl = 'assets/img/medical-receipt-bg.png';
+        const imageBytes = await fetch(imageUrl).then((res) =>
+          res.arrayBuffer(),
+        );
+        backgroundImage = await pdfDoc.embedPng(imageBytes);
+      } catch (error) {
+        // 背景画像なし。白紙で生成
+      }
     }
 
     // 各受付番号セットごとにPDFページを作成
@@ -1804,16 +1411,6 @@ async function generatePDF() {
           width: width,
           height: height,
         });
-
-        // 背景を薄くするために半透明の白レイヤーを追加
-        page.drawRectangle({
-          x: 0,
-          y: 0,
-          width: width,
-          height: height,
-          color: rgb(1, 1, 1),
-          opacity: 0.5, // 50%の透明度で背景を薄くする
-        });
       } else {
         // 背景がない場合は白で塗りつぶし
         page.drawRectangle({
@@ -1828,9 +1425,6 @@ async function generatePDF() {
       // ===== PDF書き込み =====
       // フォームデータと受付番号セットを PDF 形式に変換
       const pdfData = preparePDFData(data, receiptSet);
-
-      console.log('[本番PDF] pdfData:', pdfData);
-      console.log('[本番PDF] receiptSet:', receiptSet);
 
       // PDF_FIELD_MAPPINGS に基づいて全フィールドを書き込み
       writePDFFieldsFromMappings(page, font, pdfData);
@@ -2413,21 +2007,6 @@ function previewForm() {
   showMessage('プレビュー機能は開発中です', 'success');
 }
 
-saveBtn.addEventListener('click', () => {
-  saveFormData(false); // 手動保存（メッセージ表示）
-  showMessage('入力内容を保存しました', 'success');
-});
-
-loadBtn.addEventListener('click', () => {
-  const savedData = localStorage.getItem(STORAGE_KEY);
-  if (!savedData) {
-    showMessage('保存されたデータがありません', 'error');
-    return;
-  }
-  loadFormData();
-  showMessage('入力内容を読み込みました', 'success');
-});
-
 /**
  * 自動保存の設定
  */
@@ -2445,8 +2024,6 @@ function setupAutoSave() {
       saveFormData(true);
     });
   });
-
-  console.log('自動保存機能が有効です');
 }
 
 /**
@@ -2510,25 +2087,3 @@ function setupPhoneValidationDisplay(inputId, validationElementId) {
     }
   });
 }
-
-// ページ読み込み時の処理
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('医療費領収証明書作成ツール 初期化完了');
-
-  // 保存されたデータがあれば自動読み込み
-  const savedData = localStorage.getItem(STORAGE_KEY);
-  if (savedData) {
-    try {
-      loadFormData();
-    } catch (error) {
-      console.log('前回の入力データはありません');
-    }
-  }
-
-  // 自動保存機能を有効化
-  setupAutoSave();
-
-  // 電話番号バリデーション表示を設定
-  setupPhoneValidationDisplay('mobilePhone', 'mobilePhoneValidation');
-  setupPhoneValidationDisplay('fixedPhone', 'fixedPhoneValidation');
-});

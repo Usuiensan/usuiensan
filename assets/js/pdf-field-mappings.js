@@ -107,9 +107,33 @@ const PDF_FIELD_MAPPINGS = {
   addressType: {
     type: 'radio_circle',
     options: [
-      { value: '1', label: '自宅', x: 321.4, y: 385.9, radius: 3 },
-      { value: '2', label: '自宅外', x: 321.4, y: 400, radius: 3 },
-      { value: '3', label: '大学寮', x: 321.4, y: 414.5, radius: 3 },
+      {
+        value: '1',
+        label: '自宅',
+        x: 321.4,
+        y: 385.9,
+        radius: 3,
+        xScale: 1.5,
+        yScale: 1.5,
+      },
+      {
+        value: '2',
+        label: '自宅外',
+        x: 321.4,
+        y: 400,
+        radius: 3,
+        xScale: 1.5,
+        yScale: 1.5,
+      },
+      {
+        value: '3',
+        label: '大学寮',
+        x: 321.4,
+        y: 414.5,
+        radius: 3,
+        xScale: 1.5,
+        yScale: 1.5,
+      },
     ],
   },
   diseaseName: {
@@ -179,8 +203,8 @@ const PDF_FIELD_MAPPINGS = {
   accidentParty: {
     type: 'radio_circle',
     options: [
-      { value: '有り', x: 229, y: 507.6, radius: 4 },
-      { value: '無し', x: 268, y: 507.6, radius: 4 },
+      { value: '有り', x: 229, y: 507.6, radius: 4, xScale: 1.6, yScale: 1.6 },
+      { value: '無し', x: 268, y: 507.6, radius: 4, xScale: 1.6, yScale: 1.6 },
     ],
   },
 
@@ -268,9 +292,23 @@ const PDF_FIELD_MAPPINGS = {
   bankTransferType: {
     type: 'radio_circle',
     options: [
-      { value: 'previous', x: 117, y: 541.9, radius: 7 },
-      { value: 'new', x: 178, y: 541.9, radius: 7 },
-      { value: 'change', x: 221, y: 541.9, radius: 7 },
+      {
+        value: 'previous',
+        x: 117,
+        y: 541.9,
+        radius: 7,
+        xScale: 10,
+        yScale: 2,
+      },
+      { value: 'new', x: 178, y: 541.9, radius: 7, xScale: 1.8, yScale: 1.2 },
+      {
+        value: 'change',
+        x: 221,
+        y: 541.9,
+        radius: 7,
+        xScale: 1.8,
+        yScale: 1.2,
+      },
     ],
   },
   // フォントサイズを12->13ptへアップ

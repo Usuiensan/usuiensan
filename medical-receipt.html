@@ -479,52 +479,17 @@ title: 医療費領収証明書作成ツール
           </section>
 
           <!-- アクションボタン -->
-          <div class="action-buttons">
-            <button type="button" id="saveBtn" class="btn btn-secondary">
-              💾 入力保存
-            </button>
-            <button type="button" id="loadBtn" class="btn btn-secondary">
-              📂 入力読込
-            </button>
-            <button type="button" id="clearBtn" class="btn btn-secondary">
-              🗑️ クリア
-            </button>
-            <button type="submit" id="generateBtn" class="btn btn-primary">
-              📄 PDF生成
-            </button>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="printMode" name="printMode" />
+              <span>印刷モード（背景画像なし・既存用紙への印刷用）</span>
+            </label>
+            <span class="helper-text">※ チェックすると背景画像を除いて文字のみのPDFを生成します</span>
           </div>
 
-          <!-- テスト用ボタン（開発用） -->
-          <div
-            class="action-buttons"
-            style="
-              margin-top: 20px;
-              border-top: 1px dashed #ccc;
-              padding-top: 20px;
-            "
-          >
-            <p style="font-size: 12px; color: #666; margin-bottom: 10px">
-              🧪 テスト用（座標確認用、開発環境のみ表示）
-            </p>
-            <button
-              type="button"
-              id="testPDFNormalBtn"
-              class="btn btn-secondary"
-            >
-              🧪 テストPDF（通常）
-            </button>
-            <button
-              type="button"
-              id="testPDFAccidentBtn"
-              class="btn btn-secondary"
-            >
-              🧪 テストPDF（交通事故）
-            </button>
-            <button type="button" id="testPDFAllBtn" class="btn btn-secondary">
-              🧪 テストPDF（全フィールド）
-            </button>
-            <button type="button" id="testConsoleBtn" class="btn btn-secondary">
-              📋 コンソールにテストデータ出力
+          <div class="action-buttons">
+            <button type="submit" id="generateBtn" class="btn btn-primary">
+              📄 PDF生成
             </button>
           </div>
         </form>
