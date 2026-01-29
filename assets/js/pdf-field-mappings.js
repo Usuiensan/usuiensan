@@ -4,6 +4,16 @@
  */
 
 const PDF_FIELD_MAPPINGS = {
+  // ===== 0. 受付番号 =====
+  receiptNumber: {
+    type: 'text',
+    x: 85,
+    y: 310,
+    maxWidth: 50,
+    fontSize: 13,
+    fontName: 'font',
+  },
+
   // ===== 1. 本人情報セクション =====
 
   faculty: {
@@ -104,6 +114,66 @@ const PDF_FIELD_MAPPINGS = {
       { value: 'その他', x: 86, y: 552 },
     ],
   },
+
+  // ===== 2.1 正課中 - 科目名 =====
+  subjectName: {
+    type: 'text',
+    x: 215,
+    y: 462,
+    maxWidth: 200,
+    fontSize: 12,
+    fontName: 'font',
+  },
+
+  // ===== 2.2 大学行事中 - 行事名 =====
+  eventName: {
+    type: 'text',
+    x: 215,
+    y: 480,
+    maxWidth: 200,
+    fontSize: 12,
+    fontName: 'font',
+  },
+
+  // ===== 2.3 課外活動中 - 団体名 =====
+  clubName: {
+    type: 'text',
+    x: 215,
+    y: 516,
+    maxWidth: 200,
+    fontSize: 12,
+    fontName: 'font',
+  },
+
+  // ===== 2.4 交通事故 - 相手の有無 =====
+  accidentParty: {
+    type: 'radio_circle',
+    options: [
+      { value: '有り', x: 215, y: 530, radius: 6 },
+      { value: '無し', x: 280, y: 530, radius: 6 },
+    ],
+  },
+
+  // ===== 2.5 けがの場所 =====
+  injuryLocation: {
+    type: 'text',
+    x: 215,
+    y: 580,
+    maxWidth: 280,
+    fontSize: 12,
+    fontName: 'font',
+  },
+
+  // ===== 2.6 原因 =====
+  injuryCause: {
+    type: 'text',
+    x: 215,
+    y: 600,
+    maxWidth: 280,
+    fontSize: 12,
+    fontName: 'font',
+  },
+
   injuryLocationX: 215,
   injuryCauseX: 330,
 
@@ -133,6 +203,34 @@ const PDF_FIELD_MAPPINGS = {
     fontSize: 13,
     fontName: 'font',
   },
+
+  // ===== 3.1 銀行コード（4桁） =====
+  bankCode: {
+    type: 'digit_boxes',
+    digits: 4,
+    positions: [
+      { digit: 1, x: 340, y: 718 },
+      { digit: 2, x: 360, y: 718 },
+      { digit: 3, x: 380, y: 718 },
+      { digit: 4, x: 400, y: 718 },
+    ],
+    fontSize: 13,
+    fontName: 'font',
+  },
+
+  // ===== 3.2 支店コード（3桁） =====
+  branchCode: {
+    type: 'digit_boxes',
+    digits: 3,
+    positions: [
+      { digit: 1, x: 430, y: 718 },
+      { digit: 2, x: 450, y: 718 },
+      { digit: 3, x: 470, y: 718 },
+    ],
+    fontSize: 13,
+    fontName: 'font',
+  },
+
   accountName: {
     type: 'text',
     x: 130,
@@ -191,6 +289,22 @@ const PDF_VALUE_FORMATTERS = {
   formatStudentNumber: (studentNumber) => {
     if (!studentNumber || studentNumber.length !== 6) return null;
     return studentNumber.split('');
+  },
+  formatBankCode: (bankCode) => {
+    if (!bankCode || bankCode.length > 4) return null;
+    const digits = bankCode.split('');
+    while (digits.length < 4) {
+      digits.unshift('');
+    }
+    return digits;
+  },
+  formatBranchCode: (branchCode) => {
+    if (!branchCode || branchCode.length > 3) return null;
+    const digits = branchCode.split('');
+    while (digits.length < 3) {
+      digits.unshift('');
+    }
+    return digits;
   },
   formatAccountNumber: (accountNumber) => {
     if (!accountNumber || accountNumber.length > 7) return null;

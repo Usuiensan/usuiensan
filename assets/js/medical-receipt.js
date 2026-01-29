@@ -636,8 +636,21 @@ function preparePDFData(formData) {
   if (formData.bankTransferType !== 'previous') {
     pdfData.bankName = formData.bankName || '';
     pdfData.branchName = formData.branchName || '';
-    pdfData.bankCode = formData.bankCode || '';
-    pdfData.branchCode = formData.branchCode || '';
+    
+    // ===== 銀行コード（4桁） =====
+    if (formData.bankCode) {
+      pdfData.bankCode = window.PDF_VALUE_FORMATTERS.formatBankCode(
+        formData.bankCode,
+      );
+    }
+    
+    // ===== 支店コード（3桁） =====
+    if (formData.branchCode) {
+      pdfData.branchCode = window.PDF_VALUE_FORMATTERS.formatBranchCode(
+        formData.branchCode,
+      );
+    }
+    
     pdfData.accountName = formData.accountName || '';
 
     if (formData.accountNumber) {
@@ -1424,6 +1437,9 @@ async function generatePDF() {
       // ===== PDF書き込み =====
       // フォームデータを PDF 形式に変換
       const pdfData = preparePDFData(data);
+      
+      // このページの受付番号を追加
+      pdfData.receiptNumber = receiptNum;
 
       // PDF_FIELD_MAPPINGS に基づいて全フィールドを書き込み
       writePDFFieldsFromMappings(page, font, pdfData);
