@@ -564,25 +564,44 @@ function preparePDFData(formData) {
 
   // ===== 学生証番号（6桁を分割） =====
   if (formData.studentNumber) {
-    pdfData.studentNumber = window.PDF_VALUE_FORMATTERS.formatStudentNumber(
-      formData.studentNumber,
-    );
+    // テストデータは配列、フォームデータは文字列の可能性
+    if (typeof formData.studentNumber === 'string') {
+      // フォームデータ：文字列の場合
+      pdfData.studentNumber = window.PDF_VALUE_FORMATTERS.formatStudentNumber(
+        formData.studentNumber,
+      );
+    } else {
+      // テストデータ：配列の場合
+      pdfData.studentNumber = formData.studentNumber;
+    }
   }
 
   // ===== 携帯電話（ハイフン区切り3部分） =====
   if (formData.mobilePhone) {
-    // mobilePhone がすでにハイフン付きの場合
-    const mobileRaw = formData.mobilePhone.replace(/-/g, '');
-    pdfData.mobilePhone =
-      window.PDF_VALUE_FORMATTERS.formatMobilePhone(mobileRaw);
+    // テストデータはオブジェクト、フォームデータは文字列の可能性
+    if (typeof formData.mobilePhone === 'string') {
+      // フォームデータ：文字列の場合
+      const mobileRaw = formData.mobilePhone.replace(/-/g, '');
+      pdfData.mobilePhone =
+        window.PDF_VALUE_FORMATTERS.formatMobilePhone(mobileRaw);
+    } else {
+      // テストデータ：オブジェクトの場合
+      pdfData.mobilePhone = formData.mobilePhone;
+    }
   }
 
   // ===== 固定電話（ハイフン区切り3部分） =====
   if (formData.fixedPhone) {
-    // fixedPhone は既に formatFixedPhone() で整形済みの想定
-    pdfData.fixedPhone = window.PDF_VALUE_FORMATTERS.formatFixedPhone(
-      formData.fixedPhone,
-    );
+    // テストデータはオブジェクト、フォームデータは文字列の可能性
+    if (typeof formData.fixedPhone === 'string') {
+      // フォームデータ：文字列の場合
+      pdfData.fixedPhone = window.PDF_VALUE_FORMATTERS.formatFixedPhone(
+        formData.fixedPhone,
+      );
+    } else {
+      // テストデータ：オブジェクトの場合
+      pdfData.fixedPhone = formData.fixedPhone;
+    }
   }
 
   // ===== 住所区分（ラジオボタン値） =====
