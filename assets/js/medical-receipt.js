@@ -249,11 +249,13 @@ function setupEventListeners() {
   // 電話番号フォーマット
   setupPhoneNumberInputs();
 
-  // 負傷チェックボックス
-  isInjuryCheckbox.addEventListener('change', (e) => {
-    injurySection.style.display = e.target.checked ? 'block' : 'none';
-    saveFormData(true);
-  });
+  // 負傷チェックボックス（存在する場合のみ）
+  if (isInjuryCheckbox) {
+    isInjuryCheckbox.addEventListener('change', (e) => {
+      injurySection.style.display = e.target.checked ? 'block' : 'none';
+      saveFormData(true);
+    });
+  }
 
   // 負傷状況プルダウン
   const injuryContextSelect = document.getElementById('injuryContext');

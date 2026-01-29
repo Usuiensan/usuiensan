@@ -113,8 +113,8 @@ const PDF_FIELD_MAPPINGS = {
         x: 321.4,
         y: 385.9,
         radius: 3,
-        xScale: 1.5,
-        yScale: 1.5,
+        xScale: 2,
+        yScale: 2,
       },
       {
         value: '2',
@@ -122,8 +122,8 @@ const PDF_FIELD_MAPPINGS = {
         x: 321.4,
         y: 400,
         radius: 3,
-        xScale: 1.5,
-        yScale: 1.5,
+        xScale: 2,
+        yScale: 2,
       },
       {
         value: '3',
@@ -131,8 +131,8 @@ const PDF_FIELD_MAPPINGS = {
         x: 321.4,
         y: 414.5,
         radius: 3,
-        xScale: 1.5,
-        yScale: 1.5,
+        xScale: 2,
+        yScale: 2,
       },
     ],
   },
@@ -203,8 +203,8 @@ const PDF_FIELD_MAPPINGS = {
   accidentParty: {
     type: 'radio_circle',
     options: [
-      { value: '有り', x: 229, y: 507.6, radius: 4, xScale: 1.6, yScale: 1.6 },
-      { value: '無し', x: 268, y: 507.6, radius: 4, xScale: 1.6, yScale: 1.6 },
+      { value: '有り', x: 229, y: 507.6, radius: 4, xScale: 2, yScale: 2 },
+      { value: '無し', x: 268, y: 507.6, radius: 4, xScale: 2, yScale: 2 },
     ],
   },
 
@@ -297,8 +297,8 @@ const PDF_FIELD_MAPPINGS = {
         x: 117,
         y: 541.9,
         radius: 7,
-        xScale: 10,
-        yScale: 2,
+        xScale: 4.3,
+        yScale: 1.5,
       },
       { value: 'new', x: 178, y: 541.9, radius: 7, xScale: 1.8, yScale: 1.2 },
       {
