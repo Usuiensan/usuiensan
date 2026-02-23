@@ -1,0 +1,133 @@
+/* ========================================================================== 
+   UUIDとじゅもん相互変換ページ固有スタイル (jyumon-uuid.html)
+   ========================================================================== */
+
+.converter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  margin: 20px 0 8px;
+}
+
+.converter-card {
+  border: 2px solid #c0ffee; /* 薄いミント系。清潔感・安心感のある印象 */
+  border-radius: 12px;
+  padding: 16px;
+  background: #f8fffe;
+}
+
+.converter-card h2 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 1.05rem;
+  color: #333;
+}
+
+.converter-card input[type='text'],
+.converter-card textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  margin: 5px 0 12px;
+  background-color: #f8f8f8;
+  color: #333;
+  font-size: 16px;
+}
+
+.converter-card textarea {
+  min-height: 86px;
+  resize: vertical;
+}
+
+/* 呪文/UUID欄共通タイポグラフィ */
+#jumonInput,
+#jumonOutput,
+#uuidInput,
+#uuidOutput {
+  font-family: 'Biz UDP Gothic', 'Biz UDPゴシック', 'ヒラギノ角ゴ ProN', 'Noto Sans JP', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: 0.06em;
+}
+
+/* じゅもん入力欄 */
+#jumonInput {
+  min-height: 180px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* じゅもん出力欄 */
+#jumonOutput {
+  min-height: 180px;
+}
+
+/* UUID入力欄（単一行を想定、視認性重視で高さ確保） */
+#uuidInput {
+  display: block;
+  width: 100%;
+  min-height: 120px;
+  padding: 14px 12px;
+  border: 2px solid #b7ece1;
+  background-color: #f7fffd;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+#uuidInput:focus {
+  border-color: #339988;
+  box-shadow: 0 0 0 3px rgba(51, 153, 136, 0.18);
+  outline: none;
+}
+
+/* UUID出力欄（クリックコピーしやすいよう入力欄より少し高め） */
+#uuidOutput {
+  min-height: 150px;
+  padding: 14px 12px;
+  background: #f8fffe;
+  border: 2px dashed #b7ece1;
+  font-variant-numeric: tabular-nums;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+.actions-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.output-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+/* クリックでコピーしたときのフィードバック（エリア強調） */
+.copied-feedback {
+  outline: 3px solid rgba(51, 153, 136, 0.18);
+}
+
+/* 出力は広く表示 */
+#jumonOutput {
+  min-height: 120px;
+}
+
+.message {
+  margin-top: 8px;
+  min-height: 1.6em;
+  font-weight: 600;
+}
+
+.message.success {
+  color: #0d7377;
+}
+
+.message.error {
+  color: #b42318;
+}

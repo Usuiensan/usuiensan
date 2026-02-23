@@ -1,0 +1,47 @@
+---
+layout: default
+title: UUIDとじゅもんの相互変換
+custom_css:
+  - /assets/css/pages/jyumon-uuid.css
+---
+
+<h1>{{ page.title }}</h1>
+<p>
+  UUIDと24文字の「じゅもん」を相互に変換します。<br />
+  じゅもんは6文字ごとにスペース区切りで表示されます。
+</p>
+
+<div class="converter-grid">
+  <section class="converter-card">
+    <h2>UUID → じゅもん</h2>
+    <label for="uuidInput">UUID</label>
+    <input type="text" id="uuidInput" placeholder="例: 1af53798-92a3-4c3f-99ae-a7c42ec6084d" autocomplete="off" spellcheck="false" />
+    <button type="button" id="toJumonBtn">じゅもんに変換</button>
+
+    <label for="jumonOutput">変換結果（じゅもん）</label>
+    <textarea id="jumonOutput" readonly></textarea>
+  </section>
+
+  <section class="converter-card">
+    <h2>じゅもん → UUID</h2>
+    <label for="jumonInput">じゅもん（24文字）</label>
+    <textarea
+      id="jumonInput"
+      wrap="soft"
+      placeholder="例: あいうえおか きくけこさし すせそたちつ てとなにぬね"
+      autocomplete="off"
+      spellcheck="false"
+    ></textarea>
+    <div class="actions-row">
+      <button type="button" id="toUuidBtn">UUIDに変換</button>
+    </div>
+
+    <label for="uuidOutput">変換結果（UUID）</label>
+    <textarea id="uuidOutput" readonly></textarea>
+  </section>
+</div>
+
+<p id="convertMessage" class="message" aria-live="polite"></p>
+
+<script src="{{ '/jyumon-formatter.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/jyumon-uuid.js' | relative_url }}"></script>
